@@ -15,7 +15,7 @@ export default function Sidebar({news=[]}){
       <div className="side-section">
         <div className="side-title">Links</div>
         <div style={{fontSize:13,color:"#2563eb"}}><a href={import.meta.env.VITE_BACKEND_URL} target="_blank" rel="noreferrer">Backend</a></div>
-        <div style={{fontSize:13,color:"#2563eb",marginTop:6"}}><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></div>
+        <div style={{fontSize:13,color:"#2563eb",marginTop:6}}><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></div>
       </div>
 
       <div className="side-section">
