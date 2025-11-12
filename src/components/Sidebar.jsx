@@ -1,34 +1,52 @@
 import React from "react";
-export default function Sidebar({news=[]}){
+
+const Sidebar = () => {
+  const siteLink = "https://quicknewsgpt.vercel.app";
+
+  // Copy Link फ़ंक्शन
+  const handleCopy = () => {
+    navigator.clipboard.writeText(siteLink);
+    alert("✅ Link copied to clipboard!");
+  };
+
+  // Share फ़ंक्शन
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Quick News GPT",
+          text: "Check out this amazing AI-powered news site!",
+          url: siteLink,
+        });
+      } catch (err) {
+        console.log("Share cancelled or failed:", err);
+      }
+    } else {
+      alert("Sharing not supported on this device, please copy the link instead.");
+    }
+  };
+
   return (
-    <div>
-      <div className="side-section">
-        <div className="side-title">ताज़ा सुर्खियाँ</div>
-        {news && news.length>0 ? news.slice(0,6).map((n,i)=>(
-          <div key={i} className="mini-item">
-            <strong style={{display:"block"}}>{n.title}</strong>
-            <small style={{color:"#6b7280"}}>{n.source || ""}</small>
-          </div>
-        )) : <div style={{color:"#6b7280"}}>No headlines.</div>}
+    <div className="sidebar">
+      <div className="side-title">Quick News GPT</div>
+
+      {/* Share Section */}
+      <div className="side-box">
+        <div className="side-title">Share this site</div>
+        <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
+        <button onClick={handleShare} className="share-btn">📤 Share</button>
       </div>
 
-      <div className="side-section">
-        <div className="side-title">Links</div>
-        <div style={{fontSize:13,color:"#2563eb"}}><a href={import.meta.env.VITE_BACKEND_URL} target="_blank" rel="noreferrer">Backend</a></div>
-        <div style={{fontSize:13,color:"#2563eb",marginTop:6}}><a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a></div>
-      </div>
-
-      <div className="side-section">
-        <div className="side-title">States</div>
-        <div style={{fontSize:13,color:"#111827"}}>Delhi</div>
-        <div style={{fontSize:13,color:"#111827"}}>Karnataka</div>
-        <div style={{fontSize:13,color:"#111827"}}>Maharashtra</div>
-      </div>
-
-      <div className="side-section">
+      {/* About Section */}
+      <div className="side-box">
         <div className="side-title">About</div>
-        <div style={{color:"#6b7280",fontSize:13}}>Quick NewsGPT — free news aggregator (Hindi + English).</div>
+        <p style={{ fontSize: 13, lineHeight: "18px" }}>
+          QuickNewsGPT delivers instant AI-generated summaries of trending headlines.
+          Ask anything and get smart, concise updates instantly.
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default Sidebar;
