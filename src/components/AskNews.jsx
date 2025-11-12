@@ -1,29 +1,49 @@
 import React, { useState } from "react";
 
 export default function AskNews() {
-  const [q, setQ] = useState("");
+  const [query, setQuery] = useState("");
+  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
+  const [error, setError] = useState("");
   const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
-  const handleAsk = async () => {
+  const askNews = async () => {
     if (!query.trim()) return;
     setLoading(true);
-    setResults(null);
+    setError("");
+    setAnswer("");
+
     try {
-      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+      const res = await fetch(`${BACKEND}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+
       const data = await res.json();
-      const list = data.news || data.samples || [];
-      setResults(list);
-    } catch(err){
-      console.error("Ask error:", err);
-      setResults([]);
+      if (data.answer) {
+        setAnswer(data.answer);
+      } else {
+        setAnswer("No related news found.");
+      }
+    } catch (err) {
+      console.error("Error asking news:", err);
+      setError("Error fetching response. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-    
+  const resetForm = () => {
+    setQuery("");
+    setAnswer("");
+    setError("");
+  };
+
   return (
     <div>
       <input
