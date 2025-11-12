@@ -32,16 +32,49 @@ body{background:var(--bg);color:var(--text);padding:18px;}
   .container{grid-template-columns:1fr; padding:10px}
   .sidebar{position:static}
 }
+/* refresh icon animation */
+.refresh-spin {
+  display: inline-block;
+  animation: spin 0.9s linear infinite;
+  font-size: 18px;
+}
+.refresh-idle {
+  display: inline-block;
+  font-size: 18px;
+  opacity: 0.75;
+}
+
+/* spin keyframes */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* share buttons */
 .share-btn {
   background: #2563eb;
   color: white;
   border: none;
   border-radius: 6px;
   padding: 6px 10px;
-  margin: 4px;
+  margin-right: 8px;
   cursor: pointer;
   font-size: 13px;
 }
-.share-btn:hover {
-  background: #1e40af;
+.share-btn:hover { background: #1e40af; }
+
+/* small style for read-btn if you already have similar classes */
+.read-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: #e6eefb;
+  color: #1e40af;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+}
+.read-btn.disabled {
+  opacity: 0.6;
+  pointer-events: none;
 }
