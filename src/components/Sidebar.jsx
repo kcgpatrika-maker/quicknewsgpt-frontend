@@ -3,19 +3,29 @@ import React from "react";
 const Sidebar = () => {
   const siteLink = "https://quicknewsgpt.vercel.app";
 
-  // Copy Link फ़ंक्शन
   const handleCopy = () => {
-    navigator.clipboard.writeText(siteLink);
-    alert("✅ Link copied to clipboard!");
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(siteLink).then(() => {
+        alert("✅ Link copied to clipboard!");
+      });
+    } else {
+      // fallback
+      const el = document.createElement("textarea");
+      el.value = siteLink;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      alert("✅ Link copied to clipboard!");
+    }
   };
 
-  // Share फ़ंक्शन
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
           title: "Quick News GPT",
-          text: "Check out this amazing AI-powered news site!",
+          text: "Check out QuickNewsGPT — AI summaries of latest India news.",
           url: siteLink,
         });
       } catch (err) {
@@ -27,25 +37,26 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
-      <div className="side-title">Quick News GPT</div>
-
-      {/* Share Section */}
+    <aside className="sidebar">
       <div className="side-box">
-        <div className="side-title">Share this site</div>
-        <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
-        <button onClick={handleShare} className="share-btn">📤 Share</button>
+        <div className="side-title">Quick News GPT</div>
+
+        <div style={{ marginTop: 8 }}>
+          <div className="side-title">Share this site</div>
+          <div style={{ marginTop: 8 }}>
+            <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
+            <button onClick={handleShare} className="share-btn">📤 Share</button>
+          </div>
+        </div>
       </div>
 
-      {/* About Section */}
-      <div className="side-box">
+      <div className="side-box" style={{ marginTop: 16 }}>
         <div className="side-title">About</div>
-        <p style={{ fontSize: 13, lineHeight: "18px" }}>
+        <p style={{ fontSize: 13, lineHeight: "18px", marginTop: 8 }}>
           QuickNewsGPT delivers instant AI-generated summaries of trending headlines.
-          Ask anything and get smart, concise updates instantly.
         </p>
       </div>
-    </div>
+    </aside>
   );
 };
 
