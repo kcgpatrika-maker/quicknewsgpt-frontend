@@ -1,19 +1,44 @@
-import React from "react";
-export default function NewsList({items=[]}){
-  if(!items || items.length===0) return <div>No news available.</div>;
+import React, { useEffect, useState } from "react";
+
+const NewsList = () => {
+  const [news, setNews] = useState([]);
+
+  // डेटा लाने का फ़ंक्शन
+  const fetchNews = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/news`);
+      const data = await response.json();
+      setNews(data);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews(); // पहली बार डेटा लाओ
+
+    // हर 60 सेकंड में रीफ्रेश
+    const interval = setInterval(fetchNews, 60000);
+
+    return () => clearInterval(interval); // पेज बदलने पर इंटरवल क्लियर करें
+  }, []);
+
   return (
-    <div>
-      {items.map((it,idx)=>(
-        <article key={it.id||idx} className="card" style={{marginBottom:12}}>
-          <h3 className="headline">{it.title}</h3>
-          <p className="summary">{it.summary||it.description||"No description available."}</p>
-          {it.link ? (
-            <a className="readmore" href={it.link} target="_blank" rel="noreferrer">Read Full Story</a>
-          ) : (
-            <span className="readmore" style={{opacity:0.9}}>Read Full Story</span>
-          )}
-        </article>
-      ))}
+    <div className="news-section">
+      <h2 className="section-title">Latest Headlines</h2>
+      {news.length > 0 ? (
+        news.map((item, index) => (
+          <div key={index} className="news-card">
+            <h3>{item.title}</h3>
+            <p>{item.summary}</p>
+            <button className="read-btn">Read Full Story</button>
+          </div>
+        ))
+      ) : (
+        <p>Loading headlines...</p>
+      )}
     </div>
   );
-}
+};
+
+export default NewsList;
