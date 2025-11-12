@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AskNews from "./components/AskNews";
 import Sidebar from "./components/Sidebar";
-import "./styles.css";
+import "./index.css";
 
 function App() {
   const [news, setNews] = useState([]);
