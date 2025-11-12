@@ -32,3 +32,16 @@ body{background:var(--bg);color:var(--text);padding:18px;}
   .container{grid-template-columns:1fr; padding:10px}
   .sidebar{position:static}
 }
+.share-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.share-btn:hover {
+  background: #1e40af;
+}
