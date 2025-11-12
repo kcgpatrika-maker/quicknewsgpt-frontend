@@ -1,9 +1,9 @@
-/* ===== Global Reset ===== */
+/* ===== Global ===== */
 body {
   margin: 0;
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #f9fafb;
-  color: #0f172a;
+  background-color: #f3f4f6;
+  color: #111827;
 }
 
 /* ===== Header ===== */
@@ -12,8 +12,8 @@ body {
   justify-content: space-between;
   align-items: flex-end;
   padding: 20px;
-  border-bottom: 1px solid #e5e7eb;
   background: #fff;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .title {
@@ -29,20 +29,22 @@ body {
 
 /* ===== Layout ===== */
 .container {
-  display: grid;
-  grid-template-columns: 3fr 1fr; /* main + sidebar */
-  gap: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   padding: 20px;
-  align-items: start;
+  gap: 20px;
 }
 
 .main-column {
+  flex: 3;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .sidebar {
+  flex: 1;
   position: sticky;
   top: 10px;
   display: flex;
@@ -50,12 +52,12 @@ body {
   gap: 20px;
 }
 
-/* ===== Cards ===== */
+/* ===== Card ===== */
 .card {
   background: #fff;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .card h2, .card h3 {
@@ -70,22 +72,21 @@ body {
   padding: 30px;
 }
 
-/* ===== News Items ===== */
+/* ===== News ===== */
 .news-item {
   margin-bottom: 15px;
-  border-bottom: 1px solid #e5e7eb;
   padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .news-item:last-child {
   border-bottom: none;
   margin-bottom: 0;
-  padding-bottom: 0;
 }
 
 .news-title {
   font-weight: 600;
-  color: #1e40af;
+  color: #1d4ed8;
   text-decoration: none;
 }
 
@@ -93,14 +94,31 @@ body {
   text-decoration: underline;
 }
 
-/* ===== Footer ===== */
-.footer {
-  margin-top: 40px;
-  text-align: center;
-  color: #6b7280;
+.read-more {
+  display: inline-block;
+  margin-top: 6px;
   font-size: 13px;
-  border-top: 1px solid #e5e7eb;
-  padding-top: 10px;
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.read-more:hover {
+  text-decoration: underline;
+}
+
+/* ===== Ask Section ===== */
+.ask-box input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.ask-box {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 /* ===== Buttons ===== */
@@ -118,7 +136,26 @@ button:hover {
   background-color: #1d4ed8;
 }
 
-/* ===== Share Section ===== */
+/* ===== Refresh Section ===== */
+.refresh-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.refresh-icon {
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.refresh-icon:hover {
+  transform: rotate(90deg);
+}
+
+/* ===== Sidebar ===== */
 .share-section {
   display: flex;
   flex-direction: column;
@@ -129,12 +166,27 @@ button:hover {
   width: 100%;
 }
 
-/* ===== Small Screens ===== */
+.about {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+/* ===== Footer ===== */
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 10px;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
   }
-
   .sidebar {
     position: static;
   }
