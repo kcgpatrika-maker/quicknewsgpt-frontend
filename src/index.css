@@ -1,30 +1,36 @@
+/* QuickNewsGPT - Original Light Theme Layout */
+
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8fafc;
+  font-family: "Segoe UI", Arial, sans-serif;
   margin: 0;
   padding: 0;
-  color: #111;
+  background-color: #f8fafc;
+  color: #1e293b;
 }
 
+/* Main container */
 .app-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  align-items: flex-start;
   gap: 20px;
+  padding: 20px;
 }
 
+/* News section */
 .news-section {
   width: 60%;
   background: white;
   border-radius: 16px;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Headlines */
 .headline {
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
 }
 
 .headline h2 {
@@ -34,39 +40,44 @@ body {
 
 .headline p {
   font-size: 14px;
-  color: #444;
+  color: #475569;
 }
 
-button {
+.read-btn {
   background-color: #2563eb;
   color: white;
   border: none;
   padding: 6px 12px;
   border-radius: 8px;
   cursor: pointer;
+  font-size: 13px;
 }
 
+/* Advertisement box */
+.ad-box {
+  border: 2px dashed #94a3b8;
+  border-radius: 12px;
+  text-align: center;
+  color: gray;
+  font-size: 15px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+/* Ask section */
+.ask-section {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+}
+
+/* Sidebar */
 .sidebar {
   width: 25%;
   background: white;
   border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.ask-section {
-  background: white;
-  border-radius: 16px;
-  padding: 16px;
-  margin-top: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.ad-box {
-  margin: 16px 0;
-  text-align: center;
-  color: gray;
-  border: 2px dashed #ccc;
-  border-radius: 10px;
   padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
 }
