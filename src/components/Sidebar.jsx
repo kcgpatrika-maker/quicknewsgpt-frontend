@@ -1,15 +1,12 @@
 import React from "react";
 
 const Sidebar = () => {
-  const siteLink = "https://quicknewsgpt.vercel.app";
+  const siteLink = (import.meta.env.VITE_PUBLIC_SITE || "https://quicknewsgpt-frontend.vercel.app") || window.location.origin;
 
   const handleCopy = () => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(siteLink).then(() => {
-        alert("✅ Link copied to clipboard!");
-      });
+      navigator.clipboard.writeText(siteLink).then(() => alert("✅ Link copied to clipboard!"));
     } else {
-      // fallback
       const el = document.createElement("textarea");
       el.value = siteLink;
       document.body.appendChild(el);
@@ -23,37 +20,29 @@ const Sidebar = () => {
   const handleShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: "Quick News GPT",
-          text: "Check out QuickNewsGPT — AI summaries of latest India news.",
-          url: siteLink,
-        });
+        await navigator.share({ title: "Quick News GPT", text: "Check QuickNewsGPT — AI summaries of latest news", url: siteLink });
       } catch (err) {
-        console.log("Share cancelled or failed:", err);
+        console.log("Share failed:", err);
       }
     } else {
-      alert("Sharing not supported on this device, please copy the link instead.");
+      alert("Sharing not supported on this device. Please copy the link.");
     }
   };
 
   return (
-    <aside className="sidebar">
-      <div className="side-box">
-        <div className="side-title">Quick News GPT</div>
-
-        <div style={{ marginTop: 8 }}>
-          <div className="side-title">Share this site</div>
-          <div style={{ marginTop: 8 }}>
-            <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
-            <button onClick={handleShare} className="share-btn">📤 Share</button>
-          </div>
+    <aside>
+      <div className="card share-section">
+        <div className="side-title" style={{ fontWeight: 700 }}>Share this site</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
+          <button onClick={handleShare} className="share-btn">📤 Share</button>
         </div>
       </div>
 
-      <div className="side-box" style={{ marginTop: 16 }}>
-        <div className="side-title">About</div>
-        <p style={{ fontSize: 13, lineHeight: "18px", marginTop: 8 }}>
-          QuickNewsGPT delivers instant AI-generated summaries of trending headlines.
+      <div className="card about">
+        <div className="side-title" style={{ fontWeight: 700 }}>About</div>
+        <p style={{ marginTop: 8 }}>
+          QuickNewsGPT delivers instant AI-summaries of latest headlines in Hindi & English.
         </p>
       </div>
     </aside>
