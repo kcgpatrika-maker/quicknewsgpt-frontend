@@ -1,22 +1,32 @@
 import React, { useState } from "react";
-export default function AskNews(){
-  const [q, setQ] = useState("");
+
+export default function AskNews() {
+  const [query, setQuery] = useState("");
+  const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
-  const BACKEND = import.meta.env.VITE_BACKEND_URL;
+  const [error, setError] = useState("");
 
   const handleAsk = async () => {
-    if(!q.trim()) return;
+    if (!query.trim()) {
+      setError("कृपया कुछ लिखें।");
+      return;
+    }
     setLoading(true);
-    setResults(null);
+    setError("");
+    setArticles([]);
     try {
-      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || ""}/ask?query=${encodeURIComponent(query)}`);
       const data = await res.json();
-      const list = data.news || data.samples || [];
-      setResults(list);
-    } catch(err){
+      // normalize (data.news / data.samples / data)
+      const arr = data?.news || data?.samples || (Array.isArray(data) ? data : []);
+      if (arr && arr.length > 0) {
+        setArticles(arr);
+      } else {
+        setError("No related news found.");
+      }
+    } catch (err) {
       console.error("Ask error:", err);
-      setResults([]);
+      setError("Error fetching news. Try again.");
     } finally {
       setLoading(false);
     }
@@ -24,21 +34,33 @@ export default function AskNews(){
 
   return (
     <div>
-      <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:10}} className="ask-row">
-        <input className="ask-input" placeholder="Type a topic (e.g. Delhi, AI, monsoon...)" value={q} onChange={e=>setQ(e.target.value)} />
-        <button className="ask-btn" onClick={handleAsk} disabled={loading}>{loading ? "Asking..." : "Ask"}</button>
+      <div className="ask-box" style={{ marginBottom: 12 }}>
+        <input
+          type="text"
+          placeholder="e.g. AI, monsoon, startup..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          style={{ padding: 10, borderRadius: 8, border: "1px solid #d1d5db", fontSize: 15, width: "100%" }}
+        />
+      </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={handleAsk} disabled={loading}>{loading ? "Asking..." : "Ask"}</button>
+        <button onClick={() => { setQuery(""); setArticles([]); setError(""); }}>Reset</button>
       </div>
 
-      <div>
-        {results === null && <div style={{color:"#6b7280"}}>Ask a topic to see related news instantly.</div>}
-        {results && results.length===0 && <div style={{color:"#6b7280"}}>No related news found.</div>}
-        {results && results.length>0 && (
-          <div style={{display:"grid",gap:8}}>
-            {results.map((r, i)=>(
-              <div key={i} style={{padding:10,borderRadius:10,background:"#fff",border:"1px solid #eef2ff"}}>
-                <div style={{fontWeight:600}}>{r.title}</div>
-                <div style={{color:"#6b7280",fontSize:13}}>{r.summary||r.description||""}</div>
-                {r.link && <a href={r.link} target="_blank" rel="noreferrer" style={{color:"#2563eb",fontSize:13}}>Read full story</a>}
+      <div style={{ marginTop: 12 }}>
+        {error && <div style={{ color: "#dc2626" }}>{error}</div>}
+        {articles.length > 0 && (
+          <div style={{ marginTop: 8 }}>
+            {articles.map((a, i) => (
+              <div key={a.id || i} className="card" style={{ marginBottom: 10 }}>
+                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{a.title}</div>
+                <div style={{ color: "#374151", marginTop: 6 }}>{a.summary || a.description || a.content}</div>
+                {a.link && (
+                  <div style={{ marginTop: 8 }}>
+                    <a href={a.link} target="_blank" rel="noreferrer" className="read-more">Read Full Story</a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
