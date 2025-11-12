@@ -1,34 +1,88 @@
-:root{
-  --bg: #ffffff;
-  --card: #f8fafc;
-  --muted: #6b7280;
-  --accent: #2563eb;
-  --border: #e6e9ef;
-  --text: #111827;
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
 }
-*{box-sizing:border-box}
-html,body,#root{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;}
-body{background:var(--bg);color:var(--text);padding:18px;}
-.container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.title{font-size:24px;font-weight:700;color:var(--accent)}
-.tagline{font-size:13px;color:var(--muted)}
-.main-column{background:transparent}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 2px rgba(15,23,42,0.03)}
-.headline{font-size:18px;font-weight:600;margin:0 0 6px}
-.summary{color:var(--muted);margin:0 0 8px;font-size:14px}
-.readmore{display:inline-block;padding:8px 12px;background:var(--accent);color:white;border-radius:8px;text-decoration:none;font-size:13px}
-.ad{border:2px dashed #e2e8f0;padding:20px;border-radius:10px;text-align:center;color:var(--muted);font-weight:600}
-.ask-row{display:flex;gap:8px;align-items:center}
-.ask-input{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border)}
-.ask-btn{padding:10px 14px;background:var(--accent);color:white;border-radius:10px;border:none;cursor:pointer}
-.sidebar{position:sticky;top:20px}
-.side-section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px}
-.side-title{font-weight:600;margin-bottom:8px}
-.mini-item{font-size:14px;padding:6px 0;border-bottom:1px solid #f1f5f9;color:var(--text)}
-.mini-item:last-child{border-bottom:none}
-.footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-@media (max-width:900px){
-  .container{grid-template-columns:1fr; padding:10px}
-  .sidebar{position:static}
+
+.app-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.main-section {
+  flex: 3;
+  margin-right: 20px;
+}
+
+.headline {
+  color: #2563eb;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.news-card {
+  background: white;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.read-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.read-link:hover {
+  text-decoration: underline;
+}
+
+.ad-box {
+  background: #e2e8f0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 15px;
+  color: #475569;
+}
+
+.ask-section {
+  margin-top: 30px;
+}
+
+.sidebar {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.side-title {
+  color: #2563eb;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.side-card {
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #334155;
+}
+
+.footer {
+  margin-top: 20px;
+  font-size: 13px;
+  text-align: center;
+  color: #64748b;
 }
