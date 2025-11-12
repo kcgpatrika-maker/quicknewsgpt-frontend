@@ -2,70 +2,82 @@ import React, { useState } from "react";
 
 export default function AskNews() {
   const [query, setQuery] = useState("");
-  const [articles, setArticles] = useState([]);
+  const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
-  const handleAsk = async () => {
-    if (!query.trim()) {
-      setError("कृपया कुछ लिखें।");
-      return;
-    }
+  const askNews = async () => {
+    if (!query.trim()) return;
     setLoading(true);
     setError("");
-    setArticles([]);
+    setAnswer("");
+
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || ""}/ask?query=${encodeURIComponent(query)}`);
+      const res = await fetch(`${BACKEND}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.status}`);
+      }
+
       const data = await res.json();
-      // normalize (data.news / data.samples / data)
-      const arr = data?.news || data?.samples || (Array.isArray(data) ? data : []);
-      if (arr && arr.length > 0) {
-        setArticles(arr);
+      if (data.answer) {
+        setAnswer(data.answer);
       } else {
-        setError("No related news found.");
+        setAnswer("No related news found.");
       }
     } catch (err) {
-      console.error("Ask error:", err);
-      setError("Error fetching news. Try again.");
+      console.error("Error asking news:", err);
+      setError("Error fetching response. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  const resetForm = () => {
+    setQuery("");
+    setAnswer("");
+    setError("");
+  };
+
   return (
     <div>
-      <div className="ask-box" style={{ marginBottom: 12 }}>
-        <input
-          type="text"
-          placeholder="e.g. AI, monsoon, startup..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          style={{ padding: 10, borderRadius: 8, border: "1px solid #d1d5db", fontSize: 15, width: "100%" }}
-        />
-      </div>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={handleAsk} disabled={loading}>{loading ? "Asking..." : "Ask"}</button>
-        <button onClick={() => { setQuery(""); setArticles([]); setError(""); }}>Reset</button>
-      </div>
+      <input
+        type="text"
+        placeholder="Ask anything about news..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        style={{
+          width: "80%",
+          padding: "8px",
+          border: "1px solid #d1d5db",
+          borderRadius: "6px",
+          marginRight: "8px",
+        }}
+      />
+      <button onClick={askNews} disabled={loading}>
+        {loading ? "Loading..." : "Ask"}
+      </button>
+      <button
+        onClick={resetForm}
+        style={{
+          marginLeft: "6px",
+          backgroundColor: "#9ca3af",
+        }}
+      >
+        Reset
+      </button>
 
-      <div style={{ marginTop: 12 }}>
-        {error && <div style={{ color: "#dc2626" }}>{error}</div>}
-        {articles.length > 0 && (
-          <div style={{ marginTop: 8 }}>
-            {articles.map((a, i) => (
-              <div key={a.id || i} className="card" style={{ marginBottom: 10 }}>
-                <div style={{ fontWeight: 600, color: "#1e3a8a" }}>{a.title}</div>
-                <div style={{ color: "#374151", marginTop: 6 }}>{a.summary || a.description || a.content}</div>
-                {a.link && (
-                  <div style={{ marginTop: 8 }}>
-                    <a href={a.link} target="_blank" rel="noreferrer" className="read-more">Read Full Story</a>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {answer && (
+        <div style={{ marginTop: "10px", color: "#111827" }}>
+          <strong>Answer:</strong> {answer}
+        </div>
+      )}
     </div>
   );
 }
