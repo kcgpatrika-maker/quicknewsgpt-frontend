@@ -1,88 +1,72 @@
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8fafc;
-  color: #1e293b;
   margin: 0;
   padding: 0;
+  color: #111;
 }
 
 .app-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px;
+  gap: 20px;
 }
 
-.main-section {
-  flex: 3;
-  margin-right: 20px;
+.news-section {
+  width: 60%;
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .headline {
-  color: #2563eb;
-  font-size: 28px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.news-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+.headline h2 {
+  font-size: 18px;
+  color: #1e3a8a;
 }
 
-.news-card {
-  background: white;
-  border-radius: 10px;
-  padding: 16px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+.headline p {
+  font-size: 14px;
+  color: #444;
 }
 
-.read-link {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.read-link:hover {
-  text-decoration: underline;
-}
-
-.ad-box {
-  background: #e2e8f0;
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
   border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 15px;
-  color: #475569;
-}
-
-.ask-section {
-  margin-top: 30px;
+  cursor: pointer;
 }
 
 .sidebar {
-  flex: 1;
-  background: #ffffff;
-  border-radius: 12px;
+  width: 25%;
+  background: white;
+  border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.side-title {
-  color: #2563eb;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.side-card {
-  margin-bottom: 16px;
-  font-size: 14px;
-  color: #334155;
-}
-
-.footer {
+.ask-section {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
   margin-top: 20px;
-  font-size: 13px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ad-box {
+  margin: 16px 0;
   text-align: center;
-  color: #64748b;
+  color: gray;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 20px;
 }
