@@ -4,7 +4,7 @@ import AskNews from "./components/AskNews";
 import Sidebar from "./components/Sidebar";
 
 export default function App() {
-  const BACKEND = import.meta.env.VITE_BACKEND_URL;
+  const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
   return (
     <div>
@@ -23,7 +23,7 @@ export default function App() {
       {/* Main Layout */}
       <div className="container">
         <main className="main-column">
-          {/* Headlines section */}
+          {/* Headlines section (NewsList handles heading & refresh) */}
           <section className="card">
             <NewsList />
           </section>
