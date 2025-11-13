@@ -14,48 +14,49 @@ export default function AskNews() {
     setAnswer("");
 
     try {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 15000);
 
-  const url = `${BACKEND}/ask?query=${encodeURIComponent(query)}`;
-  const res = await fetch(url, {
-    method: "GET",
-    signal: controller.signal,
-  });
+      const url = `${BACKEND}/ask?query=${encodeURIComponent(query)}`;
+      const res = await fetch(url, {
+        method: "GET",
+        signal: controller.signal,
+      });
 
-  clearTimeout(timeout);
+      clearTimeout(timeout);
 
-  // पहले raw text लो
-  const text = await res.text();
+      // पहले raw text लो
+      const text = await res.text();
 
-  // JSON parse करने की कोशिश करो
-  let data = {};
-  try {
-    data = JSON.parse(text);
-  } catch {
-    data = { answer: text }; // अगर plain text है तो भी दिखा दो
-  }
+      // JSON parse करने की कोशिश करो
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { answer: text }; // अगर plain text है तो भी दिखा दो
+      }
 
-  if (!res.ok) {
-    throw new Error(data.error || `Server error: ${res.status}`);
-  }
+      if (!res.ok) {
+        throw new Error(data.error || `Server error: ${res.status}`);
+      }
 
-  if (data.answer) {
-    setAnswer(data.answer);
-  } else if (data.output) {
-    setAnswer(data.output);
-  } else {
-    setAnswer("No related news found.");
-  }
-} catch (err) {
-  if (err.name === "AbortError") {
-    setError("Server took too long to respond. Please try again later.");
-  } else {
-    setError(err.message || "Error fetching response. Please check backend or try again.");
-  }
-} finally {
-  setLoading(false);
-}
+      if (data.answer) {
+        setAnswer(data.answer);
+      } else if (data.output) {
+        setAnswer(data.output);
+      } else {
+        setAnswer("No related news found.");
+      }
+    } catch (err) {
+      if (err.name === "AbortError") {
+        setError("Server took too long to respond. Please try again later.");
+      } else {
+        setError(err.message || "Error fetching response. Please check backend or try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const resetForm = () => {
     setQuery("");
