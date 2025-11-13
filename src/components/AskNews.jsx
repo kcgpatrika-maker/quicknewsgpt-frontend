@@ -23,6 +23,14 @@ export default function AskNews() {
     }
   };
 
+  const handleReset = () => {
+    setQ("");
+    setResults(null);
+  };
+
+  return (
+    <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
+
   // ✅ Reset function (newly added)
   const handleReset = () => {
     setQ("");
