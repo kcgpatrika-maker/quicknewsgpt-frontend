@@ -14,13 +14,16 @@ export default function AskNews() {
     setAnswer("");
 
     try {
-      const res = await fetch(`${BACKEND}/ask`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
+      const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 15000);
+
+const res = await fetch(`${BACKEND}/ask`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query }),
+  signal: controller.signal,
+});
+clearTimeout(timeout);
 
       // अगर सर्वर से सही JSON नहीं आता
       const data = await res.json().catch(() => ({}));
@@ -38,12 +41,12 @@ export default function AskNews() {
         setAnswer("No related news found.");
       }
     } catch (err) {
-      console.error("Error asking news:", err);
-      setError("Server is responding slowly. Please try again in a few seconds.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (err.name === "AbortError") {
+    setError("Server took too long to respond. Please try again later.");
+  } else {
+    setError("Error fetching response. Please check backend or try again.");
+  }
+}
 
   const resetForm = () => {
     setQuery("");
