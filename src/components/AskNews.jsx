@@ -23,50 +23,66 @@ export default function AskNews() {
     }
   };
 
+  // ✅ Reset function
   const handleReset = () => {
     setQ("");
     setResults(null);
   };
 
   return (
-    <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
-
-  // ✅ Reset function (newly added)
-  const handleReset = () => {
-    setQ("");
-    setResults(null);
-  };
-
-  return (
-    <div>
+    <div
+      style={{
+        background: "#f9fafb",
+        padding: "16px",
+        borderRadius: "10px",
+        border: "1px solid #e5e7eb",
+      }}
+    >
       <div
         style={{
           display: "flex",
-          gap: 10,
+          gap: "10px",
           alignItems: "center",
-          marginBottom: 10,
+          marginBottom: "10px",
         }}
-        className="ask-row"
       >
         <input
           className="ask-input"
-          placeholder="Type a topic (e.g. Delhi, AI, monsoon...)"
+          placeholder="क्विक न्यूज़ GPT से पूछें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
+          style={{
+            flex: 1,
+            padding: "8px",
+            border: "1px solid #d1d5db",
+            borderRadius: "6px",
+          }}
         />
         <button
           className="ask-btn"
           onClick={handleAsk}
           disabled={loading}
+          style={{
+            backgroundColor: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+          }}
         >
-          {loading ? "Asking..." : "Ask"}
+          {loading ? "Loading..." : "Ask"}
         </button>
-
-        {/* ✅ Reset button */}
         <button
-          className="ask-btn"
           onClick={handleReset}
-          style={{ backgroundColor: "#9ca3af" }}
+          style={{
+            backgroundColor: "#9ca3af",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+          }}
         >
           Reset
         </button>
@@ -75,20 +91,20 @@ export default function AskNews() {
       <div>
         {results === null && (
           <div style={{ color: "#6b7280" }}>
-            Ask a topic to see related news instantly.
+            कोई विषय टाइप करें (जैसे दिल्ली, बिहार, AI...) — और क्विक जवाब पाएं।
           </div>
         )}
         {results && results.length === 0 && (
           <div style={{ color: "#6b7280" }}>No related news found.</div>
         )}
         {results && results.length > 0 && (
-          <div style={{ display: "grid", gap: 8 }}>
+          <div style={{ display: "grid", gap: "8px" }}>
             {results.map((r, i) => (
               <div
                 key={i}
                 style={{
-                  padding: 10,
-                  borderRadius: 10,
+                  padding: "10px",
+                  borderRadius: "10px",
                   background: "#fff",
                   border: "1px solid #eef2ff",
                 }}
