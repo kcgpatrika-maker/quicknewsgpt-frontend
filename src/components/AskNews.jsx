@@ -15,15 +15,16 @@ export default function AskNews() {
 
     try {
       const controller = new AbortController();
-const timeout = setTimeout(() => controller.abort(), 15000);
+      const timeout = setTimeout(() => controller.abort(), 15000);
 
-const res = await fetch(`${BACKEND}/ask`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ query }),
-  signal: controller.signal,
-});
-clearTimeout(timeout);
+      const res = await fetch(`${BACKEND}/ask`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
 
       // अगर सर्वर से सही JSON नहीं आता
       const data = await res.json().catch(() => ({}));
@@ -35,18 +36,20 @@ clearTimeout(timeout);
       if (data.answer) {
         setAnswer(data.answer);
       } else if (data.output) {
-        // fallback (कुछ बैकएंड 'output' key में जवाब भेजते हैं)
         setAnswer(data.output);
       } else {
         setAnswer("No related news found.");
       }
     } catch (err) {
-  if (err.name === "AbortError") {
-    setError("Server took too long to respond. Please try again later.");
-  } else {
-    setError("Error fetching response. Please check backend or try again.");
-  }
-}
+      if (err.name === "AbortError") {
+        setError("Server took too long to respond. Please try again later.");
+      } else {
+        setError("Error fetching response. Please check backend or try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const resetForm = () => {
     setQuery("");
