@@ -1,126 +1,49 @@
 import React, { useState } from "react";
-
-export default function AskNews() {
-  const [query, setQuery] = useState("");
-  const [answer, setAnswer] = useState("");
+export default function AskNews(){
+  const [q, setQ] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [results, setResults] = useState(null);
   const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
-  const askNews = async () => {
-    if (!query.trim()) return;
+  const handleAsk = async () => {
+    if(!q.trim()) return;
     setLoading(true);
-    setError("");
-    setAnswer("");
-
+    setResults(null);
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-
-      const url = `${BACKEND}/ask?query=${encodeURIComponent(query)}`;
-      const res = await fetch(url, {
-        method: "GET",
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeout);
-
-      // पहले raw text लो
-      const text = await res.text();
-
-      // JSON parse करने की कोशिश करो
-      let data = {};
-      try {
-        data = JSON.parse(text);
-      } catch {
-        data = { answer: text }; // अगर plain text है तो भी दिखा दो
-      }
-
-      if (!res.ok) {
-        throw new Error(data.error || `Server error: ${res.status}`);
-      }
-
-      if (data.answer) {
-        setAnswer(data.answer);
-      } else if (data.output) {
-        setAnswer(data.output);
-      } else {
-        setAnswer("No related news found.");
-      }
-    } catch (err) {
-      if (err.name === "AbortError") {
-        setError("Server took too long to respond. Please try again later.");
-      } else {
-        setError(err.message || "Error fetching response. Please check backend or try again.");
-      }
+      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+      const data = await res.json();
+      const list = data.news || data.samples || [];
+      setResults(list);
+    } catch(err){
+      console.error("Ask error:", err);
+      setResults([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const resetForm = () => {
-    setQuery("");
-    setAnswer("");
-    setError("");
-  };
-
   return (
     <div>
-      <input
-        type="text"
-        placeholder="क्विक न्यूज़ GPT से कुछ भी पूछें..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && askNews()}
-        style={{
-          width: "80%",
-          padding: "8px",
-          border: "1px solid #d1d5db",
-          borderRadius: "6px",
-          marginRight: "8px",
-        }}
-      />
-      <button
-        onClick={askNews}
-        disabled={loading}
-        style={{
-          backgroundColor: "#2563eb",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
-          padding: "8px 14px",
-        }}
-      >
-        {loading ? "Loading..." : "Ask"}
-      </button>
-      <button
-        onClick={resetForm}
-        style={{
-          marginLeft: "6px",
-          backgroundColor: "#9ca3af",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          padding: "8px 14px",
-        }}
-      >
-        Reset
-      </button>
+      <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:10}} className="ask-row">
+        <input className="ask-input" placeholder="Type a topic (e.g. Delhi, AI, monsoon...)" value={q} onChange={e=>setQ(e.target.value)} />
+        <button className="ask-btn" onClick={handleAsk} disabled={loading}>{loading ? "Asking..." : "Ask"}</button>
+      </div>
 
-      {error && <p style={{ color: "red", marginTop: "8px" }}>{error}</p>}
-      {answer && (
-        <div
-          style={{
-            marginTop: "12px",
-            padding: "10px",
-            backgroundColor: "#f9fafb",
-            border: "1px solid #e5e7eb",
-            borderRadius: "8px",
-          }}
-        >
-          <strong>Answer:</strong> {answer}
-        </div>
-      )}
+      <div>
+        {results === null && <div style={{color:"#6b7280"}}>Ask a topic to see related news instantly.</div>}
+        {results && results.length===0 && <div style={{color:"#6b7280"}}>No related news found.</div>}
+        {results && results.length>0 && (
+          <div style={{display:"grid",gap:8}}>
+            {results.map((r, i)=>(
+              <div key={i} style={{padding:10,borderRadius:10,background:"#fff",border:"1px solid #eef2ff"}}>
+                <div style={{fontWeight:600}}>{r.title}</div>
+                <div style={{color:"#6b7280",fontSize:13}}>{r.summary||r.description||""}</div>
+                {r.link && <a href={r.link} target="_blank" rel="noreferrer" style={{color:"#2563eb",fontSize:13}}>Read full story</a>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
