@@ -5,6 +5,7 @@ export default function AskNews() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const BACKEND = import.meta.env.VITE_BACKEND_URL;
 
   const handleAsk = async () => {
     if (!query.trim()) {
