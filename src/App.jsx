@@ -44,7 +44,7 @@ export default function App() {
     };
   }, [BACKEND]);
 
-  // Categorize and produce top-3 style headlines: International, India, State
+  // Categorize and produce top-3 style headlines: World, India, State
   useEffect(() => {
     const items = Array.isArray(allNews) ? allNews : [];
 
@@ -59,7 +59,7 @@ export default function App() {
         keywords.some((k) => lower(n.title).includes(k) || lower(n.summary || n.description || "").includes(k))
       );
 
-    const international = findByKeywords([
+    const world = findByKeywords([
       "world",
       "international",
       "foreign",
@@ -122,7 +122,7 @@ export default function App() {
       }
     };
 
-    addIfUnique(international, "🌍 International");
+    addIfUnique(world, "🌍 World");
     addIfUnique(india, "🇮🇳 India");
     addIfUnique(state, "🏜️ Rajasthan / State");
 
