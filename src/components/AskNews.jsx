@@ -55,44 +55,50 @@ export default function AskNews() {
   // -----------------------------------------
   // SELECT TOP-3 HEADLINES IN CORRECT ORDER
   // -----------------------------------------
-  const pickTopThree = (list) => {
-    const world = list.filter((n) => (n.category || "").toLowerCase() === "world");
-    const india = list.filter((n) => (n.category || "").toLowerCase() === "india");
-    const rajasthan = list.filter((n) => (n.category || "").toLowerCase() === "rajasthan");
-    const state = list.filter((n) => (n.category || "").toLowerCase() === "state");
-    const general = list.filter((n) => !n.category || (n.category || "").toLowerCase() === "general");
+ const pickTopThree = (list) => {
+  if (!list || list.length === 0) return [];
 
-    const final = [];
+  const world = list.filter(n => (n.category || "").toLowerCase() === "world");
+  const india = list.filter(n => (n.category || "").toLowerCase() === "india");
+  const rajasthan = list.filter(n => (n.category || "").toLowerCase() === "rajasthan");
+  const state = list.filter(n => (n.category || "").toLowerCase() === "state");
+  const general = list.filter(n => (n.category || "").toLowerCase() === "general");
 
-    // 1) First: world -> else india
-    if (world[0]) final.push(world[0]);
-    else if (india[0]) final.push(india[0]);
+  const final = [];
 
-    // 2) Second: india -> else any state
-    if (india[0] && (final[0] !== india[0])) final.push(india[0]);
-    else if (state[0] && !final.includes(state[0])) final.push(state[0]);
+  // 1) First Priority: World -> else India -> else anything
+  final.push(
+    world[0] || india[0] || list[0]
+  );
 
-    // 3) Third: rajasthan -> else any state -> else general
-    if (rajasthan[0] && !final.includes(rajasthan[0])) final.push(rajasthan[0]);
-    else {
-      // pick any state not already used
-      const st = state.find(s => !final.includes(s));
-      if (st) final.push(st);
-      else {
-        const g = general.find(g => !final.includes(g));
-        if (g) final.push(g);
-      }
-    }
+  // 2) Second Priority: India -> else State -> else General -> else anything remaining
+  final.push(
+    india.find(i => !final.includes(i)) ||
+    state.find(s => !final.includes(s)) ||
+    general.find(g => !final.includes(g)) ||
+    list.find(x => !final.includes(x))
+  );
 
-    // Fill if less than 3 with any remaining items (avoid duplicates)
-    const remaining = list.filter(item => !final.includes(item));
-    for (const r of remaining) {
-      if (final.length >= 3) break;
-      final.push(r);
-    }
+  // 3) Third Priority: Rajasthan -> else State -> else General -> else anything remaining
+  final.push(
+    rajasthan.find(r => !final.includes(r)) ||
+    state.find(s => !final.includes(s)) ||
+    general.find(g => !final.includes(g)) ||
+    list.find(x => !final.includes(x))
+  );
 
-    return final.slice(0, 3);
-  };
+  // Remove duplicates if any
+  const unique = final.filter((v, i, a) => v && a.indexOf(v) === i);
+
+  // If still less than 3, fill with remaining
+  while (unique.length < 3) {
+    const extra = list.find(x => !unique.includes(x));
+    if (!extra) break;
+    unique.push(extra);
+  }
+
+  return unique.slice(0, 3);
+};
 
   // -----------------------------------------
   // FETCH + PROCESS NEWS
