@@ -88,29 +88,28 @@ const handleAsk = async () => {
   setResults(null);
 
   try {
-    const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+    const res = await fetch(
+      `${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`
+    );
+
     const data = await res.json();
+    const raw = data.news || data.samples || data || [];
 
-    // items array निकालें
-    const items = data.news || data.samples || data || [];
-
-    // category जोड़ें
-    const processed = items.map(item => ({
+    // Process
+    const processed = raw.map(item => ({
       ...item,
       category: detectCategory(item)
     }));
 
-    // 3 headlines चुनें
     const topThree = pickTopThree(processed);
-
     setResults(topThree);
 
   } catch (err) {
     console.error("Ask error:", err);
     setResults([]);
+  } finally {
+    setLoading(false);
   }
-
-  setLoading(false);
 };
 
       // Add category to each news item
