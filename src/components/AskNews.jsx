@@ -114,6 +114,12 @@ export default function AskNews() {
         ...item,
         category: detectCategory(item),
       }));
+const processed = items.map((item) => ({
+  ...item,
+  category: detectCategory(item),
+}));
+
+console.log("TOTAL NEWS:", processed.length, processed);
 
       // Choose top-3 according to rules
       const topThree = pickTopThree(processed);
