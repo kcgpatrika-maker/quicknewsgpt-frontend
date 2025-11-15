@@ -9,39 +9,48 @@ export default function AskNews() {
   // -----------------------------------------
   // CATEGORY DETECTION (Strong + Corrected)
   // -----------------------------------------
-  const detectCategory = (text = "") => {
-    const t = text.toLowerCase();
+  function detectCategory(item) {
+  const text = (
+    `${item.title || ""} ${item.summary || ""} ${item.description || ""}`
+  ).toLowerCase();
 
-    // Rajasthan
-    if (/rajasthan|jaipur|udaipur|jodhpur/.test(t)) {
-      return "Rajasthan";
-    }
+  // 1) Rajasthan — highest priority
+  if (text.includes("rajasthan") || text.includes("jaipur") || text.includes("udaipur")) {
+    return "Rajasthan";
+  }
 
-    // All Indian States
-    const stateList = [
-      "bihar","up","uttar pradesh","mp","madhya pradesh","tamil nadu",
-      "kerala","karnataka","punjab","haryana","assam","gujarat",
-      "telangana","andhra","odisha","jharkhand","chhattisgarh",
-      "maharashtra","west bengal","uttarakhand","himachal",
-      "goa","tripura","manipur","mizoram","nagaland","sikkim"
-    ];
+  // 2) State (ANY Indian state)
+  const states = [
+    "bihar","patna","jharkhand","up","uttar pradesh","mp","madhya pradesh",
+    "tamil nadu","telangana","andhra","gujarat","punjab","haryana","kerala",
+    "karnataka","assam","odisha","chhattisgarh","himachal","uttarakhand",
+    "tripura","manipur","mizoram","nagaland","arunachal","goa","sikkim",
+    "maharashtra","mumbai","kolkata","west bengal"
+  ];
 
-    if (stateList.some((st) => t.includes(st))) {
-      return "State";
-    }
+  for (const s of states) {
+    if (text.includes(s)) return "State";
+  }
 
-    // India (national level)
-    if (/india|delhi|mumbai|kolkata|national|modi|government/.test(t)) {
-      return "India";
-    }
+  // 3) India (National stories)
+  if (
+    text.includes("india") ||
+    text.includes("delhi") ||
+    text.includes("modi") ||
+    text.includes("parliament") ||
+    text.includes("supreme court")
+  ) {
+    return "India";
+  }
 
-    // World
-    if (/usa|america|china|russia|pakistan|uk|europe|france|japan|united nations/.test(t)) {
-      return "World";
-    }
+  // 4) International
+  const world = ["us ", "usa", "america", "china", "pakistan", "uk ", "russia"];
+  for (const w of world) {
+    if (text.includes(w)) return "World";
+  }
 
-    return "General";
-  };
+  return "General";
+}
 
   // -----------------------------------------
   // SELECT TOP-3 HEADLINES IN CORRECT ORDER
