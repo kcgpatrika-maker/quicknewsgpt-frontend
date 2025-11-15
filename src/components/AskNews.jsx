@@ -79,17 +79,36 @@ export default function AskNews() {
     return final.slice(0, 3);
   };
 
-  // -----------------------------------------
-  // FETCH + PROCESS NEWS
-  // -----------------------------------------
-  const handleAsk = async () => {
-    if (!q.trim()) return;
-    setLoading(true);
-    setResults(null);
-    try {
-      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
-      const data = await res.json();
-      const list = data.news || data.samples || [];
+ // -----------------------------------------
+// FETCH + PROCESS NEWS
+// -----------------------------------------
+const handleAsk = async () => {
+  if (!q.trim()) return;
+  setLoading(true);
+  setResults(null);
+
+  try {
+    const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+    const data = await res.json();
+
+    // data कितना भी nested आए, items = array पहचानें
+    const items = data.news || data.samples || data || [];
+
+    // Add category
+    const processed = items.map(item => ({
+      ...item,
+      category: detectCategory(item)
+    }));
+
+    setResults(processed);
+
+  } catch (err) {
+    console.error(err);
+    alert("Error fetching news.");
+  }
+
+  setLoading(false);
+};
 
       // Add category to each news item
       const processed = list.map((item) => {
