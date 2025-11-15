@@ -91,20 +91,23 @@ const handleAsk = async () => {
     const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
     const data = await res.json();
 
-    // data कितना भी nested आए, items = array पहचानें
+    // items array निकालें
     const items = data.news || data.samples || data || [];
 
-    // Add category
+    // category जोड़ें
     const processed = items.map(item => ({
       ...item,
       category: detectCategory(item)
     }));
 
-    setResults(processed);
+    // 3 headlines चुनें
+    const topThree = pickTopThree(processed);
+
+    setResults(topThree);
 
   } catch (err) {
-    console.error(err);
-    alert("Error fetching news.");
+    console.error("Ask error:", err);
+    setResults([]);
   }
 
   setLoading(false);
