@@ -9,96 +9,66 @@ export default function AskNews() {
   // -----------------------------------------
   // CATEGORY DETECTION (Strong + Corrected)
   // -----------------------------------------
-  function detectCategory(item) {
-    const text = (
-      `${item.title || ""} ${item.summary || ""} ${item.description || ""}`
-    ).toLowerCase();
+  const detectCategory = (text = "") => {
+    const t = text.toLowerCase();
 
-    // 1) Rajasthan — highest priority
-    if (text.includes("rajasthan") || text.includes("jaipur") || text.includes("udaipur")) {
+    // Rajasthan
+    if (/rajasthan|jaipur|udaipur|jodhpur/.test(t)) {
       return "Rajasthan";
     }
 
-    // 2) State (ANY Indian state)
-    const states = [
-      "bihar","patna","jharkhand","up","uttar pradesh","mp","madhya pradesh",
-      "tamil nadu","telangana","andhra","gujarat","punjab","haryana","kerala",
-      "karnataka","assam","odisha","chhattisgarh","himachal","uttarakhand",
-      "tripura","manipur","mizoram","nagaland","arunachal","goa","sikkim",
-      "maharashtra","mumbai","kolkata","west bengal"
+    // All Indian States
+    const stateList = [
+      "bihar","up","uttar pradesh","mp","madhya pradesh","tamil nadu",
+      "kerala","karnataka","punjab","haryana","assam","gujarat",
+      "telangana","andhra","odisha","jharkhand","chhattisgarh",
+      "maharashtra","west bengal","uttarakhand","himachal",
+      "goa","tripura","manipur","mizoram","nagaland","sikkim"
     ];
 
-    for (const s of states) {
-      if (text.includes(s)) return "State";
+    if (stateList.some((st) => t.includes(st))) {
+      return "State";
     }
 
-    // 3) India (National stories)
-    if (
-      text.includes("india") ||
-      text.includes("delhi") ||
-      text.includes("modi") ||
-      text.includes("parliament") ||
-      text.includes("supreme court")
-    ) {
+    // India (national level)
+    if (/india|delhi|mumbai|kolkata|national|modi|government/.test(t)) {
       return "India";
     }
 
-    // 4) International
-    const world = ["us ", "usa", "america", "china", "pakistan", "uk ", "russia"];
-    for (const w of world) {
-      if (text.includes(w)) return "World";
+    // World
+    if (/usa|america|china|russia|pakistan|uk|europe|france|japan|united nations/.test(t)) {
+      return "World";
     }
 
     return "General";
-  }
+  };
 
   // -----------------------------------------
   // SELECT TOP-3 HEADLINES IN CORRECT ORDER
   // -----------------------------------------
- const pickTopThree = (list) => {
-  if (!list || list.length === 0) return [];
+  const pickTopThree = (list) => {
+    const world = list.filter((n) => n.category === "World");
+    const india = list.filter((n) => n.category === "India");
+    const rajasthan = list.filter((n) => n.category === "Rajasthan");
+    const state = list.filter((n) => n.category === "State");
+    const general = list.filter((n) => n.category === "General");
 
-  const world = list.filter(n => (n.category || "").toLowerCase() === "world");
-  const india = list.filter(n => (n.category || "").toLowerCase() === "india");
-  const rajasthan = list.filter(n => (n.category || "").toLowerCase() === "rajasthan");
-  const state = list.filter(n => (n.category || "").toLowerCase() === "state");
-  const general = list.filter(n => (n.category || "").toLowerCase() === "general");
+    const final = [];
 
-  const final = [];
+    if (world[0]) final.push(world[0]);
+    if (india[0]) final.push(india[0]);
+    if (rajasthan[0]) final.push(rajasthan[0]);
+    if (!rajasthan[0] && state[0]) final.push(state[0]);
 
-  // 1) First Priority: World -> else India -> else anything
-  final.push(
-    world[0] || india[0] || list[0]
-  );
+    // If still less than 3, fill with state, then general
+    const pool = [...state.slice(1), ...general];
 
-  // 2) Second Priority: India -> else State -> else General -> else anything remaining
-  final.push(
-    india.find(i => !final.includes(i)) ||
-    state.find(s => !final.includes(s)) ||
-    general.find(g => !final.includes(g)) ||
-    list.find(x => !final.includes(x))
-  );
+    while (final.length < 3 && pool.length > 0) {
+      final.push(pool.shift());
+    }
 
-  // 3) Third Priority: Rajasthan -> else State -> else General -> else anything remaining
-  final.push(
-    rajasthan.find(r => !final.includes(r)) ||
-    state.find(s => !final.includes(s)) ||
-    general.find(g => !final.includes(g)) ||
-    list.find(x => !final.includes(x))
-  );
-
-  // Remove duplicates if any
-  const unique = final.filter((v, i, a) => v && a.indexOf(v) === i);
-
-  // If still less than 3, fill with remaining
-  while (unique.length < 3) {
-    const extra = list.find(x => !unique.includes(x));
-    if (!extra) break;
-    unique.push(extra);
-  }
-
-  return unique.slice(0, 3);
-};
+    return final.slice(0, 3);
+  };
 
   // -----------------------------------------
   // FETCH + PROCESS NEWS
@@ -107,29 +77,22 @@ export default function AskNews() {
     if (!q.trim()) return;
     setLoading(true);
     setResults(null);
-
     try {
       const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
       const data = await res.json();
-
-      // Normalize items array from different payload shapes
-      const items = data?.news || data?.samples || (Array.isArray(data) ? data : []);
+      const list = data.news || data.samples || [];
 
       // Add category to each news item
-      const processed = items.map((item) => ({
-        ...item,
-        category: detectCategory(item),
-      }));
-const processed = items.map((item) => ({
-  ...item,
-  category: detectCategory(item),
-}));
+      const processed = list.map((item) => {
+        const txt = `${item.title} ${item.summary} ${item.description}`;
+        return {
+          ...item,
+          category: detectCategory(txt),
+        };
+      });
 
-console.log("TOTAL NEWS:", processed.length, processed);
-
-      // Choose top-3 according to rules
+      // Select top 3
       const topThree = pickTopThree(processed);
-
       setResults(topThree);
     } catch (err) {
       console.error("Ask error:", err);
@@ -139,7 +102,6 @@ console.log("TOTAL NEWS:", processed.length, processed);
     }
   };
 
-  // ✅ Reset function
   const handleReset = () => {
     setQ("");
     setResults(null);
