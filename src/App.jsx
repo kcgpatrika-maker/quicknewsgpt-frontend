@@ -2,143 +2,186 @@ import React, { useEffect, useState } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
-import "./App.css";
 
 function App() {
-  const [newsData, setNewsData] = useState({
-    world: [],
-    india: [],
-    state: []
-  });
-
+  const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
+  const [allNews, setAllNews] = useState([]);
+  const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // ----------- UNIVERSAL NORMALIZER -----------
-  const normalize = (data) => {
-    if (!data) return { world: [], india: [], state: [] };
+  // helper to lowercase safely
+  const lower = (txt) => (txt || "").toLowerCase();
 
-    const getArray = (obj, key) =>
-      Array.isArray(obj[key]) ? obj[key] : [];
-
-    return {
-      world: getArray(data, "world"),
-      india: getArray(data, "india"),
-      state: getArray(data, "state"),
-    };
-  };
-
-  // ----------- FETCH NEWS FUNCTION -----------
-  const fetchNews = async () => {
-    try {
-      setIsRefreshing(true);
-      setLoading(true);
-
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/news`);
-      const data = await res.json();
-
-      const n = normalize(data);
-
-      // add clean category labels (fix for "General")
-      const processed = {
-        world: n.world.map((item) => ({ ...item, category: "International" })),
-        india: n.india.map((item) => ({ ...item, category: "National" })),
-        state: n.state.map((item) => ({ ...item, category: "State" })),
-      };
-
-      setNewsData(processed);
-      setLastUpdated(new Date().toLocaleTimeString());
-    } catch (err) {
-      console.error("News fetch failed:", err);
-      setNewsData({ world: [], india: [], state: [] });
-    } finally {
-      setLoading(false);
-      setTimeout(() => setIsRefreshing(false), 300);
-    }
-  };
-
+  // Fetch from backend /news and store raw items
   useEffect(() => {
+    let mounted = true;
+    const fetchNews = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`${BACKEND}/news`);
+        const data = await res.json();
+        const items = data.news || data.samples || data.items || [];
+        if (mounted) {
+          setAllNews(items);
+        }
+      } catch (err) {
+        console.error("Error fetching /news:", err);
+        if (mounted) setError("Failed to load news.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
     fetchNews();
-    const id = setInterval(fetchNews, 60000);
-    return () => clearInterval(id);
-  }, []);
+    // refresh every 10 minutes
+    const id = setInterval(fetchNews, 10 * 60 * 1000);
+    return () => {
+      mounted = false;
+      clearInterval(id);
+    };
+  }, [BACKEND]);
+
+  // Categorize and produce top-3 style headlines: International, India, State
+  useEffect(() => {
+    const items = Array.isArray(allNews) ? allNews : [];
+
+    if (!items.length) {
+      setHeadlines([]);
+      return;
+    }
+
+    // find helpers by keywords (extend keywords as needed)
+    const findByKeywords = (keywords) =>
+      items.find((n) =>
+        keywords.some((k) => lower(n.title).includes(k) || lower(n.summary || n.description || "").includes(k))
+      );
+
+    const international = findByKeywords([
+      "world",
+      "international",
+      "foreign",
+      "us ",
+      "u.s.",
+      "united states",
+      "china",
+      "russia",
+      "uk ",
+      "pakistan",
+      "america",
+      "europe",
+      "global",
+    ]);
+
+    const india = findByKeywords([
+      "india",
+      "delhi",
+      "mumbai",
+      "bangalore",
+      "bengaluru",
+      "chennai",
+      "kolkata",
+      "modi",
+      "bharat",
+      "indian",
+      "new delhi",
+    ]);
+
+    // state detection: look for common state names (Rajasthan priority)
+    const state = findByKeywords([
+      "rajasthan",
+      "jaipur",
+      "udaipur",
+      "jodhpur",
+      "bikaner",
+      "gujarat",
+      "maharashtra",
+      "uttar pradesh",
+      "up ",
+      "punjab",
+      "kerala",
+      "karnataka",
+      "tamil nadu",
+      "west bengal",
+      "assam",
+      "bihar",
+      "jharkhand",
+      "madhya pradesh",
+    ]);
+
+    // Remove duplicates and preserve order
+    const uniques = [];
+    const addIfUnique = (item, category) => {
+      if (!item) return;
+      const already = uniques.some((u) => (u.link && item.link && u.link === item.link) || (u.title === item.title));
+      if (!already) {
+        uniques.push({ ...item, category });
+      }
+    };
+
+    addIfUnique(international, "🌍 International");
+    addIfUnique(india, "🇮🇳 India");
+    addIfUnique(state, "🏜️ Rajasthan / State");
+
+    // Fill remaining from items (skip already chosen)
+    for (const it of items) {
+      if (uniques.length >= 3) break;
+      const already = uniques.some((u) => (u.link && it.link && u.link === it.link) || u.title === it.title);
+      if (!already) {
+        uniques.push({ ...it, category: "🔹 General" });
+      }
+    }
+
+    setHeadlines(uniques.slice(0, 3));
+  }, [allNews]);
 
   return (
-    <div className="app-container">
-      <Sidebar />
-
-      <div className="content-container">
-
-        {/* ----------------- HEADER + REFRESH BLOCK ----------------- */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "12px",
-            marginTop: "10px",
-          }}
-        >
-          <h2 style={{ margin: 0 }}>Latest Headlines</h2>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {lastUpdated && (
-              <div style={{ fontSize: 13, color: "#475569" }}>
-                Updated: {lastUpdated}
-              </div>
-            )}
-
-            <button
-              onClick={fetchNews}
-              className="refresh-btn"
-              style={{
-                background: "transparent",
-                border: "1px solid #ccc",
-                borderRadius: "50%",
-                width: "34px",
-                height: "34px",
-                cursor: "pointer",
-                fontSize: "18px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-              title="Refresh now"
-            >
-              <span
-                className={
-                  isRefreshing
-                    ? "refresh-spin refresh-icon"
-                    : "refresh-icon"
-                }
-              >
-                🔄
-              </span>
-            </button>
-          </div>
+    <div>
+      <div className="header">
+        <div>
+          <div className="title">Quick NewsGPT</div>
+          <div className="tagline">Latest India news — हिंदी + English</div>
         </div>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ color: "#6b7280", fontSize: 12 }}>Connected to:</div>
+          <div style={{ fontSize: 13, color: "#0f172a" }}>{BACKEND}</div>
+        </div>
+      </div>
 
-        {/* ----------------- NEWS LISTS ----------------- */}
-        <NewsList
-          title="🌍 International"
-          list={newsData.world}
-          loading={loading}
-        />
+      <div className="container">
+        <main className="main-column">
+          <section className="card">
+            <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
 
-        <NewsList
-          title="🇮🇳 National"
-          list={newsData.india}
-          loading={loading}
-        />
+            {loading ? (
+              <p style={{ color: "#6b7280" }}>Loading latest news...</p>
+            ) : error ? (
+              <p style={{ color: "red" }}>{error}</p>
+            ) : headlines.length > 0 ? (
+              <NewsList items={headlines} />
+            ) : (
+              <p style={{ color: "#6b7280" }}>No news available.</p>
+            )}
+          </section>
 
-        <NewsList
-          title="🏛️ State"
-          list={newsData.state}
-          loading={loading}
-        />
+          <div className="card ad">Advertisement Space</div>
 
-        <AskNews />
+          <section className="card">
+            <h3 style={{ marginTop: 0 }}>क्विक न्यूज़ GPT से पूछें</h3>
+            <AskNews />
+          </section>
+
+          <div className="footer">
+            © 2025 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
+          </div>
+        </main>
+
+        <aside className="sidebar">
+          <Sidebar />
+        </aside>
       </div>
     </div>
   );
