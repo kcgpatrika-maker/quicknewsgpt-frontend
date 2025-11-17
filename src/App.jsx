@@ -4,102 +4,114 @@ import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
 
 function App() {
-  const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
-  const [allNews, setAllNews] = useState([]);
-  const [sections, setSections] = useState({
-    international: [],
-    india: [],
-    state: [],
-  });
+  const BACKEND =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://quick-newsgpt-backend.onrender.com";
 
+  const [allNews, setAllNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
 
   const lower = (t) => (t || "").toLowerCase();
 
-  // 🔹 FETCH NEWS
   useEffect(() => {
+    let mounted = true;
+
     const fetchNews = async () => {
       setLoading(true);
+      setError(null);
       try {
         const res = await fetch(`${BACKEND}/news`);
         const data = await res.json();
-        const items = data.news || data.samples || data.items || [];
-        setAllNews(items);
-        setLastUpdated(new Date().toLocaleString());
+        const items = data.news || data.items || data.samples || [];
+
+        if (mounted) {
+          setAllNews(items);
+          setLastUpdated(new Date().toLocaleString());
+        }
       } catch (err) {
-        setError("Failed to load news.");
+        if (mounted) setError("Failed to load news.");
       } finally {
-        setLoading(false);
+        if (mounted) setLoading(false);
       }
     };
 
     fetchNews();
+    const id = setInterval(fetchNews, 10 * 60 * 1000);
+
+    return () => {
+      mounted = false;
+      clearInterval(id);
+    };
   }, [BACKEND]);
 
-  // 🔹 CATEGORIZE NEWS INTO 3 FIX SECTIONS
-  useEffect(() => {
-    if (!allNews.length) return;
+  // ---- NEWS CATEGORY FILTERS ----
+  const getInternational = (items) =>
+    items.filter((n) =>
+      [
+        "world",
+        "international",
+        "global",
+        "pakistan",
+        "china",
+        "us ",
+        "america",
+        "russia",
+      ].some((k) => lower(n.title).includes(k))
+    );
 
-    const pickFirstMatch = (keywords) =>
-      allNews.find((n) =>
-        keywords.some(
-          (k) =>
-            lower(n.title).includes(k) ||
-            lower(n.summary || "").includes(k) ||
-            lower(n.description || "").includes(k)
-        )
-      );
+  const getIndia = (items) =>
+    items.filter((n) =>
+      [
+        "india",
+        "indian",
+        "new delhi",
+        "delhi",
+        "mumbai",
+        "kolkata",
+        "modi",
+        "bharat",
+      ].some((k) => lower(n.title).includes(k))
+    );
 
-    const international = pickFirstMatch([
-      "world",
-      "international",
-      "us ",
-      "america",
-      "china",
-      "russia",
-      "pakistan",
-      "global",
-      "uk ",
-    ]);
+  const getState = (items) =>
+    items.filter((n) =>
+      [
+        "rajasthan",
+        "jaipur",
+        "udaipur",
+        "bikaner",
+        "gujarat",
+        "up ",
+        "uttar pradesh",
+        "bihar",
+        "jharkhand",
+        "madhya pradesh",
+      ].some((k) => lower(n.title).includes(k))
+    );
 
-    const india = pickFirstMatch([
-      "india",
-      "indian",
-      "bharat",
-      "delhi",
-      "mumbai",
-      "bengaluru",
-      "kolkata",
-      "modi",
-    ]);
+  // Prepare fixed categories
+  const categories = [
+    { label: "🌍 International", data: getInternational(allNews) },
+    { label: "🇮🇳 India", data: getIndia(allNews) },
+    { label: "🏜️ Rajasthan / State", data: getState(allNews) },
+  ];
 
-    const state = pickFirstMatch([
-      "rajasthan",
-      "jaipur",
-      "udaipur",
-      "jodhpur",
-      "bikaner",
-      "bihar",
-      "uttar pradesh",
-      "punjab",
-      "gujarat",
-      "kerala",
-      "maharashtra",
-      "madhya pradesh",
-    ]);
+  // fallback: अगर किसी कैटेगरी में न्यूज़ न हो, तो allNews से भरें
+  const getTopNews = (arr) =>
+    arr.length > 0 ? arr[0] : allNews[0] || null;
 
-    setSections({
-      international: international ? [international] : [],
-      india: india ? [india] : [],
-      state: state ? [state] : [],
-    });
-  }, [allNews]);
+  const headlines = categories
+    .map((c) => ({
+      ...getTopNews(c.data),
+      category: c.label,
+    }))
+    .filter(Boolean)
+    .slice(0, 3);
 
   return (
     <div>
-      {/* HEADER */}
       <div className="header">
         <div>
           <div className="title">Quick NewsGPT</div>
@@ -107,12 +119,12 @@ function App() {
         </div>
 
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: 12, color: "#6b7280" }}>Connected to:</div>
-          <div style={{ fontSize: 13 }}>{BACKEND}</div>
+          <div style={{ color: "#6b7280", fontSize: 12 }}>Connected to:</div>
+          <div style={{ fontSize: 13, color: "#0f172a" }}>{BACKEND}</div>
 
           {lastUpdated && (
-            <div style={{ marginTop: 5, fontSize: 12, color: "#475569" }}>
-              Updated at: {lastUpdated}
+            <div style={{ marginTop: 4, fontSize: 11, color: "#475569" }}>
+              Last Updated: {lastUpdated}
             </div>
           )}
         </div>
@@ -120,46 +132,47 @@ function App() {
 
       <div className="container">
         <main className="main-column">
-
-          {/* FIXED SECTION — INTERNATIONAL */}
           <section className="card">
-            <h2>🌍 International</h2>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 8,
+              }}
+            >
+              <h2 style={{ margin: 0 }}>Latest Headlines</h2>
+            </div>
+
             {loading ? (
-              <p>Loading…</p>
-            ) : sections.international.length ? (
-              <NewsList items={sections.international} />
+              <p style={{ color: "#6b7280" }}>Loading latest news...</p>
+            ) : error ? (
+              <p style={{ color: "red" }}>{error}</p>
             ) : (
-              <p style={{ color: "#6b7280" }}>No news available</p>
+              <div>
+                {categories.map((cat, idx) => (
+                  <div key={idx} style={{ marginBottom: 18 }}>
+                    <div
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 600,
+                        marginBottom: 6,
+                        color: "#0f172a",
+                      }}
+                    >
+                      {cat.label}
+                    </div>
+
+                    <NewsList items={cat.data.slice(0, 1)} />
+                  </div>
+                ))}
+              </div>
             )}
           </section>
 
-          {/* FIXED SECTION — INDIA */}
-          <section className="card">
-            <h2>🇮🇳 India</h2>
-            {loading ? (
-              <p>Loading…</p>
-            ) : sections.india.length ? (
-              <NewsList items={sections.india} />
-            ) : (
-              <p style={{ color: "#6b7280" }}>No news available</p>
-            )}
-          </section>
+          <div className="card ad">Advertisement Space</div>
 
-          {/* FIXED SECTION — STATE */}
           <section className="card">
-            <h2>🏜 Rajasthan / State</h2>
-            {loading ? (
-              <p>Loading…</p>
-            ) : sections.state.length ? (
-              <NewsList items={sections.state} />
-            ) : (
-              <p style={{ color: "#6b7280" }}>No news available</p>
-            )}
-          </section>
-
-          {/* ASK SECTION */}
-          <section className="card">
-            <h3>क्विक न्यूज़ GPT से पूछें</h3>
+            <h3 style={{ marginTop: 0 }}>क्विक न्यूज़ GPT से पूछें</h3>
             <AskNews />
           </section>
 
