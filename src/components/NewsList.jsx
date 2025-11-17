@@ -17,35 +17,51 @@ function NewsList({ items = [], hideBadge = false }) {
         <div
           key={item.id || item.link || idx}
           className="news-item card"
-          style={{
-            padding: 12,
-            background: "#fff",
-            borderRadius: 8,
-            border: "1px solid #eef2ff",
-          }}
+          style={{ padding: 12, background: "#fff", borderRadius: 8, border: "1px solid #eef2ff" }}
         >
-          {/* NO CATEGORY BADGES ANYMORE */}
+          {/* Show old item.category only when hideBadge is false (we hide by default for Latest Headlines) */}
+          {!hideBadge && item.category && (
+            <div
+              style={{
+                display: "inline-block",
+                marginBottom: 6,
+                padding: "4px 8px",
+                borderRadius: "6px",
+                fontSize: 13,
+                background: "#e0f2fe",
+                color: "#0369a1",
+                fontWeight: 600,
+              }}
+            >
+              {item.category}
+            </div>
+          )}
 
+          {/* If App passed _fixedCategory (our fixed label), show it as small header above title */}
+          {item._fixedCategory && (
+            <div style={{ fontSize: 13, color: "#075985", fontWeight: 700, marginBottom: 6 }}>
+              {item._fixedCategory}
+            </div>
+          )}
+
+          {/* Title */}
           <div className="news-title" style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>
             {item.title || item.heading || "No title"}
           </div>
 
-          <div style={{ color: "#374151", fontSize: 14 }}>
-            {item.summary || item.description || item.content || ""}
-          </div>
+          {/* Summary */}
+          <div style={{ color: "#374151", fontSize: 14 }}>{item.summary || item.description || item.content || "No summary available."}</div>
 
+          {/* Link */}
           <div style={{ marginTop: 8 }}>
             {item.link ? (
-              <a
-                href={item.link}
-                target="_blank"
-                rel="noreferrer"
-                style={{ color: "#2563eb" }}
-              >
+              <a className="read-more" href={item.link} target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
                 Read Full Story
               </a>
             ) : (
-              <span style={{ color: "#6b7280" }}>Read Full Story</span>
+              <span className="read-more" style={{ color: "#6b7280" }}>
+                Read Full Story
+              </span>
             )}
           </div>
         </div>
