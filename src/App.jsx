@@ -165,13 +165,8 @@ export default function App() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
 
-            {/* fixed one-line category labels */}
-            <div style={{ 
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr 1fr",
-  gap: 12,
-  marginBottom: 10
-}}>
+            {/* fixed one-line(category) labels → NOW separate rows */}
+<div style={{ display: "grid", gap: 8, marginBottom: 10 }}>
   <div style={{ fontWeight: 700 }}>🌍 International</div>
   <div style={{ fontWeight: 700 }}>🇮🇳 India</div>
   <div style={{ fontWeight: 700 }}>🏜️ Rajasthan / State</div>
