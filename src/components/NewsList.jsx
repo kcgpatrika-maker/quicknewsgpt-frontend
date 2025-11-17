@@ -20,22 +20,7 @@ function NewsList({ items = [], hideBadge = false }) {
           style={{ padding: 12, background: "#fff", borderRadius: 8, border: "1px solid #eef2ff" }}
         >
           {/* Show old item.category only when hideBadge is false (we hide by default for Latest Headlines) */}
-          {!hideBadge && item.category && (
-            <div
-              style={{
-                display: "inline-block",
-                marginBottom: 6,
-                padding: "4px 8px",
-                borderRadius: "6px",
-                fontSize: 13,
-                background: "#e0f2fe",
-                color: "#0369a1",
-                fontWeight: 600,
-              }}
-            >
-              {item.category}
-            </div>
-          )}
+          {/* Category removed for fixed UI */}
 
           {/* If App passed _fixedCategory (our fixed label), show it as small header above title */}
           {item._fixedCategory && (
