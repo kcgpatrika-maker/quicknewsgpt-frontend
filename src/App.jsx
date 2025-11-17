@@ -166,11 +166,16 @@ export default function App() {
             <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
 
             {/* fixed one-line category labels */}
-            <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10 }}>
-              <div style={{ fontWeight: 700 }}>🌍 International</div>
-              <div style={{ fontWeight: 700 }}>🇮🇳 India</div>
-              <div style={{ fontWeight: 700 }}>🏜️ Rajasthan / State</div>
-            </div>
+            <div style={{ 
+  display: "grid",
+  gridTemplateColumns: "1fr 1fr 1fr",
+  gap: 12,
+  marginBottom: 10
+}}>
+  <div style={{ fontWeight: 700 }}>🌍 International</div>
+  <div style={{ fontWeight: 700 }}>🇮🇳 India</div>
+  <div style={{ fontWeight: 700 }}>🏜️ Rajasthan / State</div>
+</div>
 
             {/* three slots: pass single-item arrays to NewsList with hideBadge=true so old badges do not render */}
             <div style={{ display: "grid", gap: 12 }}>
