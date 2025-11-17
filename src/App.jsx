@@ -78,7 +78,7 @@ function selectThree(allItems = []) {
   // map back to items, include a clean category label for UI (fixed labels shown in header)
   return picked.slice(0, 3).map(p => {
     const { __cat, __i, ...rest } = p;
-    return { ...rest, _detected: __cat };
+    return { ...rest, category: __cat };
   });
 }
 
