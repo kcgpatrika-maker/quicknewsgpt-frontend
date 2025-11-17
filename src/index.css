@@ -55,6 +55,13 @@ button:hover { background: #1d4ed8; }
 .refresh-spin { animation: spin 1s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+.fixed-cat {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #0f172a;
+}
+
 /* Footer */
 .footer { margin-top: 30px; text-align: center; color: #6b7280; font-size: 13px; padding-top: 12px; border-top: 1px solid #eaeef2; }
 
