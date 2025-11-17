@@ -165,12 +165,18 @@ export default function App() {
           <section className="card">
             <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
 
-            {/* fixed one-line(category) labels → NOW separate rows */}
-<div style={{ display: "grid", gap: 8, marginBottom: 10 }}>
-  <div style={{ fontWeight: 700 }}>🌍 International</div>
-  <div style={{ fontWeight: 700 }}>🇮🇳 India</div>
-  <div style={{ fontWeight: 700 }}>🏜️ Rajasthan / State</div>
-</div>
+            {/* FIXED CATEGORIES SHOW */}
+            <div className="fixed-cats" style={{ marginBottom: 14 }}>
+              <span style={{ fontSize: 15, fontWeight: 700, marginRight: 20 }}>
+                🌍 International
+              </span>
+              <span style={{ fontSize: 15, fontWeight: 700, marginRight: 20 }}>
+                🇮🇳 India
+              </span>
+              <span style={{ fontSize: 15, fontWeight: 700 }}>
+                🏜️ Rajasthan / State
+              </span>
+            </div>
 
             {/* three slots: pass single-item arrays to NewsList with hideBadge=true so old badges do not render */}
             <div style={{ display: "grid", gap: 12 }}>
