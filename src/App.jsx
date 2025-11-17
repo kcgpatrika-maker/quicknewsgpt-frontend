@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useEffect, useState } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
@@ -6,16 +7,12 @@ import Sidebar from "./components/Sidebar";
 function App() {
   const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
   const [allNews, setAllNews] = useState([]);
-  const [headlines, setHeadlines] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // helper to lowercase safely
-  const lower = (txt) => (txt || "").toLowerCase();
-
-  // Fetch from backend /news and store raw items
+  // Fetch raw news from backend; do NOT mutate here — let NewsList handle selection logic
   useEffect(() => {
     let mounted = true;
     const fetchNews = async () => {
@@ -24,9 +21,10 @@ function App() {
       try {
         const res = await fetch(`${BACKEND}/news`);
         const data = await res.json();
-        const items = data.news || data.samples || data.items || [];
+        const items = data.news || data.samples || data.items || (Array.isArray(data) ? data : []);
         if (mounted) {
-          setAllNews(items);
+          setAllNews(Array.isArray(items) ? items : []);
+          setLastUpdated(new Date().toISOString());
         }
       } catch (err) {
         console.error("Error fetching /news:", err);
@@ -37,106 +35,12 @@ function App() {
     };
 
     fetchNews();
-    // refresh every 10 minutes
     const id = setInterval(fetchNews, 10 * 60 * 1000);
     return () => {
       mounted = false;
       clearInterval(id);
     };
   }, [BACKEND]);
-
-  // Categorize and produce top-3 style headlines: International, India, State
-  useEffect(() => {
-    const items = Array.isArray(allNews) ? allNews : [];
-
-    if (!items.length) {
-      setHeadlines([]);
-      return;
-    }
-
-    // find helpers by keywords (extend keywords as needed)
-    const findByKeywords = (keywords) =>
-      items.find((n) =>
-        keywords.some((k) => lower(n.title).includes(k) || lower(n.summary || n.description || "").includes(k))
-      );
-
-    const international = findByKeywords([
-      "world",
-      "international",
-      "foreign",
-      "us ",
-      "u.s.",
-      "united states",
-      "china",
-      "russia",
-      "uk ",
-      "pakistan",
-      "america",
-      "europe",
-      "global",
-    ]);
-
-    const india = findByKeywords([
-      "india",
-      "delhi",
-      "mumbai",
-      "bangalore",
-      "bengaluru",
-      "chennai",
-      "kolkata",
-      "modi",
-      "bharat",
-      "indian",
-      "new delhi",
-    ]);
-
-    // state detection: look for common state names (Rajasthan priority)
-    const state = findByKeywords([
-      "rajasthan",
-      "jaipur",
-      "udaipur",
-      "jodhpur",
-      "bikaner",
-      "gujarat",
-      "maharashtra",
-      "uttar pradesh",
-      "up ",
-      "punjab",
-      "kerala",
-      "karnataka",
-      "tamil nadu",
-      "west bengal",
-      "assam",
-      "bihar",
-      "jharkhand",
-      "madhya pradesh",
-    ]);
-
-    // Remove duplicates and preserve order
-    const uniques = [];
-    const addIfUnique = (item, category) => {
-      if (!item) return;
-      const already = uniques.some((u) => (u.link && item.link && u.link === item.link) || (u.title === item.title));
-      if (!already) {
-        uniques.push({ ...item, category });
-      }
-    };
-
-    addIfUnique(international, "🌍 International");
-    addIfUnique(india, "🇮🇳 India");
-    addIfUnique(state, "🏜️ Rajasthan / State");
-
-    // Fill remaining from items (skip already chosen)
-    for (const it of items) {
-      if (uniques.length >= 3) break;
-      const already = uniques.some((u) => (u.link && it.link && u.link === it.link) || u.title === it.title);
-      if (!already) {
-        uniques.push({ ...it, category: "🔹 General" });
-      }
-    }
-
-    setHeadlines(uniques.slice(0, 3));
-  }, [allNews]);
 
   return (
     <div>
@@ -148,6 +52,9 @@ function App() {
         <div style={{ textAlign: "right" }}>
           <div style={{ color: "#6b7280", fontSize: 12 }}>Connected to:</div>
           <div style={{ fontSize: 13, color: "#0f172a" }}>{BACKEND}</div>
+          <div style={{ color: "#6b7280", fontSize: 12, marginTop: 6 }}>
+            {lastUpdated ? `Last: ${new Date(lastUpdated).toLocaleString()}` : ""}
+          </div>
         </div>
       </div>
 
@@ -160,8 +67,9 @@ function App() {
               <p style={{ color: "#6b7280" }}>Loading latest news...</p>
             ) : error ? (
               <p style={{ color: "red" }}>{error}</p>
-            ) : headlines.length > 0 ? (
-              <NewsList items={headlines} />
+            ) : allNews.length > 0 ? (
+              // pass raw items; NewsList will detect categories and pick top-3
+              <NewsList items={allNews} />
             ) : (
               <p style={{ color: "#6b7280" }}>No news available.</p>
             )}
