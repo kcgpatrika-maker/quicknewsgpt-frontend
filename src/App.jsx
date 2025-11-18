@@ -275,7 +275,7 @@ export default function App() {
         </main>
 
         <aside className="sidebar">
-          <Sidebar />
+          <Sidebar topItems={slots} />
         </aside>
       </div>
     </div>
