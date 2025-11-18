@@ -121,6 +121,7 @@ export default function App() {
 
   return (
     <div>
+
       {/* ===================== HEADER ===================== */}
       <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         
@@ -129,58 +130,58 @@ export default function App() {
           <div className="tagline">Latest India news — हिंदी + English</div>
         </div>
 
-        {/* === NEW — Share-link placeholder will be replaced later === */}
-        <div style={{ textAlign: "right" }}>
-          <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
-            
-            {/* SHARE BUTTON PLACEHOLDER — replace later */}
-            <button
-              title="Share"
-              style={{
-                border: "1px solid #d1d5db",
-                background: "white",
-                padding: "5px 8px",
-                borderRadius: 8,
-                cursor: "pointer",
-                fontSize: 14
-              }}
-            >
-              🔗
-            </button>
-
-            {/* Updated Time + Refresh (moved to front) */}
-            <div style={{ fontSize: 13, color: "#6b7280" }}>
-              {timeString ? `Updated ${timeString}` : ""}
-            </div>
-
-            <button
-              onClick={handleRefresh}
-              title="Refresh"
-              style={{
-                border: "none",
-                background: "#2563eb",
-                color: "white",
-                padding: "6px 8px",
-                borderRadius: 8,
-                cursor: "pointer",
-                fontWeight: 700,
-                fontSize: 14
-              }}
-            >
-              ↻
-            </button>
-
-          </div>
-        </div>
+        {/* Share button — SAME PLACE as your screenshot */}
+        <button
+          title="Share Link"
+          style={{
+            border: "1px solid #d1d5db",
+            background: "white",
+            padding: "6px 10px",
+            borderRadius: 8,
+            cursor: "pointer",
+            fontSize: 16
+          }}
+        >
+          🔗
+        </button>
       </div>
 
       {/* ===================== MAIN ===================== */}
       <div className="container">
         <main className="main-column">
           <section className="card">
-            <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
+            
+            {/* TITLE + UPDATE TIME + REFRESH INLINE */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 style={{ margin: 0 }}>Latest Headlines</h2>
 
-            <div style={{ marginTop: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ fontSize: 13, color: "#6b7280" }}>
+                  {timeString ? `Updated ${timeString}` : ""}
+                </div>
+
+                <button
+                  onClick={handleRefresh}
+                  title="Refresh News"
+                  style={{
+                    border: "1px solid #2563eb",
+                    background: "#2563eb",
+                    color: "white",
+                    padding: "6px 10px",
+                    borderRadius: 8,
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    fontSize: 14
+                  }}
+                >
+                  ⟳
+                </button>
+              </div>
+            </div>
+
+            {/* ==== NEWS SLOTS ===== */}
+            <div style={{ marginTop: 12 }}>
+              
               <div style={{ marginBottom: 6 }}>
                 <div className="fixed-cat">🌍 International</div>
                 {loading ? (
@@ -213,6 +214,7 @@ export default function App() {
                   <div className="news-item card" style={{ padding: 10 }}>No news available.</div>
                 )}
               </div>
+
             </div>
           </section>
 
