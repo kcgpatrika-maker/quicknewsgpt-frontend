@@ -30,7 +30,16 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="card about">
+   <aside>
+      <div className="card share-section">
+        <div className="side-title" style={{ fontWeight: 700 }}>Share this site</div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={handleCopy} className="share-btn">🔗 Copy Link</button>
+          <button onClick={handleShare} className="share-btn">📤 Share</button>
+        </div>
+      </div>
+
+     <div className="card about">
         <div className="side-title" style={{ fontWeight: 700 }}>About</div>
         <p style={{ marginTop: 8 }}>
           QuickNewsGPT delivers instant AI-summaries of latest headlines in Hindi & English.
