@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
-import { Share2, RotateCcw } from "lucide-react";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 const SHOW_CONNECTED = false;
@@ -27,10 +26,7 @@ const KEYWORDS = {
 
 function textHasAny(text = "", arr = []) {
   const t = toLower(text);
-  return arr.some(k => {
-    if (!k) return false;
-    return t.includes(k.toLowerCase());
-  });
+  return arr.some(k => t.includes(k.toLowerCase()));
 }
 
 function detectCategoryForItem(item = {}) {
@@ -44,8 +40,6 @@ function detectCategoryForItem(item = {}) {
 function selectSlots(items = []) {
   const list = Array.isArray(items) ? items.slice() : [];
   const processed = list.map((it, idx) => ({ ...it, __cat: detectCategoryForItem(it), __i: idx }));
-
-  console.log("[selectSlots] detected categories:", processed.map(p => ({ title: p.title, cat: p.__cat })));
 
   const chosen = [];
   const usedIdx = new Set();
@@ -119,81 +113,74 @@ export default function App() {
     setSlots(chosen);
   }, [allNews]);
 
-  const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
-
-  const handleShare = () => {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link copied!");
+  const handleRefresh = async () => {
+    await fetchNews();
   };
+
+  const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
 
   return (
     <div>
-
-      {/* HEADER — refresh हटाकर share बटन रखा */}
+      {/* ===================== HEADER ===================== */}
       <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        
         <div>
           <div className="title">Quick NewsGPT</div>
           <div className="tagline">Latest India news — हिंदी + English</div>
         </div>
 
+        {/* === NEW — Share-link placeholder will be replaced later === */}
         <div style={{ textAlign: "right" }}>
-          <button
-            onClick={handleShare}
-            style={{
-              border: "none",
-              background: "#2563eb",
-              color: "white",
-              padding: "6px 10px",
-              borderRadius: 8,
-              cursor: "pointer",
-              fontWeight: 600,
-              display: "flex",
-              alignItems: "center",
-              gap: 6
-            }}
-          >
-            <Share2 size={17} /> Share
-          </button>
+          <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
+            
+            {/* SHARE BUTTON PLACEHOLDER — replace later */}
+            <button
+              title="Share"
+              style={{
+                border: "1px solid #d1d5db",
+                background: "white",
+                padding: "5px 8px",
+                borderRadius: 8,
+                cursor: "pointer",
+                fontSize: 14
+              }}
+            >
+              🔗
+            </button>
+
+            {/* Updated Time + Refresh (moved to front) */}
+            <div style={{ fontSize: 13, color: "#6b7280" }}>
+              {timeString ? `Updated ${timeString}` : ""}
+            </div>
+
+            <button
+              onClick={handleRefresh}
+              title="Refresh"
+              style={{
+                border: "none",
+                background: "#2563eb",
+                color: "white",
+                padding: "6px 8px",
+                borderRadius: 8,
+                cursor: "pointer",
+                fontWeight: 700,
+                fontSize: 14
+              }}
+            >
+              ↻
+            </button>
+
+          </div>
         </div>
       </div>
 
+      {/* ===================== MAIN ===================== */}
       <div className="container">
         <main className="main-column">
-          
           <section className="card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
+            <h2 style={{ marginTop: 0 }}>Latest Headlines</h2>
 
-              {/* UPDATED TIME + REFRESH BUTTON — जैसा आपने कहा */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ fontSize: 13, color: "#6b7280" }}>
-                  {timeString ? `Updated ${timeString}` : ""}
-                </div>
-
-                <button
-                  onClick={fetchNews}
-                  title="Refresh"
-                  style={{
-                    border: "none",
-                    background: "#0284c7",
-                    color: "white",
-                    padding: "6px 10px",
-                    borderRadius: 8,
-                    cursor: "pointer",
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6
-                  }}
-                >
-                  <RotateCcw size={16} /> Refresh
-                </button>
-              </div>
-            </div>
-
-            {/* Category-wise slots remain exactly as they were */}
             <div style={{ marginTop: 8 }}>
-              
               <div style={{ marginBottom: 6 }}>
                 <div className="fixed-cat">🌍 International</div>
                 {loading ? (
