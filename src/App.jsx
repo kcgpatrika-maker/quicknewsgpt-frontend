@@ -130,21 +130,64 @@ export default function App() {
           <div className="tagline">Latest India news — हिंदी + English</div>
         </div>
 
-        {/* Share button — SAME PLACE as your screenshot */}
-        <button
-          title="Share Link"
-          style={{
-            border: "1px solid #d1d5db",
-            background: "white",
-            padding: "6px 10px",
-            borderRadius: 8,
-            cursor: "pointer",
-            fontSize: 16
-          }}
-        >
-          🔗
-        </button>
-      </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
+
+  {/* BIG SHARE BUTTON */}
+  <button
+    onClick={async () => {
+      const url = window.location.href;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Quick NewsGPT",
+            text: "Latest news from Quick NewsGPT",
+            url
+          });
+        } catch (err) {
+          console.error("Share failed:", err);
+        }
+      } else {
+        await navigator.clipboard.writeText(url);
+        alert("Link copied!");
+      }
+    }}
+    title="Share"
+    style={{
+      border: "none",
+      background: "#059669",
+      color: "white",
+      padding: "6px 10px",
+      borderRadius: 8,
+      cursor: "pointer",
+      fontSize: 16,
+      fontWeight: 700
+    }}
+  >
+    📤 Share
+  </button>
+
+  {/* SMALL COPY-LINK BUTTON */}
+  <button
+    onClick={async () => {
+      await navigator.clipboard.writeText(window.location.href);
+      alert("Link copied!");
+    }}
+    title="Copy Link"
+    style={{
+      border: "1px solid #d1d5db",
+      background: "white",
+      color: "#374151",
+      padding: "4px 6px",
+      borderRadius: 6,
+      cursor: "pointer",
+      fontSize: 13
+    }}
+  >
+    🔗
+  </button>
+
+</div>
 
       {/* ===================== MAIN ===================== */}
       <div className="container">
