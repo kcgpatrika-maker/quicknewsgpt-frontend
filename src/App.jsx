@@ -188,6 +188,7 @@ export default function App() {
   </button>
 
 </div>
+</div>   {/* header का closing */}
 
       {/* ===================== MAIN ===================== */}
       <div className="container">
