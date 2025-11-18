@@ -127,7 +127,7 @@ export default function App() {
         
         <div>
           <div className="title">Quick NewsGPT</div>
-          <div className="tagline">Latest India news — हिंदी + English</div>
+          <div className="tagline">Your Quick Gateway to Quick News</div>
         </div>
 
         <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
