@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
@@ -7,74 +6,6 @@ import Sidebar from "./components/Sidebar";
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 const SHOW_CONNECTED = false;
 
-const toLower = (s) => (s || "").toLowerCase();
-
-const KEYWORDS = {
-  international: [
-    "world","international","foreign","us","u.s.","usa","america","united states",
-    "china","russia","pakistan","bangladesh","global","europe","uk","britain","ब्राज़ील","ब्रज़ील","brazil","mexico","tanzania"
-  ],
-  india: [
-    "india","bharat","delhi","mumbai","bangalore","bengaluru","chennai","kolkata","modi",
-    "parliament","संसद","भारत","दिल्ली","मुंबई","बेंगलुरु","बंगलोर","कोलकाता"
-  ],
-  rajasthan: [
-    "rajasthan","जयपुर","jaipur","jodhpur","उदयपुर","udaipur","ajmer",
-    "बिकानेर","bikaner","jaisalmer","alwar","सिकर","sikar"
-  ]
-};
-
-function textHasAny(text = "", arr = []) {
-  const t = toLower(text);
-  return arr.some(k => t.includes(k.toLowerCase()));
-}
-
-function detectCategoryForItem(item = {}) {
-  const txt = `${item.title || ""} ${item.summary || item.description || ""} ${item.content || ""}`.trim();
-  if (textHasAny(txt, KEYWORDS.rajasthan)) return "rajasthan";
-  if (textHasAny(txt, KEYWORDS.international)) return "international";
-  if (textHasAny(txt, KEYWORDS.india)) return "india";
-  return "general";
-}
-
-function selectSlots(items = []) {
-  const list = Array.isArray(items) ? items.slice() : [];
-  const processed = list.map((it, idx) => ({ ...it, __cat: detectCategoryForItem(it), __i: idx }));
-
-  const chosen = [];
-  const usedIdx = new Set();
-
-  const pick = (predicate) => {
-    for (const p of processed) {
-      if (usedIdx.has(p.__i)) continue;
-      if (predicate(p)) {
-        usedIdx.add(p.__i);
-        chosen.push(p);
-        return p;
-      }
-    }
-    return null;
-  };
-
-  pick(p => p.__cat === "international");
-  if (chosen.length === 0) pick(p => p.__cat === "india");
-  if (chosen.length === 0) pick(p => true);
-
-  pick(p => p.__cat === "india");
-  if (chosen.length < 2) pick(p => true);
-
-  pick(p => p.__cat === "rajasthan");
-  if (chosen.length < 3) pick(p => true);
-
-  while (chosen.length < 3) chosen.push(null);
-
-  return chosen.map((p) => {
-    if (!p) return null;
-    const { __cat, __i, ...rest } = p;
-    return { ...rest, _detected: __cat };
-  });
-}
-
 export default function App() {
   const [allNews, setAllNews] = useState([]);
   const [slots, setSlots] = useState([null, null, null]);
@@ -82,14 +13,17 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
 
+  // Fetch news from backend (backend already gives category)
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(`${BACKEND}/news`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
       const data = await res.json();
       const items = data?.news || data?.items || data?.samples || [];
+
       setAllNews(Array.isArray(items) ? items : []);
       setLastUpdated(new Date());
     } catch (err) {
@@ -108,94 +42,98 @@ export default function App() {
     return () => clearInterval(id);
   }, [fetchNews]);
 
+  // SLOT SELECTION BASED ON BACKEND CATEGORY
   useEffect(() => {
-    const chosen = selectSlots(allNews);
-    setSlots(chosen);
+    if (!Array.isArray(allNews)) return;
+
+    const intl = allNews.filter(n => (n.category || "").toLowerCase() === "international");
+    const india = allNews.filter(n => (n.category || "").toLowerCase() === "india");
+    const raj = allNews.filter(n => {
+      const c = (n.category || "").toLowerCase();
+      return c === "rajasthan" || c === "state";
+    });
+
+    function pickRandom(arr) {
+      if (!arr || arr.length === 0) return null;
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    // fallback pool
+    const fallback = allNews;
+
+    const slot1 = pickRandom(intl) || pickRandom(fallback);
+    const slot2 = pickRandom(india) || pickRandom(fallback);
+    const slot3 = pickRandom(raj) || pickRandom(fallback);
+
+    setSlots([slot1, slot2, slot3]);
   }, [allNews]);
 
   const handleRefresh = async () => {
-    await fetchNews();
+    await fetchNews(); // will refill slots automatically
   };
 
   const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
 
   return (
     <div>
-
       {/* ===================== HEADER ===================== */}
       <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        
         <div>
           <div className="title">Quick NewsGPT</div>
           <div className="tagline">Your Quick Gateway to Quick News</div>
         </div>
 
         <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
+          <button
+            onClick={async () => {
+              const url = window.location.href;
+              if (navigator.share) {
+                try {
+                  await navigator.share({ title: "Quick NewsGPT", text: "Latest news from Quick NewsGPT", url });
+                } catch (err) {}
+              } else {
+                await navigator.clipboard.writeText(url);
+                alert("Link copied!");
+              }
+            }}
+            style={{
+              border: "none",
+              background: "#059669",
+              color: "white",
+              padding: "4px 8px",
+              borderRadius: 6,
+              cursor: "pointer",
+              fontSize: 14,
+              fontWeight: 700,
+            }}
+          >
+            📤 Share
+          </button>
 
-  {/* BIG SHARE BUTTON */}
-  <button
-    onClick={async () => {
-      const url = window.location.href;
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "Quick NewsGPT",
-            text: "Latest news from Quick NewsGPT",
-            url
-          });
-        } catch (err) {
-          console.error("Share failed:", err);
-        }
-      } else {
-        await navigator.clipboard.writeText(url);
-        alert("Link copied!");
-      }
-    }}
-    title="Share"
-    style={{
-      border: "none",
-      background: "#059669",
-      color: "white",
-      padding: "4px 8px",
-      borderRadius: 6,
-      cursor: "pointer",
-      fontSize: 14,
-      fontWeight: 700
-    }}
-  >
-    📤 Share
-  </button>
-
-  {/* SMALL COPY-LINK BUTTON */}
-  <button
-    onClick={async () => {
-      await navigator.clipboard.writeText(window.location.href);
-      alert("Link copied!");
-    }}
-    title="Copy Link"
-    style={{
-      border: "1px solid #d1d5db",
-      background: "white",
-      color: "#374151",
-      padding: "4px 6px",
-      borderRadius: 6,
-      cursor: "pointer",
-      fontSize: 13
-    }}
-  >
-    🔗
-  </button>
-
-</div>
-</div>   {/* header का closing */}
+          <button
+            onClick={async () => {
+              await navigator.clipboard.writeText(window.location.href);
+              alert("Link copied!");
+            }}
+            style={{
+              border: "1px solid #d1d5db",
+              background: "white",
+              color: "#374151",
+              padding: "4px 6px",
+              borderRadius: 6,
+              cursor: "pointer",
+              fontSize: 13,
+            }}
+          >
+            🔗
+          </button>
+        </div>
+      </div>
 
       {/* ===================== MAIN ===================== */}
       <div className="container">
         <main className="main-column">
           <section className="card">
-            
-            {/* TITLE + UPDATE TIME + REFRESH INLINE */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <h2 style={{ margin: 0 }}>Latest Headlines</h2>
 
@@ -206,7 +144,6 @@ export default function App() {
 
                 <button
                   onClick={handleRefresh}
-                  title="Refresh News"
                   style={{
                     border: "1px solid #2563eb",
                     background: "#2563eb",
@@ -215,7 +152,7 @@ export default function App() {
                     borderRadius: 8,
                     cursor: "pointer",
                     fontWeight: 700,
-                    fontSize: 14
+                    fontSize: 14,
                   }}
                 >
                   ⟳
@@ -225,7 +162,6 @@ export default function App() {
 
             {/* ==== NEWS SLOTS ===== */}
             <div style={{ marginTop: 12 }}>
-              
               <div style={{ marginBottom: 6 }}>
                 <div className="fixed-cat">🌍 International</div>
                 {loading ? (
@@ -258,7 +194,6 @@ export default function App() {
                   <div className="news-item card" style={{ padding: 10 }}>No news available.</div>
                 )}
               </div>
-
             </div>
           </section>
 
