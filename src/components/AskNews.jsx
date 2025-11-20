@@ -1,4 +1,3 @@
-// src/components/AskNews.jsx
 import React, { useState } from "react";
 
 export default function AskNews() {
@@ -7,34 +6,14 @@ export default function AskNews() {
   const [results, setResults] = useState(null);
   const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
-  // Basic bilingual detection kept for internal sorting if needed
-  function detectCategory(item) {
-    const text = `${item.title || ""} ${item.summary || item.description || ""}`.toLowerCase();
-    if (!text) return "General";
-    if (text.includes("rajasthan") || text.includes("जयपुर") || text.includes("jaipur")) return "Rajasthan";
-    if (["india","bharat","delhi","मुंबई","दिल्ली"].some(k => text.includes(k))) return "India";
-    if (["us","usa","china","russia","pakistan","tanzania","brazil","mexico"].some(k => text.includes(k))) return "World";
-    for (const s of ["bihar","uttar","maharashtra","karnataka","punjab","kerala","west bengal"]) {
-      if (text.includes(s)) return "State";
-    }
-    return "General";
-  }
-
-  // Ask: show full results
   const handleAsk = async () => {
     if (!q.trim()) return;
     setLoading(true);
     setResults(null);
     try {
-      const res = await fetch(
-        `${BACKEND}/ask?q=${encodeURIComponent(q.trim())}&nocache=${Date.now()}`
-      );
-
+      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
       const data = await res.json();
-      const items = data?.news || data?.samples || (Array.isArray(data) ? data : []);
-
-      const processed = (items || []).map(it => ({ ...it, _internalCategory: detectCategory(it) }));
-
+      const processed = (data || []).map(it => ({ ...it, _detected: "Ask Result" }));
       setResults(processed.slice(0, 20));
     } catch (err) {
       console.error("Ask error:", err);
@@ -50,49 +29,27 @@ export default function AskNews() {
   };
 
   return (
-    <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
-      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
+    <div style={{ background: "#f9fafb", padding: 16, borderRadius: 10, border: "1px solid #e5e7eb" }}>
+      <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
         <input
           className="ask-input"
           placeholder="क्विक न्यूज़ GPT से पूछें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+          style={{ flex: 1, padding: 8, border: "1px solid #d1d5db", borderRadius: 6 }}
         />
-        <button
-          className="ask-btn"
-          onClick={handleAsk}
-          disabled={loading}
-          style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
-        >
+        <button onClick={handleAsk} disabled={loading} style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: 6, padding: "8px 14px", cursor: "pointer" }}>
           {loading ? "Loading..." : "Ask"}
         </button>
-        <button
-          onClick={handleReset}
-          style={{ backgroundColor: "#9ca3af", color: "white", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
-        >
+        <button onClick={handleReset} style={{ backgroundColor: "#9ca3af", color: "white", border: "none", borderRadius: 6, padding: "8px 14px", cursor: "pointer" }}>
           Reset
         </button>
       </div>
 
       <div>
-        {results === null && <div style={{ color: "#6b7280" }}>कोई विषय टाइप करें (जैसे दिल्ली, बिहार, AI...) — और क्विक जवाब पाएं।</div>}
+        {results === null && <div style={{ color: "#6b7280" }}>कोई विषय टाइप करें और क्विक जवाब पाएं।</div>}
         {results && results.length === 0 && <div style={{ color: "#6b7280" }}>No related news found.</div>}
-        {results && results.length > 0 && (
-          <div style={{ display: "grid", gap: "8px" }}>
-            {results.map((r, i) => (
-              <div key={r.link || r.id || i} style={{ padding: "10px", borderRadius: "10px", background: "#fff", border: "1px solid #eef2ff" }}>
-                <div style={{ fontWeight: 600 }}>{r.title}</div>
-                <div style={{ color: "#6b7280", fontSize: 13 }}>{r.summary || r.description || ""}</div>
-                {r.link && (
-                  <a href={r.link} target="_blank" rel="noreferrer" style={{ color: "#2563eb", fontSize: 13 }}>
-                    Read full story
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
+        {results && results.length > 0 && <NewsList items={results} />}
       </div>
     </div>
   );
