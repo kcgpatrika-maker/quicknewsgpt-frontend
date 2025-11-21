@@ -12,15 +12,14 @@ const toLower = (s) => (s || "").toLowerCase();
 const KEYWORDS = {
   international: [
     "world","international","foreign","us","u.s.","usa","america","united states",
-    "china","russia","pakistan","bangladesh","global","europe","uk","britain","à¤¬à¥�à¤°à¤¾à¤œà¤¼à¥€à¤²","à¤¬à¥�à¤°à¤œà¤¼à¥€à¤²","brazil","mexico","tanzania"
+    "china","russia","pakistan","bangladesh","global","europe","uk","britain","ब्राज़ील","ब्रज़ील","brazil","mexico","tanzania"
   ],
   india: [
     "india","bharat","delhi","mumbai","bangalore","bengaluru","chennai","kolkata","modi",
-    "parliament","à¤¸à¤‚à¤¸à¤¦","à¤­à¤¾à¤°à¤¤","à¤¦à¤¿à¤²à¥�à¤²à¥€","à¤®à¥�à¤‚à¤¬à¤ˆ","à¤¬à¥‡à¤‚à¤—à¤²à¥�à¤°à¥�","à¤¬à¤‚à¤—à¤²à¥‹à¤°","à¤•à¥‹à¤²à¤•à¤¾à¤¤à¤¾"
+    "parliament","संसद","भारत","दिल्ली","मुंबई","बेंगलुरु","बंगलोर","कोलकाता"
   ],
   rajasthan: [
-    "rajasthan","à¤œà¤¯à¤ªà¥�à¤°","jaipur","jodhpur","à¤‰à¤¦à¤¯à¤ªà¥�à¤°","udaipur","ajmer",
-    "à¤¬à¤¿à¤•à¤¾à¤¨à¥‡à¤°","bikaner","jaisalmer","alwar","à¤¸à¤¿à¤•à¤°","sikar"
+    "rajasthan","जयपुर","jaipur","jodhpur","उदयपुर","udaipur","ajmer", "बीकानेर","bikaner","jaisalmer","alwar","सीकर","sikar"
   ]
 };
 
@@ -218,7 +217,7 @@ export default function App() {
                     fontSize: 14
                   }}
                 >
-                  âŸ³
+                  ⟳
                 </button>
               </div>
             </div>
@@ -227,7 +226,7 @@ export default function App() {
             <div style={{ marginTop: 12 }}>
               
               <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">ðŸŒ� International</div>
+                <div className="fixed-cat">🌍 International</div>
                 {loading ? (
                   <div style={{ color: "#6b7280" }}>Loading...</div>
                 ) : slots[0] ? (
@@ -238,7 +237,7 @@ export default function App() {
               </div>
 
               <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">ðŸ‡®ðŸ‡³ India</div>
+                <div className="fixed-cat">🇮🇳 India</div>
                 {loading ? (
                   <div style={{ color: "#6b7280" }}>Loading...</div>
                 ) : slots[1] ? (
@@ -249,7 +248,7 @@ export default function App() {
               </div>
 
               <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">ðŸ�œï¸� Rajasthan / State</div>
+                <div className="fixed-cat">🏜️ Rajasthan / State</div>
                 {loading ? (
                   <div style={{ color: "#6b7280" }}>Loading...</div>
                 ) : slots[2] ? (
@@ -265,12 +264,12 @@ export default function App() {
           <div className="card ad" style={{ marginTop: 12 }}>Advertisement Space</div>
 
           <section className="card" style={{ marginTop: 12 }}>
-            <h3 style={{ marginTop: 0 }}>à¤•à¥�à¤µà¤¿à¤• à¤¨à¥�à¤¯à¥‚à¤œà¤¼ GPT à¤¸à¥‡ à¤ªà¥‚à¤›à¥‡à¤‚</h3>
+            <h3 style={{ marginTop: 0 }}>क्विक न्यूज़ GPT से पूछें</h3>
             <AskNews />
           </section>
 
           <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
-            Â© 2025 Quick NewsGPT â€” Built by Kailash Gautam Â· Made in India ðŸ‡®ðŸ‡³
+            © 2025 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
           </div>
         </main>
 
