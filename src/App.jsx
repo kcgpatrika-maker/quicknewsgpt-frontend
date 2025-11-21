@@ -184,7 +184,7 @@ export default function App() {
       fontSize: 13
     }}
   >
-    ðŸ”—
+    🔗
   </button>
 
 </div>
