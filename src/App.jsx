@@ -157,14 +157,14 @@ export default function App() {
       border: "none",
       background: "#059669",
       color: "white",
-      padding: "6px 10px",
-      borderRadius: 8,
+      padding: "4px 8px",
+      borderRadius: 6,
       cursor: "pointer",
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 700
     }}
   >
-    ðŸ“¤ Share
+    📤 Share
   </button>
 
   {/* SMALL COPY-LINK BUTTON */}
