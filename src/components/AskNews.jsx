@@ -11,8 +11,8 @@ export default function AskNews() {
   function detectCategory(item) {
     const text = `${item.title || ""} ${item.summary || item.description || ""}`.toLowerCase();
     if (!text) return "General";
-    if (text.includes("rajasthan") || text.includes("à¤œà¤¯à¤ªà¥�à¤°") || text.includes("jaipur")) return "Rajasthan";
-    if (["india","bharat","delhi","à¤®à¥�à¤‚à¤¬à¤ˆ","à¤¦à¤¿à¤²à¥�à¤²à¥€"].some(k => text.includes(k))) return "India";
+    if (text.includes("rajasthan") || text.includes("जयपुर") || text.includes("jaipur")) return "Rajasthan";
+    if (["india","bharat","delhi","मुम्बई‚दिल्ली"].some(k => text.includes(k))) return "India";
     if (["us","usa","china","russia","pakistan","tanzania","brazil","mexico"].some(k => text.includes(k))) return "World";
     for (const s of ["bihar","uttar","maharashtra","karnataka","punjab","kerala","west bengal"]) {
       if (text.includes(s)) return "State";
@@ -20,7 +20,7 @@ export default function AskNews() {
     return "General";
   }
 
-  // Ask: show full results (restore previous behavior) â€” but do not show category badge in UI
+  // Ask: show full results (restore previous behavior) — but do not show category badge in UI
   const handleAsk = async () => {
     if (!q.trim()) return;
     setLoading(true);
@@ -48,7 +48,7 @@ export default function AskNews() {
   return (
     <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
-        <input className="ask-input" placeholder="à¤•à¥�à¤µà¤¿à¤• à¤¨à¥�à¤¯à¥‚à¤œà¤¼ GPT à¤¸à¥‡ à¤ªà¥‚à¤›à¥‡à¤‚..." value={q} onChange={(e) => setQ(e.target.value)} style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }} />
+        <input className="ask-input" placeholder="क्विक न्यूज़ GPT से पूछें..." value={q} onChange={(e) => setQ(e.target.value)} style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }} />
         <button className="ask-btn" onClick={handleAsk} disabled={loading} style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}>
           {loading ? "Loading..." : "Ask"}
         </button>
@@ -58,7 +58,7 @@ export default function AskNews() {
       </div>
 
       <div>
-        {results === null && <div style={{ color: "#6b7280" }}>à¤•à¥‹à¤ˆ à¤µà¤¿à¤·à¤¯ à¤Ÿà¤¾à¤‡à¤ª à¤•à¤°à¥‡à¤‚ (à¤œà¥ˆà¤¸à¥‡ à¤¦à¤¿à¤²à¥�à¤²à¥€, à¤¬à¤¿à¤¹à¤¾à¤°, AI...) â€” à¤”à¤° à¤•à¥�à¤µà¤¿à¤• à¤œà¤µà¤¾à¤¬ à¤ªà¤¾à¤�à¤‚à¥¤</div>}
+        {results === null && <div style={{ color: "#6b7280" }}>कोई विषय टाइप करें (जैसे दिल्ली, बिहार, AI...) — और क्विक जवाब पाएं।</div>}
         {results && results.length === 0 && <div style={{ color: "#6b7280" }}>No related news found.</div>}
         {results && results.length > 0 && (
           <div style={{ display: "grid", gap: "8px" }}>
