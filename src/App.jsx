@@ -274,9 +274,13 @@ export default function App() {
           </section>
 
           <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
-            © 2025 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
-          </div>
-        </main>
+  © 2025 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
+  <br />
+  <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
+    Privacy Policy
+  </a>
+</div>
+</main>
 
         <aside className="sidebar">
           <Sidebar topItems={slots} />
