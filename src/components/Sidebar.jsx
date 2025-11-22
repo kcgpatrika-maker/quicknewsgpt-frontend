@@ -67,5 +67,14 @@ const Sidebar = ({ topItems = [] }) => {
     </aside>
   );
 };
+      {/* ==== Privacy Policy Link ==== */}
+      <div className="card" style={{ marginTop: 12 }}>
+        <div className="side-title" style={{ fontWeight: 700 }}>Legal</div>
+        <ul style={{ marginTop: 8 }}>
+          <li>
+            <a href="/privacy" style={{ color: "#2563eb" }}>Privacy Policy</a>
+          </li>
+        </ul>
+      </div>
 
 export default Sidebar;
