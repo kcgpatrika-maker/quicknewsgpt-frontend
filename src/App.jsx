@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 const SHOW_CONNECTED = false;
@@ -119,7 +120,11 @@ export default function App() {
   const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
 
   return (
-    <div>
+  <div>
+    {window.location.pathname === "/privacy" ? (
+      <PrivacyPolicy />
+    ) : (
+      <>
 
       {/* ===================== HEADER ===================== */}
       <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -277,6 +282,11 @@ export default function App() {
           <Sidebar topItems={slots} />
         </aside>
       </div>
+
+      </>
+    )}
+
     </div>
   );
 }
+
