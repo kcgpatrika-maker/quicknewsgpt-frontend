@@ -6,15 +6,17 @@
     <title>Quick NewsGPT — AI Headlines & Insights</title>
     <link rel="manifest" href="/manifest.json" />
 
-    <!-- Google AdSense Code (Paste Here) -->
+    <!-- REQUIRED FOR VERIFICATION -->
+    <meta name="google-adsense-account" content="ca-pub-8052311281752038">
+
+    <!-- REQUIRED FOR SHOWING ADS -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8052311281752038"
         crossorigin="anonymous"></script>
-    <!-- End AdSense Code -->
+
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- Service Worker Registration -->
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
