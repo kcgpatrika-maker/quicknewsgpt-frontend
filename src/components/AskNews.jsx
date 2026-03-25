@@ -7,12 +7,11 @@ export default function AskNews() {
   const [results, setResults] = useState(null);
   const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
-  // Basic bilingual detection kept for internal sorting if needed
   function detectCategory(item) {
     const text = `${item.title || ""} ${item.summary || item.description || ""}`.toLowerCase();
     if (!text) return "General";
     if (text.includes("rajasthan") || text.includes("जयपुर") || text.includes("jaipur")) return "Rajasthan";
-    if (["india","bharat","delhi","मुम्बई‚दिल्ली"].some(k => text.includes(k))) return "India";
+    if (["india","bharat","delhi","मुम्बई","दिल्ली"].some(k => text.includes(k))) return "India";
     if (["us","usa","china","russia","pakistan","tanzania","brazil","mexico"].some(k => text.includes(k))) return "World";
     for (const s of ["bihar","uttar","maharashtra","karnataka","punjab","kerala","west bengal"]) {
       if (text.includes(s)) return "State";
@@ -20,7 +19,6 @@ export default function AskNews() {
     return "General";
   }
 
-  // Ask: show full results (restore previous behavior) — but do not show category badge in UI
   const handleAsk = async () => {
     if (!q.trim()) return;
     setLoading(true);
@@ -30,7 +28,6 @@ export default function AskNews() {
       const data = await res.json();
       const items = data?.news || data?.samples || (Array.isArray(data) ? data : []);
       const processed = (items || []).map(it => ({ ...it, _internalCategory: detectCategory(it) }));
-      // restore previous behavior: return full list (up to 20)
       setResults(processed.slice(0, 20));
     } catch (err) {
       console.error("Ask error:", err);
@@ -48,11 +45,25 @@ export default function AskNews() {
   return (
     <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
       <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
-        <input className="ask-input" placeholder="क्विक न्यूज़ GPT से पूछें..." value={q} onChange={(e) => setQ(e.target.value)} style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }} />
-        <button className="ask-btn" onClick={handleAsk} disabled={loading} style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}>
+        <input
+          className="ask-input"
+          placeholder="क्विक न्यूज़ GPT से पूछें..."
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+        />
+        <button
+          className="ask-btn"
+          onClick={handleAsk}
+          disabled={loading}
+          style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
+        >
           {loading ? "Loading..." : "Ask"}
         </button>
-        <button onClick={handleReset} style={{ backgroundColor: "#9ca3af", color: "white", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}>
+        <button
+          onClick={handleReset}
+          style={{ backgroundColor: "#9ca3af", color: "white", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
+        >
           Reset
         </button>
       </div>
@@ -65,9 +76,28 @@ export default function AskNews() {
             {results.map((r, i) => (
               <div key={r.link || r.id || i} style={{ padding: "10px", borderRadius: "10px", background: "#fff", border: "1px solid #eef2ff" }}>
                 <div style={{ fontWeight: 600 }}>{r.title}</div>
+                
+                {/* Thumbnail */}
+                {r.image && (
+                  <img
+                    src={r.image}
+                    alt="thumbnail"
+                    style={{ width: "100%", borderRadius: 8, margin: "6px 0", maxHeight: 180, objectFit: "cover" }}
+                  />
+                )}
+
                 <div style={{ color: "#6b7280", fontSize: 13 }}>{r.summary || r.description || ""}</div>
+                
+                {/* Source + Date */}
+                <div style={{ fontSize: 12, color: "#6b7280", marginTop: 4 }}>
+                  {r.source ? `Source: ${r.source}` : ""}
+                  {r.pubDate ? ` | ${new Date(r.pubDate).toLocaleDateString()}` : ""}
+                </div>
+
                 {r.link && (
-                  <a href={r.link} target="_blank" rel="noreferrer" style={{ color: "#2563eb", fontSize: 13 }}>Read full story</a>
+                  <a href={r.link} target="_blank" rel="noreferrer" style={{ color: "#2563eb", fontSize: 13 }}>
+                    Read full story
+                  </a>
                 )}
               </div>
             ))}
