@@ -4,7 +4,6 @@ import React from "react";
 function WikipediaSearch() {
   return (
     <section id="wiki" className="card" style={{ marginTop: 12 }}>
-      <h3>Wikipedia Search</h3>
       <form
         action="https://en.wikipedia.org/wiki/Special:Search"
         method="get"
