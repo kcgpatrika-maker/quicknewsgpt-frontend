@@ -10,67 +10,9 @@ import LiveTV from "./components/LiveTV";
 import WikipediaSearch from "./components/WikipediaSearch";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
-const toLower = (s) => (s || "").toLowerCase();
-
-const KEYWORDS = {
-  international: ["world","international","foreign","us","usa","america","china","russia","pakistan","global","europe","uk","brazil","mexico"],
-  india: ["india","bharat","delhi","mumbai","bangalore","bengaluru","chennai","kolkata","भारत","दिल्ली","मुंबई"],
-  rajasthan: ["rajasthan","जयपुर","jaipur","jodhpur","उदयपुर","udaipur","ajmer","बीकानेर","bikaner","jaisalmer","alwar","सीकर","sikar"]
-};
-
-function textHasAny(text = "", arr = []) {
-  const t = toLower(text);
-  return arr.some(k => t.includes(k.toLowerCase()));
-}
-
-function detectCategoryForItem(item = {}) {
-  const txt = `${item.title || ""} ${item.summary || item.description || ""} ${item.content || ""}`.trim();
-  if (textHasAny(txt, KEYWORDS.rajasthan)) return "rajasthan";
-  if (textHasAny(txt, KEYWORDS.international)) return "international";
-  if (textHasAny(txt, KEYWORDS.india)) return "india";
-  return "general";
-}
-
-function selectSlots(items = []) {
-  const list = Array.isArray(items) ? items.slice() : [];
-  const processed = list.map((it, idx) => ({ ...it, __cat: detectCategoryForItem(it), __i: idx }));
-  const chosen = [];
-  const usedIdx = new Set();
-
-  const pick = (predicate) => {
-    for (const p of processed) {
-      if (usedIdx.has(p.__i)) continue;
-      if (predicate(p)) {
-        usedIdx.add(p.__i);
-        chosen.push(p);
-        return p;
-      }
-    }
-    return null;
-  };
-
-  pick(p => p.__cat === "international");
-  if (chosen.length === 0) pick(p => p.__cat === "india");
-  if (chosen.length === 0) pick(p => true);
-
-  pick(p => p.__cat === "india");
-  if (chosen.length < 2) pick(p => true);
-
-  pick(p => p.__cat === "rajasthan");
-  if (chosen.length < 3) pick(p => true);
-
-  while (chosen.length < 3) chosen.push(null);
-
-  return chosen.map((p) => {
-    if (!p) return null;
-    const { __cat, __i, ...rest } = p;
-    return { ...rest, _detected: __cat };
-  });
-}
 
 export default function App() {
-  const [allNews, setAllNews] = useState([]);
-  const [slots, setSlots] = useState([null, null, null]);
+  const [allNews, setAllNews] = useState({});
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
@@ -82,8 +24,19 @@ export default function App() {
     try {
       const res = await fetch(`${BACKEND}/news`);
       const data = await res.json();
-      const items = data?.news || data?.items || [];
-      setAllNews(Array.isArray(items) ? items : []);
+      const items = data?.news || [];
+      
+      // Group by categories
+      const grouped = {
+        International: items.filter(it => /world|international|us|china|russia/i.test(it.title)).slice(0,2),
+        India: items.filter(it => /india|bharat|delhi|mumbai/i.test(it.title)).slice(0,2),
+        Rajasthan: items.filter(it => /rajasthan|jaipur|jodhpur|udaipur/i.test(it.title)).slice(0,2),
+        Business: items.filter(it => /business|company|startup|market/i.test(it.title)).slice(0,2),
+        Sports: items.filter(it => /sports|cricket|football|match/i.test(it.title)).slice(0,2),
+        Entertainment: items.filter(it => /film|movie|bollywood|song/i.test(it.title)).slice(0,2),
+      };
+
+      setAllNews(grouped);
       setLastUpdated(new Date());
 
       const resCustom = await fetch(`${BACKEND}/custom`);
@@ -92,7 +45,7 @@ export default function App() {
     } catch (err) {
       console.error("fetchNews error:", err);
       setError("Failed to load news.");
-      setAllNews([]);
+      setAllNews({});
       setLastUpdated(null);
     } finally {
       setLoading(false);
@@ -104,11 +57,6 @@ export default function App() {
     const id = setInterval(fetchNews, 10 * 60 * 1000);
     return () => clearInterval(id);
   }, [fetchNews]);
-
-  useEffect(() => {
-    const chosen = selectSlots(allNews);
-    setSlots(chosen);
-  }, [allNews]);
 
   const handleRefresh = async () => {
     await fetchNews();
@@ -129,7 +77,35 @@ export default function App() {
               <div className="tagline">Your Quick Gateway to Quick News</div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={handleRefresh} style={{ background: "#2563eb", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 6 }}>⟳ Refresh</button>
+              {/* Share Button */}
+              <button
+                onClick={async () => {
+                  const url = window.location.href;
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({ title: "Quick NewsGPT", text: "Latest news from Quick NewsGPT", url });
+                    } catch (err) {
+                      console.error("Share failed:", err);
+                    }
+                  } else {
+                    await navigator.clipboard.writeText(url);
+                    alert("Link copied!");
+                  }
+                }}
+                style={{ border: "none", background: "#059669", color: "white", padding: "6px 10px", borderRadius: 6 }}
+              >
+                📤 Share
+              </button>
+              {/* Copy Link */}
+              <button
+                onClick={async () => {
+                  await navigator.clipboard.writeText(window.location.href);
+                  alert("Link copied!");
+                }}
+                style={{ border: "1px solid #d1d5db", background: "white", color: "#374151", padding: "6px 10px", borderRadius: 6 }}
+              >
+                🔗
+              </button>
             </div>
           </div>
 
@@ -138,43 +114,65 @@ export default function App() {
             <main className="main-column">
               {/* Latest Headlines */}
               <section className="card">
-                <h2>Latest Headlines</h2>
-                <div style={{ fontSize: 13, color: "#6b7280" }}>
-                  {timeString ? `Updated ${timeString}` : ""}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <h2 style={{ margin: 0 }}>Latest Headlines</h2>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{ fontSize: 13, color: "#6b7280" }}>
+                      {timeString ? `Updated ${timeString}` : ""}
+                    </div>
+                    <button onClick={handleRefresh} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: 6 }}>
+                      ⟳ Refresh
+                    </button>
+                  </div>
                 </div>
-                <div style={{ marginTop: 12 }}>
-                  <div className="fixed-cat">🌍 International</div>
-                  {loading ? <div>Loading...</div> : <NewsList items={slots[0] ? [slots[0]] : []} hideBadge={true} />}
-                  <div className="fixed-cat">🇮🇳 India</div>
-                  {loading ? <div>Loading...</div> : <NewsList items={slots[1] ? [slots[1]] : []} hideBadge={true} />}
-                  <div className="fixed-cat">🏜️ Rajasthan / State</div>
-                  {loading ? <div>Loading...</div> : <NewsList items={slots[2] ? [slots[2]] : []} hideBadge={true} />}
-                </div>
+
+                {loading ? (
+                  <div>Loading...</div>
+                ) : (
+                  Object.keys(allNews).map(cat => (
+                    <div key={cat} style={{ marginTop: 12 }}>
+                      <div className="fixed-cat">{cat}</div>
+                      <NewsList items={allNews[cat]} hideBadge={true} />
+                    </div>
+                  ))
+                )}
               </section>
 
-              {/* Advertisement */}
-              <div className="card ad" style={{ marginTop: 12 }}>Advertisement Space</div>
+              {/* User Uploaded News */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>✍️ गौतम की कलम से</h3>
+                <NewsList items={customNews} />
+              </section>
+
+              {/* Trending */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>🔥 Top 5 Trending</h3>
+                <ul style={{ marginTop: 8 }}>
+                  <li>India wins crucial cricket match</li>
+                  <li>New AI policy announced by govt</li>
+                  <li>Bollywood movie breaks box office records</li>
+                  <li>Global markets show recovery signs</li>
+                  <li>Major tech launch excites youth</li>
+                </ul>
+              </section>
+
+              {/* Wikipedia Search */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>📚 Explore Knowledge on Wikipedia</h3>
+                <WikipediaSearch />
+              </section>
+
+              {/* Live TV */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>📺 Live TV</h3>
+                <LiveTV />
+              </section>
 
               {/* Ask Section */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>क्विक न्यूज़ GPT से पूछें</h3>
                 <AskNews />
               </section>
-
-              {/* User Uploaded News */}
-              <section className="card" style={{ marginTop: 12 }}>
-                <h3>User Uploaded News</h3>
-                <NewsList items={customNews} />
-              </section>
-
-              {/* Trending */}
-              <Trending />
-
-              {/* Wikipedia Search */}
-              <WikipediaSearch />
-
-              {/* Live TV */}
-              <LiveTV />
 
               {/* Footer */}
               <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
@@ -188,7 +186,7 @@ export default function App() {
 
             {/* Sidebar */}
             <aside className="sidebar">
-              <Sidebar topItems={slots} />
+              <Sidebar topItems={allNews["India"]?.slice(0, 3) || []} />
             </aside>
           </div>
         </>
