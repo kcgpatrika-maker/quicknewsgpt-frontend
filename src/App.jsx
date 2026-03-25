@@ -36,10 +36,11 @@ const grouped = {
   Entertainment: items.filter(it => /film|movie|bollywood|song/i.test(it.title)).slice(0,2),
 };
 
-// fallback: अगर कोई category खाली है तो पहले 2 items डाल दो
+// fallback logic सुधारें
 for (const cat of Object.keys(grouped)) {
   if (!grouped[cat] || grouped[cat].length === 0) {
-    grouped[cat] = items.slice(0,2);
+    // हर category को अलग slice दें
+    grouped[cat] = items.slice((Object.keys(grouped).indexOf(cat)*2), (Object.keys(grouped).indexOf(cat)*2)+2);
   }
 }
 
