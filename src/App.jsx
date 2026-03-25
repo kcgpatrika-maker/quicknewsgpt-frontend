@@ -178,7 +178,7 @@ for (const cat of Object.keys(grouped)) {
 
               {/* Ask Section */}
               <section className="card" style={{ marginTop: 12 }}>
-                <h3>क्विक न्यूज़ GPT से पूछें</h3>
+                <h3>देश-दुनिया की अन्य खबरें</h3>
                 <AskNews />
               </section>
 
