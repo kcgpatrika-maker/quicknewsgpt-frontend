@@ -1,4 +1,5 @@
 // src/App.jsx
+import "./App.css";
 import React, { useEffect, useState, useCallback } from "react";
 import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
