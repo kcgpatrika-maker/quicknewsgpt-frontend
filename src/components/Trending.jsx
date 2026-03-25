@@ -4,17 +4,18 @@ import React, { useEffect, useState } from "react";
 export default function Trending() {
   const [trends, setTrends] = useState([]);
 
-  useEffect(() => {
-    // फिलहाल static headlines + links डाल रहे हैं
-    // बाद में backend से dynamic data लाया जा सकता है
-    setTrends([
-      { title: "India wins crucial cricket match", link: "https://www.espncricinfo.com/" },
-      { title: "New AI policy announced by govt", link: "https://www.livemint.com/" },
-      { title: "Bollywood movie breaks box office records", link: "https://www.bollywoodhungama.com/" },
-      { title: "Global markets show recovery signs", link: "https://economictimes.indiatimes.com/" },
-      { title: "Major tech launch excites youth", link: "https://www.gadgets360.com/" },
-    ]);
-  }, []);
+useEffect(() => {
+  async function loadTrending() {
+    try {
+      const res = await fetch(`${BACKEND}/trending`);
+      const data = await res.json();
+      setTrends(data.news || []);
+    } catch (err) {
+      console.error("Trending error:", err);
+    }
+  }
+  loadTrending();
+}, []);
 
   return (
     <div>
