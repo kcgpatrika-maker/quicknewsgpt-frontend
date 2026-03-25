@@ -40,6 +40,21 @@ header nav a {
   margin-right: 16px;
   font-weight: 500;
 }
+.fixed-cat {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 6px;
+}
+
+.fixed-cat.International { background: #2563eb; }   /* Blue */
+.fixed-cat.India { background: #059669; }           /* Green */
+.fixed-cat.Rajasthan { background: #d97706; }       /* Orange */
+.fixed-cat.Business { background: #9333ea; }        /* Purple */
+.fixed-cat.Sports { background: #dc2626; }          /* Red */
+.fixed-cat.Entertainment { background: #f43f5e; }   /* Pink */
 
 /* Cards */
 .card {
