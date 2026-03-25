@@ -22,12 +22,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
           {/* Title */}
           <div className="news-title">{r.title}</div>
 
-          {/* Summary → सिर्फ़ desktop पर दिखे */}
-          {r.summary && (
-            <div className="news-summary">
-              {r.summary || r.description || ""}
-            </div>
-          )}
+{/* Summary पूरी तरह हटाएँ, सिर्फ़ Title + Read full story */}
 
           {/* Read full story link */}
           {r.link && (
