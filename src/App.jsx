@@ -24,25 +24,7 @@ export default function App() {
     try {
       const res = await fetch(`${BACKEND}/news`);
       const data = await res.json();
-      const items = data?.news || [];
-      
-      // Group by categories
-const grouped = {
-  International: items.filter(it => /world|international|us|china|russia/i.test(it.title)).slice(0,2),
-  India: items.filter(it => /india|bharat|delhi|mumbai/i.test(it.title)).slice(0,2),
-  Rajasthan: items.filter(it => /rajasthan|jaipur|jodhpur|udaipur/i.test(it.title)).slice(0,2),
-  Business: items.filter(it => /business|company|startup|market/i.test(it.title)).slice(0,2),
-  Sports: items.filter(it => /sports|cricket|football|match/i.test(it.title)).slice(0,2),
-  Entertainment: items.filter(it => /film|movie|bollywood|song/i.test(it.title)).slice(0,2),
-};
-
-// fallback logic सुधारें
-for (const cat of Object.keys(grouped)) {
-  if (!grouped[cat] || grouped[cat].length === 0) {
-    // हर category को अलग slice दें
-    grouped[cat] = items.slice((Object.keys(grouped).indexOf(cat)*2), (Object.keys(grouped).indexOf(cat)*2)+2);
-  }
-}
+      const grouped = data?.news || {};
 
       setAllNews(grouped);
       setLastUpdated(new Date());
@@ -139,7 +121,9 @@ for (const cat of Object.keys(grouped)) {
                 ) : (
                   Object.keys(allNews).map(cat => (
                     <div key={cat} style={{ marginTop: 12 }}>
-                      <div className="fixed-cat">{cat}</div>
+                      <div className={`fixed-cat ${cat}`}>
+                        {cat === "Rajasthan" ? "Rajasthan / States" : cat}
+                      </div>
                       <NewsList items={allNews[cat]} hideBadge={true} />
                     </div>
                   ))
@@ -155,13 +139,7 @@ for (const cat of Object.keys(grouped)) {
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>🔥 Top 5 Trending</h3>
-                <ul style={{ marginTop: 8 }}>
-                  <li>India wins crucial cricket match</li>
-                  <li>New AI policy announced by govt</li>
-                  <li>Bollywood movie breaks box office records</li>
-                  <li>Global markets show recovery signs</li>
-                  <li>Major tech launch excites youth</li>
-                </ul>
+                <Trending />
               </section>
 
               {/* Wikipedia Search */}
@@ -178,7 +156,7 @@ for (const cat of Object.keys(grouped)) {
 
               {/* Ask Section */}
               <section className="card" style={{ marginTop: 12 }}>
-                <h3>देश-दुनिया की अन्य खबरें</h3>
+                <h3>🌐 देश-दुनिया की अन्य खबरें</h3>
                 <AskNews />
               </section>
 
