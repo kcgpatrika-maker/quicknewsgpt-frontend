@@ -90,11 +90,19 @@ aside {
   top: 16px;
 }
 
-/* Responsive Design */
+/* News summary default (desktop) */
+.news-summary {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* Mobile view → summary hide */
 @media (max-width: 768px) {
-  .app {
-    display: block;
+  .news-summary {
+    display: none;
   }
+}
 
   header nav {
     display: flex;
