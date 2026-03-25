@@ -11,7 +11,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
       {items.map((r, i) => (
         <div
           key={r.link || r.id || i}
-          className="news-card"
+          className="news-card news-item"
           style={{
             padding: "10px",
             borderRadius: "10px",
@@ -20,12 +20,14 @@ export default function NewsList({ items = [], hideBadge = false }) {
           }}
         >
           {/* Title */}
-          <div style={{ fontWeight: 600 }}>{r.title}</div>
+          <div className="news-title">{r.title}</div>
 
           {/* Summary → सिर्फ़ desktop पर दिखे */}
-          <div className="news-summary">
-            {r.summary || r.description || ""}
-          </div>
+          {r.summary && (
+            <div className="news-summary">
+              {r.summary || r.description || ""}
+            </div>
+          )}
 
           {/* Read full story link */}
           {r.link && (
@@ -33,7 +35,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
               href={r.link}
               target="_blank"
               rel="noreferrer"
-              style={{ color: "#2563eb", fontSize: 13 }}
+              className="read-more"
             >
               Read full story
             </a>
