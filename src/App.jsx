@@ -4,24 +4,17 @@ import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
 import PrivacyPolicy from "./components/PrivacyPolicy";
+import Trending from "./components/Trending";
+import LiveTV from "./components/LiveTV";
+import WikipediaSearch from "./components/WikipediaSearch";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
-const SHOW_CONNECTED = false;
-
 const toLower = (s) => (s || "").toLowerCase();
 
 const KEYWORDS = {
-  international: [
-    "world","international","foreign","us","u.s.","usa","america","united states",
-    "china","russia","pakistan","bangladesh","global","europe","uk","britain","ब्राज़ील","ब्रज़ील","brazil","mexico","tanzania"
-  ],
-  india: [
-    "india","bharat","delhi","mumbai","bangalore","bengaluru","chennai","kolkata","modi",
-    "parliament","संसद","भारत","दिल्ली","मुंबई","बेंगलुरु","बंगलोर","कोलकाता"
-  ],
-  rajasthan: [
-    "rajasthan","जयपुर","jaipur","jodhpur","उदयपुर","udaipur","ajmer", "बीकानेर","bikaner","jaisalmer","alwar","सीकर","sikar"
-  ]
+  international: ["world","international","foreign","us","usa","america","china","russia","pakistan","global","europe","uk","brazil","mexico"],
+  india: ["india","bharat","delhi","mumbai","bangalore","bengaluru","chennai","kolkata","भारत","दिल्ली","मुंबई"],
+  rajasthan: ["rajasthan","जयपुर","jaipur","jodhpur","उदयपुर","udaipur","ajmer","बीकानेर","bikaner","jaisalmer","alwar","सीकर","sikar"]
 };
 
 function textHasAny(text = "", arr = []) {
@@ -40,7 +33,6 @@ function detectCategoryForItem(item = {}) {
 function selectSlots(items = []) {
   const list = Array.isArray(items) ? items.slice() : [];
   const processed = list.map((it, idx) => ({ ...it, __cat: detectCategoryForItem(it), __i: idx }));
-
   const chosen = [];
   const usedIdx = new Set();
 
@@ -81,17 +73,21 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
+  const [customNews, setCustomNews] = useState([]);
 
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(`${BACKEND}/news`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const items = data?.news || data?.items || data?.samples || [];
+      const items = data?.news || data?.items || [];
       setAllNews(Array.isArray(items) ? items : []);
       setLastUpdated(new Date());
+
+      const resCustom = await fetch(`${BACKEND}/custom`);
+      const dataCustom = await resCustom.json();
+      setCustomNews(dataCustom.news || []);
     } catch (err) {
       console.error("fetchNews error:", err);
       setError("Failed to load news.");
@@ -120,177 +116,82 @@ export default function App() {
   const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
 
   return (
-  <div>
-    {window.location.pathname === "/privacy" ? (
-      <PrivacyPolicy />
-    ) : (
-      <>
+    <div>
+      {window.location.pathname === "/privacy" ? (
+        <PrivacyPolicy />
+      ) : (
+        <>
+          {/* HEADER */}
+          <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div className="title">Quick NewsGPT</div>
+              <div className="tagline">Your Quick Gateway to Quick News</div>
+            </div>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={handleRefresh} style={{ background: "#2563eb", color: "#fff", border: "none", padding: "6px 10px", borderRadius: 6 }}>⟳ Refresh</button>
+            </div>
+          </div>
 
-      {/* ===================== HEADER ===================== */}
-      <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        
-        <div>
-          <div className="title">Quick NewsGPT</div>
-          <div className="tagline">Your Quick Gateway to Quick News</div>
-        </div>
-
-        <div style={{ display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end" }}>
-
-  {/* BIG SHARE BUTTON */}
-  <button
-    onClick={async () => {
-      const url = window.location.href;
-
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: "Quick NewsGPT",
-            text: "Latest news from Quick NewsGPT",
-            url
-          });
-        } catch (err) {
-          console.error("Share failed:", err);
-        }
-      } else {
-        await navigator.clipboard.writeText(url);
-        alert("Link copied!");
-      }
-    }}
-    title="Share"
-    style={{
-      border: "none",
-      background: "#059669",
-      color: "white",
-      padding: "4px 8px",
-      borderRadius: 6,
-      cursor: "pointer",
-      fontSize: 14,
-      fontWeight: 700
-    }}
-  >
-    📤 Share
-  </button>
-
-  {/* SMALL COPY-LINK BUTTON */}
-  <button
-    onClick={async () => {
-      await navigator.clipboard.writeText(window.location.href);
-      alert("Link copied!");
-    }}
-    title="Copy Link"
-    style={{
-      border: "1px solid #d1d5db",
-      background: "white",
-      color: "#374151",
-      padding: "4px 6px",
-      borderRadius: 6,
-      cursor: "pointer",
-      fontSize: 13
-    }}
-  >
-    🔗
-  </button>
-
-</div>
-</div>   {/* header à¤•à¤¾ closing */}
-
-      {/* ===================== MAIN ===================== */}
-      <div className="container">
-        <main className="main-column">
-          <section className="card">
-            
-            {/* TITLE + UPDATE TIME + REFRESH INLINE */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 style={{ margin: 0 }}>Latest Headlines</h2>
-
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          {/* MAIN */}
+          <div className="container">
+            <main className="main-column">
+              {/* Latest Headlines */}
+              <section className="card">
+                <h2>Latest Headlines</h2>
                 <div style={{ fontSize: 13, color: "#6b7280" }}>
                   {timeString ? `Updated ${timeString}` : ""}
                 </div>
+                <div style={{ marginTop: 12 }}>
+                  <div className="fixed-cat">🌍 International</div>
+                  {loading ? <div>Loading...</div> : <NewsList items={slots[0] ? [slots[0]] : []} hideBadge={true} />}
+                  <div className="fixed-cat">🇮🇳 India</div>
+                  {loading ? <div>Loading...</div> : <NewsList items={slots[1] ? [slots[1]] : []} hideBadge={true} />}
+                  <div className="fixed-cat">🏜️ Rajasthan / State</div>
+                  {loading ? <div>Loading...</div> : <NewsList items={slots[2] ? [slots[2]] : []} hideBadge={true} />}
+                </div>
+              </section>
 
-                <button
-                  onClick={handleRefresh}
-                  title="Refresh News"
-                  style={{
-                    border: "1px solid #2563eb",
-                    background: "#2563eb",
-                    color: "white",
-                    padding: "6px 10px",
-                    borderRadius: 8,
-                    cursor: "pointer",
-                    fontWeight: 700,
-                    fontSize: 14
-                  }}
-                >
-                  ⟳
-                </button>
+              {/* Advertisement */}
+              <div className="card ad" style={{ marginTop: 12 }}>Advertisement Space</div>
+
+              {/* Ask Section */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>क्विक न्यूज़ GPT से पूछें</h3>
+                <AskNews />
+              </section>
+
+              {/* User Uploaded News */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>User Uploaded News</h3>
+                <NewsList items={customNews} />
+              </section>
+
+              {/* Trending */}
+              <Trending />
+
+              {/* Wikipedia Search */}
+              <WikipediaSearch />
+
+              {/* Live TV */}
+              <LiveTV />
+
+              {/* Footer */}
+              <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
+                © 2026 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
+                <br />
+                <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
+                  Privacy Policy
+                </a>
               </div>
-            </div>
+            </main>
 
-            {/* ==== NEWS SLOTS ===== */}
-            <div style={{ marginTop: 12 }}>
-              
-              <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">🌍 International</div>
-                {loading ? (
-                  <div style={{ color: "#6b7280" }}>Loading...</div>
-                ) : slots[0] ? (
-                  <NewsList items={[slots[0]]} hideBadge={true} />
-                ) : (
-                  <div className="news-item card" style={{ padding: 10 }}>No news available.</div>
-                )}
-              </div>
-
-              <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">🇮🇳 India</div>
-                {loading ? (
-                  <div style={{ color: "#6b7280" }}>Loading...</div>
-                ) : slots[1] ? (
-                  <NewsList items={[slots[1]]} hideBadge={true} />
-                ) : (
-                  <div className="news-item card" style={{ padding: 10 }}>No news available.</div>
-                )}
-              </div>
-
-              <div style={{ marginBottom: 6 }}>
-                <div className="fixed-cat">🏜️ Rajasthan / State</div>
-                {loading ? (
-                  <div style={{ color: "#6b7280" }}>Loading...</div>
-                ) : slots[2] ? (
-                  <NewsList items={[slots[2]]} hideBadge={true} />
-                ) : (
-                  <div className="news-item card" style={{ padding: 10 }}>No news available.</div>
-                )}
-              </div>
-
-            </div>
-          </section>
-
-          <div className="card ad" style={{ marginTop: 12 }}>Advertisement Space</div>
-
-          <section className="card" style={{ marginTop: 12 }}>
-            <h3 style={{ marginTop: 0 }}>क्विक न्यूज़ GPT से पूछें</h3>
-            <AskNews />
-          </section>
-
-          <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
-  © 2025 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
-  <br />
-  <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
-    Privacy Policy
-  </a>
-</div>
-</main>
-
-        <aside className="sidebar">
-          <Sidebar topItems={slots} />
-        </aside>
-      </div>
-
-      </>
-    )}
-
+            {/* Sidebar */}
+            <aside className="sidebar">
+              <Sidebar topItems={slots} />
+            </aside>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-
