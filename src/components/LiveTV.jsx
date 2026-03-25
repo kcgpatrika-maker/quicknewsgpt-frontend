@@ -4,7 +4,6 @@ import React from "react";
 function LiveTV() {
   return (
     <section id="live" className="card" style={{ marginTop: 12 }}>
-      <h3>📺 Live TV</h3>
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li style={{ marginBottom: 6 }}>
           <a
