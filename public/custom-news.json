@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "title": "जयपुर में नई सड़क योजना शुरू",
+    "summary": "सरकार ने जयपुर में नई सड़क योजना का ऐलान किया है।",
+    "link": "https://example.com/story1",
+    "source": "User Upload",
+    "pubDate": "2026-03-24",
+    "image": "https://example.com/images/jaipur-road.jpg"
+  },
+  {
+    "id": "2",
+    "title": "दिल्ली में प्रदूषण का स्तर बढ़ा",
+    "summary": "दिल्ली में प्रदूषण का स्तर खतरनाक स्तर पर पहुंच गया है।",
+    "link": "https://example.com/story2",
+    "source": "User Upload",
+    "pubDate": "2026-03-24",
+    "image": "https://example.com/images/delhi-pollution.jpg"
+  }
+]
