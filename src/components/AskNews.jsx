@@ -30,42 +30,98 @@ export default function AskNews() {
   };
 
   return (
-    <div style={{ background: "#f9fafb", padding: "16px", borderRadius: "10px", border: "1px solid #e5e7eb" }}>
-      <div style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
+    <div
+      style={{
+        background: "#f9fafb",
+        padding: "16px",
+        borderRadius: "10px",
+        border: "1px solid #e5e7eb",
+      }}
+    >
+      {/* Input + Buttons */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          alignItems: "center",
+          marginBottom: "10px",
+        }}
+      >
         <input
           className="ask-input"
           placeholder="शहर का नाम लिखें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          style={{ flex: 1, padding: "8px", border: "1px solid #d1d5db", borderRadius: "6px" }}
+          style={{
+            flex: 1,
+            padding: "8px",
+            border: "1px solid #d1d5db",
+            borderRadius: "6px",
+          }}
         />
         <button
           className="ask-btn"
           onClick={handleAsk}
           disabled={loading}
-          style={{ backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
+          style={{
+            backgroundColor: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+          }}
         >
           {loading ? "Loading..." : "Ask"}
         </button>
         <button
           onClick={handleReset}
-          style={{ backgroundColor: "#9ca3af", color: "white", border: "none", borderRadius: "6px", padding: "8px 14px", cursor: "pointer" }}
+          style={{
+            backgroundColor: "#9ca3af",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            padding: "8px 14px",
+            cursor: "pointer",
+          }}
         >
           Reset
         </button>
       </div>
 
+      {/* Results */}
       <div>
-        {results === null && <div style={{ color: "#6b7280" }}>शहर का नाम लिखें और क्विक जवाब पाएं।</div>}
-        {results && results.length === 0 && <div style={{ color: "#6b7280" }}>No related news found.</div>}
+        {results === null && (
+          <div style={{ color: "#6b7280" }}>
+            शहर का नाम लिखें और क्विक जवाब पाएं।
+          </div>
+        )}
+        {results && results.length === 0 && (
+          <div style={{ color: "#6b7280" }}>No related news found.</div>
+        )}
         {results && results.length > 0 && (
           <div style={{ display: "grid", gap: "8px" }}>
             {results.map((r, i) => (
-              <div key={r.link || r.id || i} style={{ padding: "10px", borderRadius: "10px", background: "#fff", border: "1px solid #eef2ff" }}>
+              <div
+                key={r.link || r.id || i}
+                style={{
+                  padding: "10px",
+                  borderRadius: "10px",
+                  background: "#fff",
+                  border: "1px solid #eef2ff",
+                }}
+              >
+                {/* सिर्फ़ Title */}
                 <div style={{ fontWeight: 600 }}>{r.title}</div>
-                <div style={{ color: "#6b7280", fontSize: 13 }}>{r.summary || r.description || ""}</div>
+
+                {/* Read full story link */}
                 {r.link && (
-                  <a href={r.link} target="_blank" rel="noreferrer" style={{ color: "#2563eb", fontSize: 13 }}>
+                  <a
+                    href={r.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ color: "#2563eb", fontSize: 13 }}
+                  >
                     Read full story
                   </a>
                 )}
