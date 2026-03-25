@@ -27,14 +27,21 @@ export default function App() {
       const items = data?.news || [];
       
       // Group by categories
-      const grouped = {
-        International: items.filter(it => /world|international|us|china|russia/i.test(it.title)).slice(0,2),
-        India: items.filter(it => /india|bharat|delhi|mumbai/i.test(it.title)).slice(0,2),
-        Rajasthan: items.filter(it => /rajasthan|jaipur|jodhpur|udaipur/i.test(it.title)).slice(0,2),
-        Business: items.filter(it => /business|company|startup|market/i.test(it.title)).slice(0,2),
-        Sports: items.filter(it => /sports|cricket|football|match/i.test(it.title)).slice(0,2),
-        Entertainment: items.filter(it => /film|movie|bollywood|song/i.test(it.title)).slice(0,2),
-      };
+const grouped = {
+  International: items.filter(it => /world|international|us|china|russia/i.test(it.title)).slice(0,2),
+  India: items.filter(it => /india|bharat|delhi|mumbai/i.test(it.title)).slice(0,2),
+  Rajasthan: items.filter(it => /rajasthan|jaipur|jodhpur|udaipur/i.test(it.title)).slice(0,2),
+  Business: items.filter(it => /business|company|startup|market/i.test(it.title)).slice(0,2),
+  Sports: items.filter(it => /sports|cricket|football|match/i.test(it.title)).slice(0,2),
+  Entertainment: items.filter(it => /film|movie|bollywood|song/i.test(it.title)).slice(0,2),
+};
+
+// fallback: अगर कोई category खाली है तो पहले 2 items डाल दो
+for (const cat of Object.keys(grouped)) {
+  if (!grouped[cat] || grouped[cat].length === 0) {
+    grouped[cat] = items.slice(0,2);
+  }
+}
 
       setAllNews(grouped);
       setLastUpdated(new Date());
