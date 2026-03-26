@@ -47,19 +47,35 @@ header nav a {
   margin-bottom: 8px;
 }
 
-/* Category Headings (colored text only) */
+/* Category Headings (red text + emoji) */
 .fixed-cat {
   font-weight: 700;
   margin-bottom: 6px;
   font-size: 16px;
+  color: red;              /* सभी headings लाल रंग में */
+  display: flex;
+  align-items: center;
 }
 
-.fixed-cat.International { color: #2563eb; }   /* Blue */
-.fixed-cat.India { color: #059669; }           /* Green */
-.fixed-cat.Rajasthan { color: #d97706; }       /* Orange */
-.fixed-cat.Business { color: #9333ea; }        /* Purple */
-.fixed-cat.Sports { color: #dc2626; }          /* Red */
-.fixed-cat.Entertainment { color: #f43f5e; }   /* Pink */
+/* Emoji per category */
+.fixed-cat.International::before {
+  content: "🌍 ";          /* International */
+}
+.fixed-cat.India::before {
+  content: "🇮🇳 ";          /* India */
+}
+.fixed-cat.Rajasthan::before {
+  content: "🏰 ";          /* Rajasthan / States */
+}
+.fixed-cat.Business::before {
+  content: "💼 ";          /* Business */
+}
+.fixed-cat.Sports::before {
+  content: "🏆 ";          /* Sports */
+}
+.fixed-cat.Entertainment::before {
+  content: "🎬 ";          /* Entertainment */
+}
 
 /* Cards */
 .card {
