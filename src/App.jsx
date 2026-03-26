@@ -48,10 +48,6 @@ export default function App() {
     return () => clearInterval(id);
   }, [fetchNews]);
 
-  const handleRefresh = async () => {
-    await fetchNews();
-  };
-
   const timeString = lastUpdated ? lastUpdated.toLocaleTimeString() : "";
 
   return (
@@ -64,10 +60,13 @@ export default function App() {
           <div className="header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <div>
               <div className="title">Quick NewsGPT</div>
-              <div className="tagline">Your Quick Gateway to Quick News</div>
+              {/* Punch line font बड़ा और एक लाइन में */}
+              <div className="tagline" style={{ fontSize: "18px", fontWeight: 500 }}>
+                Your Quick Gateway to Quick News
+              </div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              {/* Share Button */}
+              {/* सिर्फ़ Share Button */}
               <button
                 onClick={async () => {
                   const url = window.location.href;
@@ -86,16 +85,6 @@ export default function App() {
               >
                 📤 Share
               </button>
-              {/* Copy Link */}
-              <button
-                onClick={async () => {
-                  await navigator.clipboard.writeText(window.location.href);
-                  alert("Link copied!");
-                }}
-                style={{ border: "1px solid #d1d5db", background: "white", color: "#374151", padding: "6px 10px", borderRadius: 6 }}
-              >
-                🔗
-              </button>
             </div>
           </div>
 
@@ -107,12 +96,10 @@ export default function App() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <h2 style={{ margin: 0 }}>Latest Headlines</h2>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    {/* Refresh हटाकर Updated time दिखाएँ */}
                     <div style={{ fontSize: 13, color: "#6b7280" }}>
                       {timeString ? `Updated ${timeString}` : ""}
                     </div>
-                    <button onClick={handleRefresh} style={{ background: "#2563eb", color: "white", border: "none", padding: "6px 10px", borderRadius: 6 }}>
-                      ⟳ Refresh
-                    </button>
                   </div>
                 </div>
 
@@ -121,6 +108,7 @@ export default function App() {
                 ) : (
                   Object.keys(allNews).map(cat => (
                     <div key={cat} style={{ marginTop: 12 }}>
+                      {/* Category headings अब सिर्फ़ colored text */}
                       <div className={`fixed-cat ${cat}`}>
                         {cat === "Rajasthan" ? "Rajasthan / States" : cat}
                       </div>
