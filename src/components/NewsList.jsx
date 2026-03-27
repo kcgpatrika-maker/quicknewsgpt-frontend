@@ -1,17 +1,26 @@
-// src/components/NewsList.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function NewsList({ items = [], hideBadge = false }) {
-  const [visibleItems, setVisibleItems] = useState(() => shuffleAndPick(items));
+export default function NewsList({ fetchNews }) {
+  const [items, setItems] = useState([]);
 
-  function shuffleAndPick(list) {
-    if (!list || list.length === 0) return [];
-    const shuffled = [...list].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 12); // हर बार 12 खबरें दिखाएँ
-  }
+  // पहली बार load पर news लाओ
+  useEffect(() => {
+    loadNews();
+  }, []);
 
+  const loadNews = async () => {
+    try {
+      const data = await fetchNews(); // backend से 20 खबरें आएँगी
+      setItems(data.slice(0, 12));    // उनमें से 12 headlines दिखाएँ
+    } catch (err) {
+      console.error("News load error:", err);
+      setItems([]);
+    }
+  };
+
+  // मोबाइल पर finger‑pull refresh → loadNews फिर से चलेगा
   const handleRefresh = () => {
-    setVisibleItems(shuffleAndPick(items));
+    loadNews();
   };
 
   if (!items || items.length === 0) {
@@ -20,7 +29,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
 
   return (
     <div>
-      {/* Refresh Button */}
+      {/* Refresh trigger (mobile पर finger‑pull से भी होगा) */}
       <div style={{ marginBottom: "10px", textAlign: "right" }}>
         <button
           onClick={handleRefresh}
@@ -39,7 +48,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
 
       {/* News Grid */}
       <div style={{ display: "grid", gap: "6px" }}>
-        {visibleItems.map((r, i) => (
+        {items.map((r, i) => (
           <div
             key={r.link || r.id || i}
             className="news-card news-item"
@@ -50,15 +59,12 @@ export default function NewsList({ items = [], hideBadge = false }) {
               border: "1px solid #e5e7eb",
             }}
           >
-            {/* Title */}
             <div
               className="news-title"
               style={{ fontSize: "15px", fontWeight: 500 }}
             >
               {r.title}
             </div>
-
-            {/* Read full story link */}
             {r.link && (
               <a
                 href={r.link}
