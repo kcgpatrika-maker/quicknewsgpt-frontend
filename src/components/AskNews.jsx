@@ -1,21 +1,30 @@
-// src/components/AskNews.jsx
 import React, { useState } from "react";
 
 export default function AskNews() {
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
-  const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
+  const BACKEND =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://quick-newsgpt-backend.onrender.com";
 
   const handleAsk = async () => {
     if (!q.trim()) return;
     setLoading(true);
     setResults(null);
     try {
-      const res = await fetch(`${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`);
+      const res = await fetch(
+        `${BACKEND}/ask?q=${encodeURIComponent(q.trim())}`
+      );
       const data = await res.json();
-      const items = data?.news || [];
-      setResults(items.slice(0, 20));
+
+      // अगर backend ने message भेजा है (invalid query)
+      if (data.message) {
+        setResults({ message: data.message });
+      } else {
+        const items = data?.news || [];
+        setResults(items.slice(0, 20));
+      }
     } catch (err) {
       console.error("Ask error:", err);
       setResults([]);
@@ -49,7 +58,7 @@ export default function AskNews() {
       >
         <input
           className="ask-input"
-          placeholder="शहर का नाम लिखें..."
+          placeholder="शहर / राज्य / देश / घटना / विषय लिखें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
           style={{
@@ -93,13 +102,19 @@ export default function AskNews() {
       <div>
         {results === null && (
           <div style={{ color: "#6b7280" }}>
-            शहर का नाम लिखें और क्विक जवाब पाएं।
+            शहर, राज्य/देश, घटना या विषय का नाम लिखें और क्विक जवाब पाएं।
           </div>
         )}
-        {results && results.length === 0 && (
+
+        {results && results.message && (
+          <div style={{ color: "red" }}>{results.message}</div>
+        )}
+
+        {Array.isArray(results) && results.length === 0 && (
           <div style={{ color: "#6b7280" }}>No related news found.</div>
         )}
-        {results && results.length > 0 && (
+
+        {Array.isArray(results) && results.length > 0 && (
           <div style={{ display: "grid", gap: "8px" }}>
             {results.map((r, i) => (
               <div
@@ -111,10 +126,7 @@ export default function AskNews() {
                   border: "1px solid #eef2ff",
                 }}
               >
-                {/* सिर्फ़ Title */}
                 <div style={{ fontWeight: 600 }}>{r.title}</div>
-
-                {/* Read full story link */}
                 {r.link && (
                   <a
                     href={r.link}
