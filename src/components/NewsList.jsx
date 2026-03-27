@@ -1,27 +1,7 @@
 // src/components/NewsList.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-export default function NewsList() {
-  const [items, setItems] = useState([]);
-  const BACKEND =
-    import.meta.env.VITE_BACKEND_URL ||
-    "https://quick-newsgpt-backend.onrender.com";
-
-  const loadNews = async () => {
-    try {
-      const res = await fetch(`${BACKEND}/news`);
-      const data = await res.json();
-      setItems(data.slice(0, 12)); // 20 में से 12 headlines दिखाएँ
-    } catch (err) {
-      console.error("News load error:", err);
-      setItems([]);
-    }
-  };
-
-  useEffect(() => {
-    loadNews();
-  }, []);
-
+export default function NewsList({ items = [], hideBadge = false }) {
   if (!items || items.length === 0) {
     return <div style={{ color: "#6b7280" }}>No news available.</div>;
   }
@@ -33,18 +13,18 @@ export default function NewsList() {
           key={r.link || r.id || i}
           className="news-card news-item"
           style={{
-            padding: "8px",
-            borderRadius: "6px",
+            padding: "8px",              // पहले 10px था → अब छोटा
+            borderRadius: "6px",         // पहले 10px था → अब compact
             background: "#fff",
-            border: "1px solid #e5e7eb",
+            border: "1px solid #e5e7eb", // हल्का border
           }}
         >
-          <div
-            className="news-title"
-            style={{ fontSize: "15px", fontWeight: 500 }}
-          >
+          {/* Title */}
+          <div className="news-title" style={{ fontSize: "15px", fontWeight: 500 }}>
             {r.title}
           </div>
+
+          {/* Read full story link */}
           {r.link && (
             <a
               href={r.link}
