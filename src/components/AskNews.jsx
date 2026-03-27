@@ -18,15 +18,15 @@ export default function AskNews() {
       );
       const data = await res.json();
 
-      if (data.message) {
-        setResults({ message: data.message });
+      const items = data?.news || [];
+      if (items.length === 0) {
+        setResults({ message: "कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।" });
       } else {
-        const items = data?.news || [];
         setResults(items.slice(0, 20));
       }
     } catch (err) {
       console.error("Ask error:", err);
-      setResults([]);
+      setResults({ message: "कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।" });
     } finally {
       setLoading(false);
     }
@@ -106,20 +106,12 @@ export default function AskNews() {
       <div>
         {results === null && (
           <div style={{ color: "#6b7280" }}>
-            देश, राज्य, शहर, प्रमुख व्यक्ति का नाम लिखें.....
+            देश, राज्य, शहर, प्रमुख व्यक्ति या विषय का नाम लिखें और ताज़ा खबरें पाएं।
           </div>
         )}
 
         {results && results.message && (
-          <div style={{ color: "red" }}>
-            कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।
-          </div>
-        )}
-
-        {Array.isArray(results) && results.length === 0 && (
-          <div style={{ color: "#6b7280" }}>
-            No related news found.
-          </div>
+          <div style={{ color: "red" }}>{results.message}</div>
         )}
 
         {Array.isArray(results) && results.length > 0 && (
