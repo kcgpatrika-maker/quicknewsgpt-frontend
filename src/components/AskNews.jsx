@@ -18,7 +18,6 @@ export default function AskNews() {
       );
       const data = await res.json();
 
-      // अगर backend ने message भेजा है (invalid query)
       if (data.message) {
         setResults({ message: data.message });
       } else {
@@ -47,6 +46,11 @@ export default function AskNews() {
         border: "1px solid #e5e7eb",
       }}
     >
+      {/* Heading */}
+      <h3 style={{ marginBottom: "12px", fontWeight: 600 }}>
+        अन्य खबरों के लिए सर्च करें
+      </h3>
+
       {/* Input + Buttons */}
       <div
         style={{
@@ -58,7 +62,7 @@ export default function AskNews() {
       >
         <input
           className="ask-input"
-          placeholder="शहर / राज्य / देश / घटना / विषय लिखें..."
+          placeholder="देश/ राज्य/ शहर/ प्रमुख व्यक्ति/ विषय लिखें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
           style={{
@@ -102,16 +106,20 @@ export default function AskNews() {
       <div>
         {results === null && (
           <div style={{ color: "#6b7280" }}>
-            शहर, राज्य/देश, घटना या विषय का नाम लिखें और क्विक जवाब पाएं।
+            देश, राज्य, शहर, प्रमुख व्यक्ति का नाम लिखें.....
           </div>
         )}
 
         {results && results.message && (
-          <div style={{ color: "red" }}>{results.message}</div>
+          <div style={{ color: "red" }}>
+            कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।
+          </div>
         )}
 
         {Array.isArray(results) && results.length === 0 && (
-          <div style={{ color: "#6b7280" }}>No related news found.</div>
+          <div style={{ color: "#6b7280" }}>
+            No related news found.
+          </div>
         )}
 
         {Array.isArray(results) && results.length > 0 && (
