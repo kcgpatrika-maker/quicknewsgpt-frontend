@@ -141,4 +141,6 @@ export default function AskNews() {
           </div>
         )}
       </div>
-    </div
+    </div>
+  );
+}
