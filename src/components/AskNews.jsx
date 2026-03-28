@@ -20,7 +20,7 @@ export default function AskNews() {
 
       const items = data?.news || [];
       if (items.length === 0) {
-        setResults({ message: "कोई ताज़ा खबर नहीं मिली। कृपया सही नाम लिखें।" });
+        setResults({ message: "कृपया करंट इश्यू या घटनाक्रम से जुड़े नाम लिखें।" });
       } else {
         setResults(items.slice(0, 20));
       }
