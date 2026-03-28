@@ -47,11 +47,7 @@ export default function AskNews() {
         marginTop: "16px"
       }}
     >
-      {/* Heading */}
-      <h3 style={{ marginBottom: "8px", fontWeight: 600 }}>
-        अन्य खबरों के लिए सर्च करें
-      </h3>
-
+      
       {/* Input + Buttons */}
       <div
         style={{
