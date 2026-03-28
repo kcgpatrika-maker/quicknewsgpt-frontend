@@ -20,13 +20,13 @@ export default function AskNews() {
 
       const items = data?.news || [];
       if (items.length === 0) {
-        setResults({ message: "कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।" });
+        setResults({ message: "कोई ताज़ा खबर नहीं मिली। कृपया सही नाम लिखें।" });
       } else {
         setResults(items.slice(0, 20));
       }
     } catch (err) {
       console.error("Ask error:", err);
-      setResults({ message: "कृपया ताज़ा मुद्दों या वर्तमान घटनाओं से जुड़ा ही सवाल पूछें।" });
+      setResults({ message: "सर्च में समस्या आई। कृपया दोबारा प्रयास करें।" });
     } finally {
       setLoading(false);
     }
@@ -41,13 +41,14 @@ export default function AskNews() {
     <div
       style={{
         background: "#f9fafb",
-        padding: "16px",
-        borderRadius: "10px",
+        padding: "12px",
+        borderRadius: "8px",
         border: "1px solid #e5e7eb",
+        marginTop: "16px"
       }}
     >
       {/* Heading */}
-      <h3 style={{ marginBottom: "12px", fontWeight: 600 }}>
+      <h3 style={{ marginBottom: "8px", fontWeight: 600 }}>
         अन्य खबरों के लिए सर्च करें
       </h3>
 
@@ -55,13 +56,12 @@ export default function AskNews() {
       <div
         style={{
           display: "flex",
-          gap: "10px",
+          gap: "8px",
           alignItems: "center",
-          marginBottom: "10px",
+          marginBottom: "8px",
         }}
       >
         <input
-          className="ask-input"
           placeholder="देश/ राज्य/ शहर/ प्रमुख व्यक्ति/ विषय लिखें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
@@ -73,7 +73,6 @@ export default function AskNews() {
           }}
         />
         <button
-          className="ask-btn"
           onClick={handleAsk}
           disabled={loading}
           style={{
@@ -120,8 +119,8 @@ export default function AskNews() {
               <div
                 key={r.link || r.id || i}
                 style={{
-                  padding: "10px",
-                  borderRadius: "10px",
+                  padding: "8px",
+                  borderRadius: "6px",
                   background: "#fff",
                   border: "1px solid #eef2ff",
                 }}
@@ -142,6 +141,4 @@ export default function AskNews() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
+    </div
