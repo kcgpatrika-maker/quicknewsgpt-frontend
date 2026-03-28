@@ -62,7 +62,7 @@ export default function App() {
               <div className="title">Quick NewsGPT</div>
               {/* Punch line font बड़ा और एक लाइन में */}
               <div className="tagline" style={{ fontSize: "18px", fontWeight: 500 }}>
-                Your Quick Gateway to Quick News
+                Quick Gateway to Quick News
               </div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
@@ -81,7 +81,7 @@ export default function App() {
                     alert("Link copied!");
                   }
                 }}
-                style={{ border: "none", background: "#059669", color: "white", padding: "6px 10px", borderRadius: 6 }}
+                style={{ border: "none", background: "#059669", color: "white", padding: "6px 8px", borderRadius: 6 }}
               >
                 📤 Share
               </button>
@@ -143,8 +143,8 @@ export default function App() {
               </section>
 
               {/* Ask Section */}
-              <section className="card" style={{ marginTop: 12 }}>
-                <h3>🌐 देश-दुनिया की अन्य खबरें</h3>
+              <section className="card" style={{ marginTop: 8 }}>
+                <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
                 <AskNews />
               </section>
 
