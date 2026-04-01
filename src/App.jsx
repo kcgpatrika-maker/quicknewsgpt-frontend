@@ -132,7 +132,7 @@ export default function App() {
         fetch(`${BACKEND}/custom/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, pin: "1234" }) // PIN भेजना जरूरी
+          body: JSON.stringify({ title: headline, pin: "1336" }) // PIN भेजना जरूरी
         }).then(() => window.location.reload());
       }}
       onEdit={(headline) => {
