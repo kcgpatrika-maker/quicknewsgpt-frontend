@@ -8,6 +8,7 @@ import PrivacyPolicy from "./components/PrivacyPolicy";
 import Trending from "./components/Trending";
 import LiveTV from "./components/LiveTV";
 import WikipediaSearch from "./components/WikipediaSearch";
+import CustomNewsAdmin from "./components/CustomNewsAdmin";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
