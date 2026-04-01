@@ -59,3 +59,4 @@ export default function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
     </div>
   );
 }
+export default CustomNewsAdmin;
