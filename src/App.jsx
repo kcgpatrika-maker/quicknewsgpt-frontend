@@ -124,32 +124,38 @@ export default function App() {
                 <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
                 <AskNews />
               </section>
-              
-import CustomNewsAdmin from "./components/CustomNewsAdmin";
-
 <section className="card" style={{ marginTop: 12 }}>
-  <h3>✍️ गौतम की कलम से</h3>
+  <h3 style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    <span>✍️ गौतम की कलम से</span>
+    <CustomNewsAdmin
+      onAdd={(headline) => {
+        fetch(`${BACKEND}/custom/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: headline, pin: "1234" }) // PIN भेजना जरूरी
+        }).then(() => window.location.reload());
+      }}
+      onEdit={(headline) => {
+        // अभी demo के लिए पहले बॉक्स (id=c1) को edit कर रहे हैं
+        fetch(`${BACKEND}/custom/edit/c1`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title: headline, pin: "1234" })
+        }).then(() => window.location.reload());
+      }}
+      onDelete={() => {
+        // demo के लिए पहले बॉक्स (id=c1) को delete कर रहे हैं
+        fetch(`${BACKEND}/custom/delete/c1`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin: "1234" })
+        }).then(() => window.location.reload());
+      }}
+    />
+  </h3>
+
+  {/* Headlines दिखाने के लिए */}
   <NewsList items={customNews} />
-  <CustomNewsAdmin
-    onAdd={(headline) => {
-      fetch(`${BACKEND}/custom/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: headline })
-      }).then(() => window.location.reload());
-    }}
-    onEdit={(headline) => {
-      fetch(`${BACKEND}/custom/edit/c1`, {   // अभी demo के लिए id=c1
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: headline })
-      }).then(() => window.location.reload());
-    }}
-    onDelete={() => {
-      fetch(`${BACKEND}/custom/delete/c1`, { method: "DELETE" })
-        .then(() => window.location.reload());
-    }}
-  />
 </section>
 
               {/* Wikipedia Search */}
