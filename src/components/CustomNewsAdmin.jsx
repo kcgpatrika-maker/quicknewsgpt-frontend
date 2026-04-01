@@ -1,9 +1,8 @@
-// src/components/CustomNewsAdmin.jsx
 import React, { useState } from "react";
 
-const ADMIN_PIN = "1336"; // यहां अपना PIN डालें
+const ADMIN_PIN = "1336"; // अपना PIN यहां रखें
 
-export default function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
+function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
@@ -26,7 +25,7 @@ export default function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
             style={{ fontSize: 12, padding: "4px 6px", background: "#ddd", borderRadius: 4 }}
             onClick={() => setShowLogin(true)}
           >
-            🔒 Admin
+            🔒
           </button>
           {showLogin && (
             <div style={{ marginTop: 6 }}>
@@ -59,4 +58,5 @@ export default function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
     </div>
   );
 }
+
 export default CustomNewsAdmin;
