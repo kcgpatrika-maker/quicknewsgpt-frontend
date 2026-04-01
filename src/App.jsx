@@ -124,38 +124,53 @@ export default function App() {
                 <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
                 <AskNews />
               </section>
+
 <section className="card" style={{ marginTop: 12 }}>
-  <h3 style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-    <span>✍️ गौतम की कलम से</span>
+  <h3 style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+    गौतम की कलम से
     <CustomNewsAdmin
       onAdd={(headline) => {
         fetch(`${BACKEND}/custom/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, pin: "1336" }) // PIN भेजना जरूरी
+          body: JSON.stringify({ title: headline, pin: "1336" })
         }).then(() => window.location.reload());
       }}
-      onEdit={(headline) => {
-        // अभी demo के लिए पहले बॉक्स (id=c1) को edit कर रहे हैं
-        fetch(`${BACKEND}/custom/edit/c1`, {
+      onEdit={(id, headline) => {
+        fetch(`${BACKEND}/custom/edit/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ title: headline, pin: "1336" })
         }).then(() => window.location.reload());
       }}
-      onDelete={() => {
-        // demo के लिए पहले बॉक्स (id=c1) को delete कर रहे हैं
-        fetch(`${BACKEND}/custom/delete/c1`, {
+      onDelete={(id) => {
+        fetch(`${BACKEND}/custom/delete/${id}`, {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin: "1234" })
+          body: JSON.stringify({ pin: "1336" })
         }).then(() => window.location.reload());
       }}
     />
   </h3>
 
   {/* Headlines दिखाने के लिए */}
-  <NewsList items={customNews} />
+  <NewsList
+    items={customNews}
+    onEdit={(id, headline) => {
+      fetch(`${BACKEND}/custom/edit/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: headline, pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+    onDelete={(id) => {
+      fetch(`${BACKEND}/custom/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+  />
 </section>
 
               {/* Wikipedia Search */}
