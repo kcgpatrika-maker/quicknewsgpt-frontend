@@ -118,16 +118,16 @@ export default function App() {
                 )}
               </section>
 
+              {/* Ask Section */}
+              <section className="card" style={{ marginTop: 8 }}>
+                <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
+                <AskNews />
+              </section>
+              
               {/* User Uploaded News */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>✍️ गौतम की कलम से</h3>
                 <NewsList items={customNews} />
-              </section>
-
-              {/* Trending */}
-              <section className="card" style={{ marginTop: 12 }}>
-                <h3>🔥 Top 5 Trending</h3>
-                <Trending />
               </section>
 
               {/* Wikipedia Search */}
@@ -136,16 +136,17 @@ export default function App() {
                 <WikipediaSearch />
               </section>
 
+              {/* Trending */}
+              <section className="card" style={{ marginTop: 12 }}>
+                <h3>🔥 Top 5 Trending</h3>
+                <Trending />
+              </section>
+
+              
               {/* Live TV */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>📺 Live TV</h3>
                 <LiveTV />
-              </section>
-
-              {/* Ask Section */}
-              <section className="card" style={{ marginTop: 8 }}>
-                <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
-                <AskNews />
               </section>
 
               {/* Footer */}
