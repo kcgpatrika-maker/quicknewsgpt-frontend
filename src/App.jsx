@@ -140,7 +140,7 @@ export default function App() {
         fetch(`${BACKEND}/custom/edit/c1`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, pin: "1234" })
+          body: JSON.stringify({ title: headline, pin: "1336" })
         }).then(() => window.location.reload());
       }}
       onDelete={() => {
