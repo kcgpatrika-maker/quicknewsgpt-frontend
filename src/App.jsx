@@ -124,11 +124,32 @@ export default function App() {
                 <AskNews />
               </section>
               
-              {/* User Uploaded News */}
-              <section className="card" style={{ marginTop: 12 }}>
-                <h3>✍️ गौतम की कलम से</h3>
-                <NewsList items={customNews} />
-              </section>
+import CustomNewsAdmin from "./components/CustomNewsAdmin";
+
+<section className="card" style={{ marginTop: 12 }}>
+  <h3>✍️ गौतम की कलम से</h3>
+  <NewsList items={customNews} />
+  <CustomNewsAdmin
+    onAdd={(headline) => {
+      fetch(`${BACKEND}/custom/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: headline })
+      }).then(() => window.location.reload());
+    }}
+    onEdit={(headline) => {
+      fetch(`${BACKEND}/custom/edit/c1`, {   // अभी demo के लिए id=c1
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: headline })
+      }).then(() => window.location.reload());
+    }}
+    onDelete={() => {
+      fetch(`${BACKEND}/custom/delete/c1`, { method: "DELETE" })
+        .then(() => window.location.reload());
+    }}
+  />
+</section>
 
               {/* Wikipedia Search */}
               <section className="card" style={{ marginTop: 12 }}>
