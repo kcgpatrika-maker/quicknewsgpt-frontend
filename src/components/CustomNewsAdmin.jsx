@@ -7,6 +7,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [headline, setHeadline] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
@@ -18,17 +19,22 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   };
 
   return (
-    <div style={{ marginTop: 10 }}>
+    <span style={{ marginLeft: 6 }}>
       {!authenticated ? (
         <>
           <button
-            style={{ fontSize: 12, padding: "4px 6px", background: "#ddd", borderRadius: 4 }}
+            style={{
+              fontSize: 12,
+              padding: "2px 4px",
+              background: "#ddd",
+              borderRadius: 4,
+            }}
             onClick={() => setShowLogin(true)}
           >
-            🔒
+            ▢
           </button>
           {showLogin && (
-            <div style={{ marginTop: 6 }}>
+            <span style={{ marginLeft: 6 }}>
               <input
                 type="password"
                 placeholder="PIN"
@@ -36,26 +42,29 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
                 onChange={(e) => setPin(e.target.value)}
               />
               <button onClick={handleLogin}>Login</button>
-            </div>
+            </span>
           )}
         </>
       ) : (
-        <div style={{ marginTop: 6 }}>
-          <h4>✍️ Add/Edit News</h4>
+        <span style={{ marginLeft: 6 }}>
           <input
             type="text"
             placeholder="Headline (max 100 chars)"
             value={headline}
             onChange={(e) => setHeadline(e.target.value)}
             maxLength={100}
-            style={{ width: "100%", marginBottom: 6 }}
+            style={{ width: "200px", marginRight: 6 }}
           />
           <button onClick={() => onAdd(headline)}>➕ Add</button>
-          <button onClick={() => onEdit(headline)}>✏️ Edit</button>
-          <button onClick={onDelete}>🗑️ Delete</button>
-        </div>
+          {selectedId && (
+            <>
+              <button onClick={() => onEdit(selectedId, headline)}>✏️ Edit</button>
+              <button onClick={() => onDelete(selectedId)}>🗑️ Delete</button>
+            </>
+          )}
+        </span>
       )}
-    </div>
+    </span>
   );
 }
 
