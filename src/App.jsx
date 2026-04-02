@@ -9,6 +9,7 @@ import Trending from "./components/Trending";
 import LiveTV from "./components/LiveTV";
 import WikipediaSearch from "./components/WikipediaSearch";
 import CustomNewsAdmin from "./components/CustomNewsAdmin";
+import CustomNewsList from "./components/CustomNewsList";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
@@ -153,25 +154,25 @@ export default function App() {
     />
   </h3>
 
-  {/* Headlines दिखाने के लिए */}
-  <NewsList
-    items={customNews}
-    onEdit={(id, headline) => {
-      fetch(`${BACKEND}/custom/edit/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: headline, pin: "1336" })
-      }).then(() => window.location.reload());
-    }}
-    onDelete={(id) => {
-      fetch(`${BACKEND}/custom/delete/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: "1336" })
-      }).then(() => window.location.reload());
-    }}
-  />
-</section>
+  {/* Custom Headlines दिखाने के लिए */}
+<CustomNewsList
+  items={customNews}
+  onEdit={(id, headline) => {
+    fetch(`${BACKEND}/custom/edit/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: headline, pin: "1336" })
+    }).then(() => window.location.reload());
+  }}
+  onDelete={(id) => {
+    fetch(`${BACKEND}/custom/delete/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ pin: "1336" })
+    }).then(() => window.location.reload());
+  }}
+/>
+
 
               {/* Wikipedia Search */}
               <section className="card" style={{ marginTop: 12 }}>
