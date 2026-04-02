@@ -154,25 +154,24 @@ export default function App() {
     />
   </h3>
 
-  {/* Custom Headlines दिखाने के लिए */}
-<CustomNewsList
-  items={customNews}
-  onEdit={(id, headline) => {
-    fetch(`${BACKEND}/custom/edit/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: headline, pin: "1336" })
-    }).then(() => window.location.reload());
-  }}
-  onDelete={(id) => {
-    fetch(`${BACKEND}/custom/delete/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pin: "1336" })
-    }).then(() => window.location.reload());
-  }}
-/>
-
+  <CustomNewsList
+    items={customNews}
+    onEdit={(id, headline) => {
+      fetch(`${BACKEND}/custom/edit/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: headline, pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+    onDelete={(id) => {
+      fetch(`${BACKEND}/custom/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+  />
+</section>
 
               {/* Wikipedia Search */}
               <section className="card" style={{ marginTop: 12 }}>
