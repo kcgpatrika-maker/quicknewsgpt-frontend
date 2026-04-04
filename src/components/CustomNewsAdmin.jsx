@@ -2,45 +2,80 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onLogin }) {
+function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [headline, setHeadline] = useState("");
+  const [summary, setSummary] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleLogin = () => {
+    if (pin === ADMIN_PIN) {
+      setAuthenticated(true);
+      setShowLogin(false);
+    } else {
+      alert("गलत PIN!");
+    }
+  };
 
   return (
     <span style={{ marginLeft: 6 }}>
-      <button
-        style={{
-          fontSize: 10,
-          background: "transparent",
-          border: "none",
-          color: "transparent"
-        }}
-        onClick={() => setShowLogin(true)}
-      >
-        .
-      </button>
-
-      {showLogin && (
+      {!authenticated ? (
         <>
-          <input
-            type="password"
-            placeholder="PIN"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          />
           <button
-            onClick={() => {
-              if (pin === ADMIN_PIN) {
-                onLogin(true);
-                setShowLogin(false);
-              } else {
-                alert("गलत PIN");
-              }
+            style={{
+              fontSize: 12,
+              padding: "2px 4px",
+              background: "#ddd",
+              borderRadius: 4,
             }}
+            onClick={() => setShowLogin(true)}
           >
-            OK
+            ▢
           </button>
+
+          {showLogin && (
+            <>
+              <input
+                type="password"
+                placeholder="PIN"
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+              />
+              <button onClick={handleLogin}>Login</button>
+            </>
+          )}
         </>
+      ) : (
+        <span>
+          <input
+            type="text"
+            placeholder="Headline"
+            value={headline}
+            onChange={(e) => setHeadline(e.target.value)}
+            maxLength={100}
+          />
+
+          <textarea
+            placeholder="पूरी खबर"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+          />
+
+          <button onClick={() => onAdd(headline, summary)}>➕ Add</button>
+
+          {selectedId && (
+            <>
+              <button onClick={() => onEdit(selectedId, headline, summary)}>
+                ✏️ Edit
+              </button>
+              <button onClick={() => onDelete(selectedId)}>
+                🗑️ Delete
+              </button>
+            </>
+          )}
+        </span>
       )}
     </span>
   );
