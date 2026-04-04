@@ -166,6 +166,7 @@ export default function App() {
   {/* यूजर इंटरफ़ेस */}
   <CustomNewsList items={customNews} />
 </section>
+
               
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
