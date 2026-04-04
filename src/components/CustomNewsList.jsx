@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 
-export default function CustomNewsList({ items = [], onEdit, onDelete }) {
-const [openId, setOpenId] = useState(null);
-  
+export default function CustomNewsList({ items = [] }) {
+  const [openId, setOpenId] = useState(null);
+
   if (!items || items.length === 0) {
     return <div>कोई खबर नहीं</div>;
   }
 
   return (
     <div>
-      {items.map((r, i) => (
-        <div key={r.id || i} style={{ marginBottom: 10 }}>
+      {items.map((r) => (
+        <div key={r.id} style={{ marginBottom: 10 }}>
           {/* Headline */}
           <div style={{ fontWeight: "bold" }}>
             {r.title}
           </div>
+
           {/* Button */}
           <button onClick={() => setOpenId(openId === r.id ? null : r.id)}>
             पूरा पढ़े
@@ -26,7 +27,6 @@ const [openId, setOpenId] = useState(null);
               {r.summary}
             </div>
           )}
-          </div>
         </div>
       ))}
     </div>
