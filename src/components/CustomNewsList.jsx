@@ -1,34 +1,49 @@
 import React, { useState } from "react";
 
-export default function CustomNewsList({ items = [] }) {
-  const [openId, setOpenId] = useState(null);
+const ADMIN_PIN = "1336";
 
-  if (!items || items.length === 0) {
-    return <div>कोई खबर नहीं</div>;
-  }
+function CustomNewsAdmin({ onLogin }) {
+  const [showLogin, setShowLogin] = useState(false);
+  const [pin, setPin] = useState("");
 
   return (
-    <div>
-      {items.map((r) => (
-        <div key={r.id} style={{ marginBottom: 10 }}>
-          {/* Headline */}
-          <div style={{ fontWeight: "bold" }}>
-            {r.title}
-          </div>
+    <span style={{ marginLeft: 6 }}>
+      <button
+        style={{
+          fontSize: 10,
+          background: "transparent",
+          border: "none",
+          color: "transparent"
+        }}
+        onClick={() => setShowLogin(true)}
+      >
+        .
+      </button>
 
-          {/* Button */}
-          <button onClick={() => setOpenId(openId === r.id ? null : r.id)}>
-            पूरा पढ़े
+      {showLogin && (
+        <>
+          <input
+            type="password"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              if (pin === ADMIN_PIN) {
+                onLogin(true);
+                setShowLogin(false);
+              } else {
+                alert("गलत PIN");
+              }
+            }}
+          >
+            OK
           </button>
-
-          {/* Full News */}
-          {openId === r.id && (
-            <div style={{ marginTop: 5 }}>
-              {r.summary}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+        </>
+      )}
+    </span>
   );
 }
+
+export default CustomNewsAdmin;
