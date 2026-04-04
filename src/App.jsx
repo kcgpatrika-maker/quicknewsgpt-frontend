@@ -127,52 +127,30 @@ export default function App() {
               </section>
 
 <section className="card" style={{ marginTop: 12 }}>
-  <h3 style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+  <h3>
     गौतम की कलम से
     <CustomNewsAdmin
-      onAdd={(headline) => {
+      onAdd={(headline, summary) => {
+        if (customNews.length >= 3) {
+          alert("सिर्फ 3 खबर ही जोड़ सकते हैं");
+          return;
+        }
+
         fetch(`${BACKEND}/custom/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, pin: "1336" })
-        }).then(() => window.location.reload());
-      }}
-      onEdit={(id, headline) => {
-        fetch(`${BACKEND}/custom/edit/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, pin: "1336" })
-        }).then(() => window.location.reload());
-      }}
-      onDelete={(id) => {
-        fetch(`${BACKEND}/custom/delete/${id}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin: "1336" })
+          body: JSON.stringify({
+            title: headline,
+            summary: summary,
+            pin: "1336"
+          })
         }).then(() => window.location.reload());
       }}
     />
   </h3>
 
-  <CustomNewsList
-    items={customNews}
-    onEdit={(id, headline) => {
-      fetch(`${BACKEND}/custom/edit/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: headline, pin: "1336" })
-      }).then(() => window.location.reload());
-    }}
-    onDelete={(id) => {
-      fetch(`${BACKEND}/custom/delete/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: "1336" })
-      }).then(() => window.location.reload());
-    }}
-  />
+  <CustomNewsList items={customNews} />
 </section>
-
               {/* Wikipedia Search */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>📚 Explore Knowledge on Wikipedia</h3>
