@@ -127,57 +127,60 @@ export default function App() {
                 <AskNews />
               </section>
 
-              <section className="card" style={{ marginTop: 12 }}>
+<section className="card" style={{ marginTop: 12 }}>
   <h3>
     ✍️ गौतम की कलम से
 
-    {/* 👇 सिर्फ login handle करेगा */}
-    <CustomNewsAdmin onLogin={setIsAdmin} />
-  </h3>
-
-  <CustomNewsList
-    items={customNews}
-    isAdmin={isAdmin}
-
-    onSave={(index, id, title, summary) => {
-      if (!title || !summary) {
-        alert("पूरा भरें");
-        return;
-      }
-
-      if (id) {
-        // Edit existing
-        fetch(`${BACKEND}/custom/edit/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title,
-            summary,
-            pin: "1336"
-          })
-        }).then(() => window.location.reload());
-      } else {
-        // Add new
-        if (customNews.length >= 3) {
-          alert("सिर्फ 3 खबर ही जोड़ सकते हैं");
-          return;
-        }
-
+    <CustomNewsAdmin
+      onAdd={(headline, summary) => {
         fetch(`${BACKEND}/custom/add`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            title,
-            summary,
+            title: headline,
+            summary: summary,
             pin: "1336"
           })
         }).then(() => window.location.reload());
-      }
+      }}
+
+      onEdit={(id, headline, summary) => {
+        fetch(`${BACKEND}/custom/edit/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: headline,
+            summary: summary,
+            pin: "1336"
+          })
+        }).then(() => window.location.reload());
+      }}
+
+      onDelete={(id) => {
+        fetch(`${BACKEND}/custom/delete/${id}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pin: "1336" })
+        }).then(() => window.location.reload());
+      }}
+    />
+  </h3>
+
+  <CustomNewsList
+    items={customNews}
+    onEdit={(id, headline, summary) => {
+      fetch(`${BACKEND}/custom/edit/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: headline,
+          summary: summary,
+          pin: "1336"
+        })
+      }).then(() => window.location.reload());
     }}
 
     onDelete={(id) => {
-      if (!id) return;
-
       fetch(`${BACKEND}/custom/delete/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -186,7 +189,6 @@ export default function App() {
     }}
   />
 </section>
-
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>🔥 Top 5 Trending</h3>
