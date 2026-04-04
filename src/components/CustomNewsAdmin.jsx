@@ -2,13 +2,12 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
+function CustomNewsAdmin({ onAdd }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [headline, setHeadline] = useState("");
   const [summary, setSummary] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
 
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
@@ -64,17 +63,6 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
           />
 
           <button onClick={() => onAdd(headline, summary)}>➕ Add</button>
-
-          {selectedId && (
-            <>
-              <button onClick={() => onEdit(selectedId, headline, summary)}>
-                ✏️ Edit
-              </button>
-              <button onClick={() => onDelete(selectedId)}>
-                🗑️ Delete
-              </button>
-            </>
-          )}
         </span>
       )}
     </span>
