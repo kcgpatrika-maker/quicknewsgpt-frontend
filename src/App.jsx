@@ -130,45 +130,42 @@ export default function App() {
 <section className="card" style={{ marginTop: 12 }}>
   <h3>✍️ गौतम की कलम से</h3>
 
-    <CustomNewsAdmin
-      onAdd={(headline, summary) => {
-        fetch(`${BACKEND}/custom/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: headline,
-            summary: summary,
-            pin: "1336"
-          })
-        }).then(() => window.location.reload());
-      }}
+  {/* एडमिन इंटरफ़ेस */}
+  <CustomNewsAdmin
+    onAdd={(headline, summary) => {
+      fetch(`${BACKEND}/custom/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: headline,
+          summary: summary,
+          pin: "1336"
+        })
+      }).then(() => window.location.reload());
+    }}
+    onEdit={(id, headline, summary) => {
+      fetch(`${BACKEND}/custom/edit/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: headline,
+          summary: summary,
+          pin: "1336"
+        })
+      }).then(() => window.location.reload());
+    }}
+    onDelete={(id) => {
+      fetch(`${BACKEND}/custom/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+  />
 
-      onEdit={(id, headline, summary) => {
-        fetch(`${BACKEND}/custom/edit/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: headline,
-            summary: summary,
-            pin: "1336"
-          })
-        }).then(() => window.location.reload());
-      }}
-
-      onDelete={(id) => {
-        fetch(`${BACKEND}/custom/delete/${id}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin: "1336" })
-        }).then(() => window.location.reload());
-      }}
-    />
-  
   {/* यूजर इंटरफ़ेस */}
-
-  <CustomNewsList
-    items={customNews}
-    </section>
+  <CustomNewsList items={customNews} />
+</section>
               
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
