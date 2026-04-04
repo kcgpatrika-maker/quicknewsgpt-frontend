@@ -19,6 +19,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
   const [customNews, setCustomNews] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchNews = useCallback(async () => {
     setLoading(true);
@@ -126,11 +127,37 @@ export default function App() {
                 <AskNews />
               </section>
 
-<section className="card" style={{ marginTop: 12 }}>
+              <section className="card" style={{ marginTop: 12 }}>
   <h3>
-    गौतम की कलम से
-    <CustomNewsAdmin
-      onAdd={(headline, summary) => {
+    ✍️ गौतम की कलम से
+
+    {/* 👇 सिर्फ login handle करेगा */}
+    <CustomNewsAdmin onLogin={setIsAdmin} />
+  </h3>
+
+  <CustomNewsList
+    items={customNews}
+    isAdmin={isAdmin}
+
+    onSave={(index, id, title, summary) => {
+      if (!title || !summary) {
+        alert("पूरा भरें");
+        return;
+      }
+
+      if (id) {
+        // Edit existing
+        fetch(`${BACKEND}/custom/edit/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title,
+            summary,
+            pin: "1336"
+          })
+        }).then(() => window.location.reload());
+      } else {
+        // Add new
         if (customNews.length >= 3) {
           alert("सिर्फ 3 खबर ही जोड़ सकते हैं");
           return;
@@ -140,22 +167,25 @@ export default function App() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            title: headline,
-            summary: summary,
+            title,
+            summary,
             pin: "1336"
           })
         }).then(() => window.location.reload());
-      }}
-    />
-  </h3>
+      }
+    }}
 
-  <CustomNewsList items={customNews} />
+    onDelete={(id) => {
+      if (!id) return;
+
+      fetch(`${BACKEND}/custom/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: "1336" })
+      }).then(() => window.location.reload());
+    }}
+  />
 </section>
-              {/* Wikipedia Search */}
-              <section className="card" style={{ marginTop: 12 }}>
-                <h3>📚 Explore Knowledge on Wikipedia</h3>
-                <WikipediaSearch />
-              </section>
 
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
