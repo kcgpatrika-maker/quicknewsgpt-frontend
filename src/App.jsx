@@ -128,8 +128,7 @@ export default function App() {
               </section>
 
 <section className="card" style={{ marginTop: 12 }}>
-  <h3>
-    ✍️ गौतम की कलम से
+  <h3>✍️ गौतम की कलम से</h3>
 
     <CustomNewsAdmin
       onAdd={(headline, summary) => {
@@ -164,31 +163,13 @@ export default function App() {
         }).then(() => window.location.reload());
       }}
     />
-  </h3>
+  
+  {/* यूजर इंटरफ़ेस */}
 
   <CustomNewsList
     items={customNews}
-    onEdit={(id, headline, summary) => {
-      fetch(`${BACKEND}/custom/edit/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: headline,
-          summary: summary,
-          pin: "1336"
-        })
-      }).then(() => window.location.reload());
-    }}
-
-    onDelete={(id) => {
-      fetch(`${BACKEND}/custom/delete/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: "1336" })
-      }).then(() => window.location.reload());
-    }}
-  />
-</section>
+    </section>
+              
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
                 <h3>🔥 Top 5 Trending</h3>
