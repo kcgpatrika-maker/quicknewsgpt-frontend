@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
-const ADMIN_PIN = "1336"; // अपना PIN यहां रखें
+const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
+function CustomNewsAdmin({ onAdd }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
+
   const [headline, setHeadline] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const [summary, setSummary] = useState("");
 
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
@@ -22,17 +23,21 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
     <span style={{ marginLeft: 6 }}>
       {!authenticated ? (
         <>
+          {/* Hidden button */}
           <button
             style={{
-              fontSize: 12,
+              fontSize: 10,
               padding: "2px 4px",
-              background: "#ddd",
-              borderRadius: 4,
+              background: "transparent",
+              border: "none",
+              color: "transparent",
+              cursor: "default"
             }}
             onClick={() => setShowLogin(true)}
           >
-            ▢
+            .
           </button>
+
           {showLogin && (
             <span style={{ marginLeft: 6 }}>
               <input
@@ -41,28 +46,44 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
               />
-              <button onClick={handleLogin}>Login</button>
+              <button onClick={handleLogin}>OK</button>
             </span>
           )}
         </>
       ) : (
-        <span style={{ marginLeft: 6 }}>
+        <div style={{ marginTop: 10 }}>
           <input
             type="text"
-            placeholder="Headline (max 100 chars)"
+            placeholder="हेडलाइन"
             value={headline}
             onChange={(e) => setHeadline(e.target.value)}
             maxLength={100}
-            style={{ width: "200px", marginRight: 6 }}
+            style={{ width: "100%", marginBottom: 6 }}
           />
-          <button onClick={() => onAdd(headline)}>➕ Add</button>
-          {selectedId && (
-            <>
-              <button onClick={() => onEdit(selectedId, headline)}>✏️ Edit</button>
-              <button onClick={() => onDelete(selectedId)}>🗑️ Delete</button>
-            </>
-          )}
-        </span>
+
+          <textarea
+            placeholder="पूरी खबर (100 शब्द)"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            style={{ width: "100%", height: 80 }}
+          />
+
+          <br />
+
+          <button
+            onClick={() => {
+              if (!headline || !summary) {
+                alert("पूरा भरें");
+                return;
+              }
+              onAdd(headline, summary);
+              setHeadline("");
+              setSummary("");
+            }}
+          >
+            Save
+          </button>
+        </div>
       )}
     </span>
   );
