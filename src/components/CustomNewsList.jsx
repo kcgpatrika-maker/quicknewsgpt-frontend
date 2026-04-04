@@ -1,6 +1,8 @@
 import React from "react";
 
 export default function CustomNewsList({ items = [], onEdit, onDelete }) {
+const [openId, setOpenId] = useState(null);
+  
   if (!items || items.length === 0) {
     return <div>कोई खबर नहीं</div>;
   }
@@ -9,21 +11,21 @@ export default function CustomNewsList({ items = [], onEdit, onDelete }) {
     <div>
       {items.map((r, i) => (
         <div key={r.id || i} style={{ marginBottom: 10 }}>
-          <div style={{ fontWeight: "bold" }}>{r.title}</div>
+          {/* Headline */}
+          <div style={{ fontWeight: "bold" }}>
+            {r.title}
+          </div>
+          {/* Button */}
+          <button onClick={() => setOpenId(openId === r.id ? null : r.id)}>
+            पूरा पढ़े
+          </button>
 
-          {r.summary && <div>{r.summary}</div>}
-
-          {/* 👇 Delete अब हमेशा दिखेगा */}
-          <div key={r.id} style={{ marginBottom: 10 }}>
-            <div style={{ fontWeight: "bold" }}>{r.title}</div>
-            
-            {r.summary && (
-              <>
-               <button onClick={() => alert(r.summary)}>   
-                पूरा पढ़ें
-               </button>
-              </>
-              )}
+          {/* Full News */}
+          {openId === r.id && (
+            <div style={{ marginTop: 5 }}>
+              {r.summary}
+            </div>
+          )}
           </div>
         </div>
       ))}
