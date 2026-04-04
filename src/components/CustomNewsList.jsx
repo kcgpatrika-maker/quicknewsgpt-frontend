@@ -1,49 +1,37 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ADMIN_PIN = "1336";
-
-function CustomNewsAdmin({ onLogin }) {
-  const [showLogin, setShowLogin] = useState(false);
-  const [pin, setPin] = useState("");
+export default function CustomNewsList({ items = [], onEdit, onDelete }) {
+  if (!items || items.length === 0) {
+    return <div>कोई खबर नहीं</div>;
+  }
 
   return (
-    <span style={{ marginLeft: 6 }}>
-      <button
-        style={{
-          fontSize: 10,
-          background: "transparent",
-          border: "none",
-          color: "transparent"
-        }}
-        onClick={() => setShowLogin(true)}
-      >
-        .
-      </button>
+    <div>
+      {items.map((r, i) => (
+        <div key={r.id || i} style={{ marginBottom: 10 }}>
+          <div style={{ fontWeight: "bold" }}>{r.title}</div>
 
-      {showLogin && (
-        <>
-          <input
-            type="password"
-            placeholder="PIN"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          />
-          <button
-            onClick={() => {
-              if (pin === ADMIN_PIN) {
-                onLogin(true);
-                setShowLogin(false);
-              } else {
-                alert("गलत PIN");
-              }
-            }}
-          >
-            OK
-          </button>
-        </>
-      )}
-    </span>
+          {r.summary && <div>{r.summary}</div>}
+
+          {/* 👇 Delete अब हमेशा दिखेगा */}
+          <div style={{ marginTop: 5 }}>
+            <button
+              onClick={() => {
+                const newHeadline = prompt("नया headline:", r.title);
+                if (newHeadline) {
+                  onEdit(r.id, newHeadline, r.summary);
+                }
+              }}
+            >
+              ✏️ Edit
+            </button>
+
+            <button onClick={() => onDelete(r.id)}>
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
-
-export default CustomNewsAdmin;
