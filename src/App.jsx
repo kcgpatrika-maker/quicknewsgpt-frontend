@@ -132,7 +132,6 @@ export default function App() {
 
   {/* एडमिन इंटरफ़ेस */}
   <CustomNewsAdmin
-    setAuthenticated={setAuthenticated}   // 🔹 App.jsx में स्टेट अपडेट करेगा
     onAdd={(headline, summary) => {
       fetch(`${BACKEND}/custom/add`, {
         method: "POST",
@@ -142,23 +141,8 @@ export default function App() {
           summary: summary,
           pin: "1336"
         })
-      })
-        .then(async (res) => {
-          if (!res.ok) {
-            const err = await res.json();
-            alert(err.error);
-          } else {
-            window.location.reload();
-          }
-        })
-        .catch(() => alert("Error saving news"));
+      }).then(() => window.location.reload());
     }}
-  />
-
-  {/* यूजर इंटरफ़ेस */}
-  <CustomNewsList
-    items={customNews}
-    authenticated={authenticated}   // 🔹 अब एडमिन मोड सही से मिलेगा
     onEdit={(id, headline, summary) => {
       fetch(`${BACKEND}/custom/edit/${id}`, {
         method: "PUT",
@@ -178,6 +162,9 @@ export default function App() {
       }).then(() => window.location.reload());
     }}
   />
+
+  {/* यूजर इंटरफ़ेस */}
+  <CustomNewsList items={customNews} />
 </section>
               
               {/* Trending */}
