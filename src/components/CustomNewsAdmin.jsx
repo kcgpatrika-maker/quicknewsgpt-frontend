@@ -2,18 +2,17 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd, setAuthenticated }) {
+function CustomNewsAdmin({ onAdd }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
-  const [authenticated, setLocalAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
   const [headline, setHeadline] = useState("");
   const [summary, setSummary] = useState("");
 
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
-      setLocalAuthenticated(true);
+      setAuthenticated(true);
       setShowLogin(false);
-      if (setAuthenticated) setAuthenticated(true); // 🔹 App.jsx को भी बताएं कि एडमिन लॉगिन हो गया
     } else {
       alert("गलत PIN!");
     }
