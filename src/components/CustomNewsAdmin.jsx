@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd }) {
+function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
@@ -20,33 +20,29 @@ function CustomNewsAdmin({ onAdd }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {!authenticated ? (
-        <>
-          <button
-            style={{
-              fontSize: 12,
-              padding: "2px 4px",
-              background: "#ddd",
-              borderRadius: 4,
-            }}
-            onClick={() => setShowLogin(true)}
-          >
-            ▢
-          </button>
+      {/* ✍️ इमोजी ही hidden बटन */}
+      <span
+        style={{ cursor: "pointer" }}
+        onClick={() => setShowLogin(true)}
+      >
+        ✍️
+      </span>
 
-          {showLogin && (
-            <>
-              <input
-                type="password"
-                placeholder="PIN"
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-              />
-              <button onClick={handleLogin}>Login</button>
-            </>
-          )}
+      {/* PIN इनपुट */}
+      {showLogin && !authenticated && (
+        <>
+          <input
+            type="password"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+          />
+          <button onClick={handleLogin}>Login</button>
         </>
-      ) : (
+      )}
+
+      {/* एडमिन मोड */}
+      {authenticated && (
         <span>
           <input
             type="text"
@@ -55,13 +51,11 @@ function CustomNewsAdmin({ onAdd }) {
             onChange={(e) => setHeadline(e.target.value)}
             maxLength={100}
           />
-
           <textarea
             placeholder="पूरी खबर"
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
           />
-
           <button onClick={() => onAdd(headline, summary)}>➕ Add</button>
         </span>
       )}
