@@ -132,7 +132,6 @@ export default function App() {
 
   {/* एडमिन इंटरफ़ेस */}
   <CustomNewsAdmin
-    setAuthenticated={setAuthenticated}
     onAdd={(headline, summary) => {
       fetch(`${BACKEND}/custom/add`, {
         method: "POST",
