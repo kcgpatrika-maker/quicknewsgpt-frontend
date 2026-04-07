@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const ADMIN_PIN = "1336";
 
 function CustomNewsAdmin({ onAdd }) {
-  const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [headline, setHeadline] = useState("");
@@ -12,7 +11,6 @@ function CustomNewsAdmin({ onAdd }) {
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
       setAuthenticated(true);
-      setShowLogin(false);
     } else {
       alert("गलत PIN!");
     }
@@ -20,16 +18,7 @@ function CustomNewsAdmin({ onAdd }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {/* hidden बटन – सिर्फ़ एडमिन को पता है */}
-      <button
-        style={{ display: "none" }}
-        onClick={() => setShowLogin(true)}
-      >
-        ▢
-      </button>
-
-      {/* PIN इनपुट सिर्फ़ तब दिखेगा जब hidden बटन दबाएँ */}
-      {showLogin && !authenticated && (
+      {!authenticated ? (
         <>
           <input
             type="password"
@@ -39,10 +28,7 @@ function CustomNewsAdmin({ onAdd }) {
           />
           <button onClick={handleLogin}>Login</button>
         </>
-      )}
-
-      {/* एडमिन मोड – PIN सही होने पर */}
-      {authenticated && (
+      ) : (
         <span>
           <input
             type="text"
