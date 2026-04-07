@@ -20,7 +20,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {/* ✍️ इमोजी ही hidden बटन */}
+      {/* ✍️ इमोजी हेडिंग के साथ ही hidden बटन */}
       <span
         style={{ cursor: "pointer" }}
         onClick={() => setShowLogin(true)}
