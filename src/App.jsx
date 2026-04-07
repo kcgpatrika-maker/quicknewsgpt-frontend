@@ -128,7 +128,7 @@ export default function App() {
               </section>
 
 <section className="card" style={{ marginTop: 12 }}>
-  <h3>✍️ गौतम की कलम से</h3>
+  <h3>गौतम की कलम से</h3>
 
   {/* एडमिन इंटरफ़ेस */}
   <CustomNewsAdmin
