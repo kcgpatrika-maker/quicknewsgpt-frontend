@@ -136,22 +136,14 @@ export default function App() {
       fetch(`${BACKEND}/custom/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: headline,
-          summary: summary,
-          pin: "1336"
-        })
+        body: JSON.stringify({ title: headline, summary, pin: "1336" })
       }).then(() => window.location.reload());
     }}
     onEdit={(id, headline, summary) => {
       fetch(`${BACKEND}/custom/edit/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: headline,
-          summary: summary,
-          pin: "1336"
-        })
+        body: JSON.stringify({ title: headline, summary, pin: "1336" })
       }).then(() => window.location.reload());
     }}
     onDelete={(id) => {
@@ -163,7 +155,7 @@ export default function App() {
     }}
   />
 
-  {/* यूजर इंटरफ़ेस */}
+  {/* यूज़र इंटरफ़ेस */}
   <CustomNewsList items={customNews} />
 </section>
               
