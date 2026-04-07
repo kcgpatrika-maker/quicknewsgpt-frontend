@@ -1,36 +1,14 @@
 import React, { useState } from "react";
 
-export default function CustomNewsList({ items = [] }) {
+export default function CustomNewsList({ items = [], authenticated, onEdit, onDelete }) {
   const [openId, setOpenId] = useState(null);
-  const [pin, setPin] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
 
   if (!items || items.length === 0) {
     return <div>कोई खबर नहीं</div>;
   }
 
-  const handleLogin = () => {
-    if (pin === ADMIN_PIN) {
-      setAuthenticated(true);
-    } else {
-      alert("गलत PIN!");
-    }
-  };
-
   return (
     <div>
-      {!authenticated ? (
-        <>
-          <input
-            type="password"
-            placeholder="PIN"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
-          />
-          <button onClick={handleLogin}>Login</button>
-        </>
-      ) : null}
-
       {items.map((r) => (
         <div key={r.id} style={{ marginBottom: 10 }}>
           {/* Headline */}
@@ -44,7 +22,7 @@ export default function CustomNewsList({ items = [] }) {
             पूरा पढ़े
           </span>
 
-{/* एडमिन मोड में एडिट/डिलीट */}
+          {/* एडमिन मोड में एडिट/डिलीट */}
           {authenticated && (
             <>
               <button onClick={() => onEdit(r.id, r.title, r.summary)}>✏️ Edit</button>
