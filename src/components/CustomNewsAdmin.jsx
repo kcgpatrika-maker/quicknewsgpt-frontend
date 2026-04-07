@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd }) {
+function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
+  const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [headline, setHeadline] = useState("");
@@ -11,6 +12,7 @@ function CustomNewsAdmin({ onAdd }) {
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
       setAuthenticated(true);
+      setShowLogin(false);
     } else {
       alert("गलत PIN!");
     }
@@ -18,7 +20,16 @@ function CustomNewsAdmin({ onAdd }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {!authenticated ? (
+      {/* ✍️ इमोजी ही hidden बटन है */}
+      <span
+        style={{ cursor: "pointer" }}
+        onClick={() => setShowLogin(true)}
+      >
+        ✍️
+      </span>
+
+      {/* PIN इनपुट */}
+      {showLogin && !authenticated && (
         <>
           <input
             type="password"
@@ -28,7 +39,10 @@ function CustomNewsAdmin({ onAdd }) {
           />
           <button onClick={handleLogin}>Login</button>
         </>
-      ) : (
+      )}
+
+      {/* एडमिन मोड */}
+      {authenticated && (
         <span>
           <input
             type="text"
@@ -37,13 +51,11 @@ function CustomNewsAdmin({ onAdd }) {
             onChange={(e) => setHeadline(e.target.value)}
             maxLength={100}
           />
-
           <textarea
             placeholder="पूरी खबर"
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
           />
-
           <button onClick={() => onAdd(headline, summary)}>➕ Add</button>
         </span>
       )}
