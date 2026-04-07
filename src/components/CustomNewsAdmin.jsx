@@ -20,33 +20,29 @@ function CustomNewsAdmin({ onAdd }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {!authenticated ? (
-        <>
-          <button
-            style={{
-              fontSize: 12,
-              padding: "2px 4px",
-              background: "#ddd",
-              borderRadius: 4,
-            }}
-            onClick={() => setShowLogin(true)}
-          >
-            ▢
-          </button>
+      {/* hidden बटन – सिर्फ़ एडमिन को पता है */}
+      <button
+        style={{ display: "none" }}
+        onClick={() => setShowLogin(true)}
+      >
+        ▢
+      </button>
 
-          {showLogin && (
-            <>
-              <input
-                type="password"
-                placeholder="PIN"
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
-              />
-              <button onClick={handleLogin}>Login</button>
-            </>
-          )}
+      {/* PIN इनपुट सिर्फ़ तब दिखेगा जब hidden बटन दबाएँ */}
+      {showLogin && !authenticated && (
+        <>
+          <input
+            type="password"
+            placeholder="PIN"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+          />
+          <button onClick={handleLogin}>Login</button>
         </>
-      ) : (
+      )}
+
+      {/* एडमिन मोड – PIN सही होने पर */}
+      {authenticated && (
         <span>
           <input
             type="text"
