@@ -181,7 +181,6 @@ export default function App() {
   <h3>💰 Gold & Silver Rates</h3>
   <GoldSilver />
 </section>
-
               
               {/* Live TV */}
               <section className="card" style={{ marginTop: 4 }}>
