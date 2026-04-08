@@ -55,6 +55,27 @@ button:hover { background: #1d4ed8; }
 .refresh-spin { animation: spin 1s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+/* Gold-Silver Section */
+.goldsilver-card {
+  background: linear-gradient(135deg, #fff8e1, #f3f4f6);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.gold-rate {
+  color: #b58900;   /* Golden accent */
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.silver-rate {
+  color: #6c757d;   /* Silver accent */
+  font-weight: 700;
+  font-size: 16px;
+}
+
+
 /* Footer */
 .footer { margin-top: 30px; text-align: center; color: #6b7280; font-size: 13px; padding-top: 12px; border-top: 1px solid #eaeef2; }
 
