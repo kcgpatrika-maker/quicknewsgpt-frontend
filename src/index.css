@@ -75,9 +75,28 @@ button:hover { background: #1d4ed8; }
   font-size: 16px;
 }
 
+.goldsilver-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* दो कॉलम */
+  gap: 20px;
+}
+
+/* अगर मोबाइल पर भी side-by-side चाहिए तो नीचे वाला हिस्सा हटा दें या बदलें */
+@media (max-width: 768px) {
+  .goldsilver-grid {
+    grid-template-columns: 1fr 1fr; /* मोबाइल पर भी दो कॉलम */
+  }
+}
 
 /* Footer */
-.footer { margin-top: 30px; text-align: center; color: #6b7280; font-size: 13px; padding-top: 12px; border-top: 1px solid #eaeef2; }
+.footer {
+  margin-top: 30px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #eaeef2;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
