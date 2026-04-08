@@ -19,7 +19,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
   const [customNews, setCustomNews] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
 
   const fetchNews = useCallback(async () => {
     setLoading(true);
@@ -152,12 +152,35 @@ export default function App() {
           body: JSON.stringify({ pin: "1336" })
         }).then(() => window.location.reload());
       }}
+      setAuthenticated={setAuthenticated}
     />
   </h3>
-
-  {/* यूज़र इंटरफ़ेस */}
-  <CustomNewsList items={customNews} />
-</section>
+        <CustomNewsList
+          items={customNews}
+          authenticated={authenticated}
+          onEdit={(id, headline, summary) => {
+            fetch(`${BACKEND}/custom/edit/${id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                title: headline,
+                summary: summary,
+                pin: "1336",
+              }),
+            }).then(() => window.location.reload());
+          }}
+          onDelete={(id) => {
+            fetch(`${BACKEND}/custom/delete/${id}`, {
+              method: "DELETE",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ pin: "1336" }),
+            }).then(() => window.location.reload());
+          }}
+        />
+      </section>
+    </div>
+  );
+}
               
               {/* Trending */}
               <section className="card" style={{ marginTop: 12 }}>
