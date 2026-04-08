@@ -19,6 +19,7 @@ export default function App() {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
   const [customNews, setCustomNews] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   
   const fetchNews = useCallback(async () => {
     setLoading(true);
