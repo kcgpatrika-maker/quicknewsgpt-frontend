@@ -4,14 +4,17 @@ import React, { useEffect, useState } from "react";
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
 export default function GoldSilver() {
-  const [rates, setRates] = useState([]);
+  const [rates, setRates] = useState({ gold: {}, silver: {} });
 
   useEffect(() => {
     async function loadRates() {
       try {
         const res = await fetch(`${BACKEND}/goldsilver`);
         const data = await res.json();
-        setRates(data.rates || []);
+        setRates({
+          gold: data.gold || {},
+          silver: data.silver || {}
+        });
       } catch (err) {
         console.error("GoldSilver error:", err);
       }
@@ -21,21 +24,20 @@ export default function GoldSilver() {
 
   return (
     <div>
-      <ul style={{ marginTop: 8, paddingLeft: 16 }}>
-        {rates.map((r, i) => (
+      <h4 className="gold-rate">Gold Rates -</h4>
+      <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+        {Object.entries(rates.gold).map(([key, value], i) => (
           <li key={i} style={{ marginBottom: 6 }}>
-            <a
-              href={r.link}
-              target="_blank"
-              rel="noreferrer"
-              className={
-                r.title.toLowerCase().includes("silver") || r.title.includes("चांदी")
-                  ? "silver-rate"
-                  : "gold-rate"
-              }
-            >
-              {r.title}
-            </a>
+            <span className="gold-rate">{key}:</span> {value}
+          </li>
+        ))}
+      </ul>
+
+      <h4 className="silver-rate" style={{ marginTop: 12 }}>Silver Rates -</h4>
+      <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+        {Object.entries(rates.silver).map(([key, value], i) => (
+          <li key={i} style={{ marginBottom: 6 }}>
+            <span className="silver-rate">{key}:</span> {value}
           </li>
         ))}
       </ul>
