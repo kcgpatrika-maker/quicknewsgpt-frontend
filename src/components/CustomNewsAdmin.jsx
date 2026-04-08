@@ -19,12 +19,14 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
   };
 
   return (
-    <h3>
-  गौतम की कलम से{" "}
-  <span style={{ cursor: "pointer" }} onClick={() => setShowLogin(true)}>
-    ✍️
-  </span>
-</h3>
+    <span style={{ marginLeft: 6 }}>
+      {/* ✍️ इमोजी हेडिंग के साथ ही hidden बटन */}
+      <span
+        style={{ cursor: "pointer" }}
+        onClick={() => setShowLogin(true)}
+      >
+        ✍️
+      </span>
 
       {/* PIN इनपुट */}
       {showLogin && !authenticated && (
