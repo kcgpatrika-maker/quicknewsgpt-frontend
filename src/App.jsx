@@ -151,13 +151,13 @@ export default function App() {
           body: JSON.stringify({ pin: "1336" })
         }).then(() => window.location.reload());
       }}
-      setAuthenticated={setIsAdmin}   // ← यहाँ isAdmin state को अपडेट करेंगे
+      setAuthenticated={setIsAdmin}   // ← अब isAdmin state को अपडेट करेंगे
     />
   </h3>
 
   <CustomNewsList
     items={customNews}
-    authenticated={isAdmin}           // ← यहाँ isAdmin को पास करेंगे
+    authenticated={isAdmin}           // ← अब isAdmin को पास करेंगे
     onEdit={(id, headline, summary) => {
       fetch(`${BACKEND}/custom/edit/${id}`, {
         method: "PUT",
