@@ -2,17 +2,18 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
+function CustomNewsAdmin({ onAdd, onEdit, onDelete, setAuthenticated }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticatedLocal, setAuthenticatedLocal] = useState(false);
   const [headline, setHeadline] = useState("");
   const [summary, setSummary] = useState("");
 
   const handleLogin = () => {
     if (pin === ADMIN_PIN) {
-      setAuthenticated(true);
+      setAuthenticatedLocal(true);
       setShowLogin(false);
+      setAuthenticated(true);   // ← यह लाइन App.jsx में isAdmin को true कर देगी
     } else {
       alert("गलत PIN!");
     }
@@ -20,7 +21,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
 
   return (
     <span style={{ marginLeft: 6 }}>
-      {/* ✍️ इमोजी हेडिंग के साथ ही hidden बटन */}
+      {/* ✍️ इमोजी ही hidden बटन */}
       <span
         style={{ cursor: "pointer" }}
         onClick={() => setShowLogin(true)}
@@ -29,7 +30,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
       </span>
 
       {/* PIN इनपुट */}
-      {showLogin && !authenticated && (
+      {showLogin && !authenticatedLocal && (
         <>
           <input
             type="password"
@@ -42,7 +43,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete }) {
       )}
 
       {/* एडमिन मोड */}
-      {authenticated && (
+      {authenticatedLocal && (
         <span>
           <input
             type="text"
