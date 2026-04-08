@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const ADMIN_PIN = "1336";
 
-function CustomNewsAdmin({ onAdd, onEdit, onDelete, setAuthenticated }) {
+function CustomNewsAdmin({ onAdd, setAuthenticated }) {
   const [showLogin, setShowLogin] = useState(false);
   const [pin, setPin] = useState("");
   const [authenticatedLocal, setAuthenticatedLocal] = useState(false);
@@ -13,7 +13,7 @@ function CustomNewsAdmin({ onAdd, onEdit, onDelete, setAuthenticated }) {
     if (pin === ADMIN_PIN) {
       setAuthenticatedLocal(true);
       setShowLogin(false);
-      setAuthenticated(true);   // ← यह लाइन App.jsx में isAdmin को true कर देगी
+      setAuthenticated(true);   // App.jsx में isAdmin को true कर देगा
     } else {
       alert("गलत PIN!");
     }
