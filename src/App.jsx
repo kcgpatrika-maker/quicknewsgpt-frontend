@@ -127,7 +127,7 @@ export default function App() {
                 <AskNews />
               </section>
 
-<section className="card" style={{ marginTop: 12 }}>
+<section className="card" style={{ marginTop: 8 }}>
   <h3>
     गौतम की कलम से{" "}
     <CustomNewsAdmin
