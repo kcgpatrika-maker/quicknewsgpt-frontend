@@ -5,7 +5,7 @@ import AskNews from "./components/AskNews";
 import NewsList from "./components/NewsList";
 import Sidebar from "./components/Sidebar";
 import PrivacyPolicy from "./components/PrivacyPolicy";
-import Trending from "./components/Trending";
+import GoldSilver from "./components/GoldSilver";
 import LiveTV from "./components/LiveTV";
 import WikipediaSearch from "./components/WikipediaSearch";
 import CustomNewsAdmin from "./components/CustomNewsAdmin";
@@ -176,11 +176,11 @@ export default function App() {
   />
 </section>
               
-              {/* Trending */}
-              <section className="card" style={{ marginTop: 4 }}>
-                <h3>🔥 Top 5 Trending</h3>
-                <Trending />
-              </section>
+{/* Gold-Silver Rates */}
+<section className="card goldsilver-card" style={{ marginTop: 4 }}>
+  <h3>💰 Gold & Silver Rates</h3>
+  <GoldSilver />
+</section>
 
               
               {/* Live TV */}
