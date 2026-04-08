@@ -23,24 +23,28 @@ export default function GoldSilver() {
   }, []);
 
   return (
-    <div>
-      <h4 className="gold-rate">Gold Rates -</h4>
-      <ul style={{ marginTop: 4, paddingLeft: 16 }}>
-        {Object.entries(rates.gold).map(([key, value], i) => (
-          <li key={i} style={{ marginBottom: 6 }}>
-            <span className="gold-rate">{key}:</span> {value}
-          </li>
-        ))}
-      </ul>
+    <div className="goldsilver-grid">
+      <div>
+        <h4 className="gold-rate">Gold Rates -</h4>
+        <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+          {Object.entries(rates.gold).map(([key, value], i) => (
+            <li key={i} style={{ marginBottom: 6 }}>
+              <span className="gold-rate">{key}:</span> {value}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-      <h4 className="silver-rate" style={{ marginTop: 12 }}>Silver Rates -</h4>
-      <ul style={{ marginTop: 4, paddingLeft: 16 }}>
-        {Object.entries(rates.silver).map(([key, value], i) => (
-          <li key={i} style={{ marginBottom: 6 }}>
-            <span className="silver-rate">{key}:</span> {value}
-          </li>
-        ))}
-      </ul>
+      <div>
+        <h4 className="silver-rate">Silver Rates -</h4>
+        <ul style={{ marginTop: 4, paddingLeft: 16 }}>
+          {Object.entries(rates.silver).map(([key, value], i) => (
+            <li key={i} style={{ marginBottom: 6 }}>
+              <span className="silver-rate">{key}:</span> {value}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
