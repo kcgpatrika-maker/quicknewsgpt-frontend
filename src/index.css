@@ -58,7 +58,7 @@ button:hover { background: #1d4ed8; }
 /* Gold-Silver Section */
 .goldsilver-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* दो कॉलम */
   gap: 20px;
 }
 
