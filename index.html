@@ -13,9 +13,11 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8052311281752038"
         crossorigin="anonymous"></script>
   </head>
+
   <body>
     <div id="root"></div>
 
+    <!-- Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
@@ -24,6 +26,26 @@
       }
     </script>
 
+    <!-- ✅ Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCcmHCEtZIEWfvSsX-OlifKIaYe2FY0EYw",
+        authDomain: "quick-news-gpt.firebaseapp.com",
+        projectId: "quick-news-gpt",
+        storageBucket: "quick-news-gpt.firebasestorage.app",
+        messagingSenderId: "981114039766",
+        appId: "1:981114039766:web:4caf7131fc9b8eefb2c877"
+      };
+
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <!-- ✅ Firebase End -->
+
+    <!-- React App -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
