@@ -56,29 +56,26 @@ button:hover { background: #1d4ed8; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 /* Gold-Silver Section */
-.goldsilver-card {
-  background: linear-gradient(135deg, #fff8e1, #f3f4f6);
+.goldsilver-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.gold-card, .silver-card {
+  background: #fff;
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: center;
 }
 
-.gold-rate {
-  color: #d4af37; /* Gold accent */
-  font-weight: 700;
-  font-size: 16px;
+.gold-card h4 {
+  color: #d4af37;
 }
 
-.silver-rate {
-  color: #c0c0c0; /* Silver accent */
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.goldsilver-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* दो कॉलम */
-  gap: 20px;
+.silver-card h4 {
+  color: #c0c0c0;
 }
 
 /* अगर मोबाइल पर भी side-by-side चाहिए तो नीचे वाला हिस्सा हटा दें या बदलें */
