@@ -78,13 +78,6 @@ button:hover { background: #1d4ed8; }
   color: #c0c0c0;
 }
 
-/* अगर मोबाइल पर भी side-by-side चाहिए तो नीचे वाला हिस्सा हटा दें या बदलें */
-@media (max-width: 768px) {
-  .goldsilver-grid {
-    grid-template-columns: 1fr 1fr; /* मोबाइल पर भी दो कॉलम */
-  }
-}
-
 /* Footer */
 .footer {
   margin-top: 30px;
