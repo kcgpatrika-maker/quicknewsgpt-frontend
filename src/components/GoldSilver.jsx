@@ -25,14 +25,16 @@ export default function GoldSilver() {
 
   return (
     <div className="goldsilver-grid">
+      {/* Gold Section */}
       <div className="gold-card">
-        <h4>🥇 GOLD</h4>
-        <p>{rates.gold}</p>
+        <h4 className="gold-rate">🥇 Gold Rates</h4>
+        <p style={{ marginTop: 8 }}>{rates.gold}</p>
       </div>
 
+      {/* Silver Section */}
       <div className="silver-card">
-        <h4>🥈 SILVER</h4>
-        <p>{rates.silver}</p>
+        <h4 className="silver-rate">🥈 Silver Rates</h4>
+        <p style={{ marginTop: 8 }}>{rates.silver}</p>
       </div>
     </div>
   );
