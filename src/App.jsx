@@ -15,7 +15,7 @@ const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backe
 
 export default function App() {
   console.log(window.firebase);
-  const db = window.firebase.firestore();
+  const db = window.db;
   const [allNews, setAllNews] = useState({});
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
