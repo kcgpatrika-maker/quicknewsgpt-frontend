@@ -14,6 +14,7 @@ import CustomNewsList from "./components/CustomNewsList";
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
 export default function App() {
+  const db = window.firebase.firestore();
   const [allNews, setAllNews] = useState({});
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -132,11 +133,15 @@ export default function App() {
     गौतम की कलम से{" "}
     <CustomNewsAdmin
       onAdd={(headline, summary) => {
-        fetch(`${BACKEND}/custom/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, summary, pin: "1336" })
-        }).then(() => window.location.reload());
+        const db = window.firebase.firestore();
+
+        db.collection("news").add({
+          title: headline,
+          summary: summary,
+          pubDate: new Date().toISOString().split("T")[0]
+        }).then(() => {
+          window.location.reload();
+        });
       }}
       onEdit={(id, headline, summary) => {
         fetch(`${BACKEND}/custom/edit/${id}`, {
@@ -152,13 +157,13 @@ export default function App() {
           body: JSON.stringify({ pin: "1336" })
         }).then(() => window.location.reload());
       }}
-      setAuthenticated={setIsAdmin}   // ← अब isAdmin state को अपडेट करेंगे
+      setAuthenticated={setIsAdmin}
     />
   </h3>
 
   <CustomNewsList
     items={customNews}
-    authenticated={isAdmin}           // ← अब isAdmin को पास करेंगे
+    authenticated={isAdmin}
     onEdit={(id, headline, summary) => {
       fetch(`${BACKEND}/custom/edit/${id}`, {
         method: "PUT",
