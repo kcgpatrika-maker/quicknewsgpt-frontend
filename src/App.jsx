@@ -14,6 +14,7 @@ import CustomNewsList from "./components/CustomNewsList";
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
 export default function App() {
+  console.log(window.firebase);
   const db = window.firebase.firestore();
   const [allNews, setAllNews] = useState({});
   const [loading, setLoading] = useState(true);
