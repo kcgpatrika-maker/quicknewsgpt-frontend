@@ -1,7 +1,9 @@
 // src/components/GoldSilver.jsx
 import React, { useEffect, useState } from "react";
 
-const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
+const BACKEND =
+  import.meta.env.VITE_BACKEND_URL ||
+  "https://quick-newsgpt-backend.onrender.com";
 
 export default function GoldSilver() {
   const [rates, setRates] = useState({ gold: {}, silver: {} });
@@ -24,8 +26,9 @@ export default function GoldSilver() {
 
   return (
     <div className="goldsilver-grid">
+      {/* Gold Section */}
       <div>
-        <h4 className="gold-rate">Gold Rates -</h4>
+        <h4 className="gold-rate">🥇 Gold Rates</h4>
         <ul style={{ marginTop: 4, paddingLeft: 16 }}>
           {Object.entries(rates.gold).map(([key, value], i) => (
             <li key={i} style={{ marginBottom: 6 }}>
@@ -35,8 +38,9 @@ export default function GoldSilver() {
         </ul>
       </div>
 
+      {/* Silver Section */}
       <div>
-        <h4 className="silver-rate">Silver Rates -</h4>
+        <h4 className="silver-rate">🥈 Silver Rates</h4>
         <ul style={{ marginTop: 4, paddingLeft: 16 }}>
           {Object.entries(rates.silver).map(([key, value], i) => (
             <li key={i} style={{ marginBottom: 6 }}>
