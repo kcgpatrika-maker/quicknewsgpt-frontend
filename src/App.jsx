@@ -34,29 +34,29 @@ export default function App() {
   });
 }, []);
 
-  const fetchNews = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${BACKEND}/news`);
-      const data = await res.json();
-      const grouped = data?.news || {};
+const fetchNews = useCallback(async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    // 🔹 बैकएंड से RSS/News लोड करना
+    const res = await fetch(`${BACKEND}/news`);
+    const data = await res.json();
+    const grouped = data?.news || {};
 
-      setAllNews(grouped);
-      setLastUpdated(new Date());
+    setAllNews(grouped);
+    setLastUpdated(new Date());
 
-      const resCustom = await fetch(`${BACKEND}/custom`);
-      const dataCustom = await resCustom.json();
-      setCustomNews(dataCustom.news || []);
-    } catch (err) {
-      console.error("fetchNews error:", err);
-      setError("Failed to load news.");
-      setAllNews({});
-      setLastUpdated(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+    // ❌ यहां से customNews लोड करने की ज़रूरत नहीं
+    // Firebase useEffect अलग से customNews को भरेगा
+  } catch (err) {
+    console.error("fetchNews error:", err);
+    setError("Failed to load news.");
+    setAllNews({});
+    setLastUpdated(null);
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   useEffect(() => {
     fetchNews();
