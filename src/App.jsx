@@ -22,7 +22,18 @@ export default function App() {
   const [error, setError] = useState(null);
   const [customNews, setCustomNews] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  
+  useEffect(() => {
+  const db = window.db;
+  db.collection("news").get().then(snapshot => {
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setCustomNews(items);
+    setLoading(false);
+  }).catch(err => {
+    setError(err.message);
+    setLoading(false);
+  });
+}, []);
+
   const fetchNews = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -134,29 +145,39 @@ export default function App() {
     गौतम की कलम से{" "}
     <CustomNewsAdmin
       onAdd={(headline, summary) => {
-        const db = window.firebase.firestore();
-
+        const db = window.db;
         db.collection("news").add({
           title: headline,
           summary: summary,
           pubDate: new Date().toISOString().split("T")[0]
         }).then(() => {
-          window.location.reload();
+          // ✅ बिना reload के state अपडेट
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
         });
       }}
       onEdit={(id, headline, summary) => {
-        fetch(`${BACKEND}/custom/edit/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: headline, summary, pin: "1336" })
-        }).then(() => window.location.reload());
+        const db = window.db;
+        db.collection("news").doc(id).update({
+          title: headline,
+          summary: summary
+        }).then(() => {
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
+        });
       }}
       onDelete={(id) => {
-        fetch(`${BACKEND}/custom/delete/${id}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ pin: "1336" })
-        }).then(() => window.location.reload());
+        const db = window.db;
+        db.collection("news").doc(id).delete().then(() => {
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
+        });
       }}
       setAuthenticated={setIsAdmin}
     />
@@ -166,18 +187,25 @@ export default function App() {
     items={customNews}
     authenticated={isAdmin}
     onEdit={(id, headline, summary) => {
-      fetch(`${BACKEND}/custom/edit/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: headline, summary, pin: "1336" })
-      }).then(() => window.location.reload());
+      const db = window.db;
+      db.collection("news").doc(id).update({
+        title: headline,
+        summary: summary
+      }).then(() => {
+        db.collection("news").get().then(snapshot => {
+          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCustomNews(items);
+        });
+      });
     }}
     onDelete={(id) => {
-      fetch(`${BACKEND}/custom/delete/${id}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pin: "1336" })
-      }).then(() => window.location.reload());
+      const db = window.db;
+      db.collection("news").doc(id).delete().then(() => {
+        db.collection("news").get().then(snapshot => {
+          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCustomNews(items);
+        });
+      });
     }}
   />
 </section>
