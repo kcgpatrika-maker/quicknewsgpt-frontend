@@ -20,14 +20,20 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
+                maxLength={100}
               />
               <textarea
                 value={editSummary}
                 onChange={(e) => setEditSummary(e.target.value)}
+                maxLength={600}
               />
               <button
                 onClick={() => {
-                  onEdit(r.id, editTitle, editSummary);
+                  if (!editTitle.trim() || !editSummary.trim()) {
+                    alert("कृपया हेडलाइन और खबर दोनों लिखें");
+                    return;
+                  }
+                  onEdit(r.id, editTitle.trim(), editSummary.trim());
                   setEditId(null);
                 }}
               >
@@ -42,7 +48,7 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
                 style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
                 onClick={() => setOpenId(openId === r.id ? null : r.id)}
               >
-                पूरा पढ़े
+                पूरा पढ़ें
               </span>
               {authenticated && (
                 <>
