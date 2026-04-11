@@ -19,6 +19,16 @@ function CustomNewsAdmin({ onAdd, setAuthenticated }) {
     }
   };
 
+  const handleAdd = () => {
+    if (!headline.trim() || !summary.trim()) {
+      alert("कृपया हेडलाइन और खबर दोनों लिखें");
+      return;
+    }
+    onAdd(headline.trim(), summary.trim());
+    setHeadline("");
+    setSummary("");
+  };
+
   return (
     <span style={{ marginLeft: 6 }}>
       {/* ✍️ इमोजी ही hidden बटन */}
@@ -53,11 +63,12 @@ function CustomNewsAdmin({ onAdd, setAuthenticated }) {
             maxLength={100}
           />
           <textarea
-            placeholder="पूरी खबर"
+            placeholder="पूरी खबर (100 शब्द सीमा)"
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
+            maxLength={600} // लगभग 100 शब्दों के बराबर
           />
-          <button onClick={() => onAdd(headline, summary)}>➕ Add</button>
+          <button onClick={handleAdd}>➕ Add</button>
         </span>
       )}
     </span>
