@@ -25,8 +25,14 @@ export default function GoldSilver() {
   return (
     <div className="goldsilver-card">
       <h3>💰 Gold & Silver Rates</h3>
-      <p>🏅 Gold (24K): {rates.gold?.["24K"] || "N/A"}</p>
-      <p>🥈 Silver (1kg): {rates.silver?.["1kg"] || "N/A"}</p>
+<p>
+  <span className="label">🏅 Gold (24K):</span>{" "}
+  <span className="value">{rates.gold?.["24K"] || "N/A"}</span>
+</p>
+<p>
+  <span className="label">🥈 Silver (1kg):</span>{" "}
+  <span className="value">{rates.silver?.["1kg"] || "N/A"}</span>
+</p>
     </div>
   );
 }
