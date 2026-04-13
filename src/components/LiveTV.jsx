@@ -4,16 +4,16 @@ import React from "react";
 function LiveTV() {
   const channels = [
     [
-      { name: "DD News (Live)", link: "https://www.youtube.com/@DDNews/live", color: "#0b3d91" }, // Navy Blue
-      { name: "Aaj Tak (Live)", link: "https://www.youtube.com/@aajtak/live", color: "#d32f2f" }, // Red
+      { name: "DD News (Live)", link: "https://www.youtube.com/@DDNews/live", className: "ddnews" },
+      { name: "Aaj Tak (Live)", link: "https://www.youtube.com/@aajtak/live", className: "aajtak" },
     ],
     [
-      { name: "ABP News (Live)", link: "https://www.youtube.com/@abpnews/live", color: "#e53935" }, // Red
-      { name: "News18 Rajasthan (Live)", link: "https://hindi.news18.com/livetv/rajasthan", color: "#1a73e8" }, // Blue
+      { name: "ABP News (Live)", link: "https://www.youtube.com/@abpnews/live", className: "abpnews" },
+      { name: "News18 Rajasthan (Live)", link: "https://hindi.news18.com/livetv/news18-rajasthan/?utm_source=copilot.com", className: "news18" },
     ],
     [
-      { name: "Zee News (Live)", link: "https://www.youtube.com/@ZeeNews/live", color: "#1565c0" }, // Blue
-      { name: "Zee Rajasthan (Live)", link: "https://zeenews.india.com/hindi/rajasthan", color: "#1565c0" }, // Blue
+      { name: "Zee News (Live)", link: "https://www.youtube.com/@ZeeNews/live", className: "zeenews" },
+      { name: "Zee Rajasthan (Live)", link: "https://zeenews.india.com/hindi/india/rajasthan/live-tv/embed?autoplay=1&mute=0&utm_source=copilot.com", className: "zeerajasthan" },
     ],
   ];
 
@@ -28,8 +28,7 @@ function LiveTV() {
                 href={ch.link}
                 target="_blank"
                 rel="noreferrer"
-                className="channel-link"
-                style={{ color: ch.color }}
+                className={`channel-link ${ch.className}`}
               >
                 {ch.name}
               </a>
