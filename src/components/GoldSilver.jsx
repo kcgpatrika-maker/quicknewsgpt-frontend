@@ -23,29 +23,10 @@ export default function GoldSilver() {
   if (!rates) return <p>Loading Gold & Silver rates...</p>;
 
   return (
-    <div className="goldsilver-grid">
+    <div className="goldsilver-card">
       <h3>💰 Gold & Silver Rates</h3>
-
-      <div className="gold-card">
-        <h4>🥇 Gold Rates</h4>
-        <ul>
-          <li>24K: {rates.gold?.["24K"] || "N/A"}</li>
-          <li>22K: {rates.gold?.["22K"] || "N/A"}</li>
-        </ul>
-      </div>
-
-      <div className="silver-card">
-        <h4>🥈 Silver Rates</h4>
-        <ul>
-          <li>1 gm: {rates.silver?.["1gm"] || "N/A"}</li>
-          <li>10 gm: {rates.silver?.["10gm"] || "N/A"}</li>
-          <li>1 kg: {rates.silver?.["1kg"] || "N/A"}</li>
-        </ul>
-      </div>
-
-      <p style={{ fontSize: "12px", marginTop: "10px" }}>
-        Last updated: {rates.date || "N/A"}
-      </p>
+      <p>🏅 Gold (24K): {rates.gold?.["24K"] || "N/A"}</p>
+      <p>🥈 Silver (1kg): {rates.silver?.["1kg"] || "N/A"}</p>
     </div>
   );
 }
