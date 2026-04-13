@@ -220,6 +220,11 @@ const fetchNews = useCallback(async () => {
                 <h3>📺 Live TV</h3>
                 <LiveTV />
               </section>
+              {/* सबकुछ बताएगा विकीपीडिया */}
+      <section className="card" style={{ marginTop: 4 }}>
+        <h3>📖 सब कुछ बताएगा विकिपीडिया</h3>
+        <WikipediaSearch />
+      </section>
 
               {/* Footer */}
               <div className="footer" style={{ marginTop: 12, color: "#6b7280" }}>
