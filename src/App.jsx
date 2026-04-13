@@ -212,7 +212,6 @@ const fetchNews = useCallback(async () => {
               
 {/* Gold-Silver Rates */}
 <section className="card goldsilver-card" style={{ marginTop: 4 }}>
-  <h3>💰 Gold & Silver Rates</h3>
   <GoldSilver />
 </section>
               
