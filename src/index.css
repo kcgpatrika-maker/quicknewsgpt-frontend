@@ -91,7 +91,7 @@ button:hover { background: #1d4ed8; }
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
-  background: linear-gradient(135deg, #fff, #f9f9f9);
+  background: #fafafa;
   max-width: 600px;
 }
 
@@ -110,28 +110,37 @@ button:hover { background: #1d4ed8; }
 .channel-row {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
-.channel-link {
+.channel-btn {
   flex: 1;
   text-align: center;
   font-weight: bold;
   text-decoration: none;
-  padding: 6px;
-  border-radius: 4px;
-  transition: background 0.2s;
+  padding: 8px;
+  border-radius: 6px;
+  transition: transform 0.2s;
 }
 
-/* ब्रांड स्टाइल */
-.channel-link.ddnews { color: #0b3d91; font-family: 'Arial Black', sans-serif; }
-.channel-link.aajtak { color: #d32f2f; font-family: 'Verdana', sans-serif; }
-.channel-link.abpnews { color: #e53935; font-family: 'Tahoma', sans-serif; }
-.channel-link.news18 { color: #1a73e8; font-family: 'Helvetica', sans-serif; }
-.channel-link.zeenews { color: #1565c0; font-family: 'Arial', sans-serif; }
-.channel-link.zeerajasthan { color: #1565c0; font-family: 'Arial', sans-serif; }
+.channel-btn:hover {
+  transform: scale(1.05);
+}
 
-.channel-link:hover {
-  background: #f0f0f0;
+/* तीन अलग रंग */
+.btn-row1 .channel-btn {
+  background: #007bff; /* Blue */
+  color: #fff;
+}
+
+.btn-row2 .channel-btn {
+  background: #28a745; /* Green */
+  color: #fff;
+}
+
+.btn-row3 .channel-btn {
+  background: #ff9800; /* Orange */
+  color: #fff;
 }
 
 /* Footer */
