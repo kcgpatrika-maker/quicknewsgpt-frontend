@@ -3,44 +3,40 @@ import React from "react";
 
 function LiveTV() {
   const channels = [
-    {
-      name: "DD National (Live)",
-      link: "https://www.youtube.com/@DoordarshanNational/live",
-    },
-    {
-      name: "DD News (Live)",
-      link: "https://www.youtube.com/@DDNews/live", // सही official चैनल
-    },
-    {
-      name: "Zee News (Live)",
-      link: "https://www.youtube.com/@ZeeNews/live",
-    },
-    {
-      name: "Aaj Tak (Live)",
-      link: "https://www.youtube.com/@aajtak/live",
-    },
-    {
-      name: "ABP News (Live)",
-      link: "https://www.youtube.com/@abpnews/live",
-    },
+    [
+      { name: "DD News (Live)", link: "https://www.youtube.com/@DDNews/live" },
+      { name: "Aaj Tak (Live)", link: "https://www.youtube.com/@aajtak/live" },
+    ],
+    [
+      { name: "ABP News (Live)", link: "https://www.youtube.com/@abpnews/live" },
+      { name: "News18 Rajasthan (Live)", link: "https://hindi.news18.com/livetv/rajasthan" },
+    ],
+    [
+      { name: "Zee News (Live)", link: "https://www.youtube.com/@ZeeNews/live" },
+      { name: "Zee Rajasthan (Live)", link: "https://zeenews.india.com/hindi/rajasthan" },
+    ],
   ];
 
   return (
-    <section id="live" className="card" style={{ marginTop: 12 }}>
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {channels.map((ch, i) => (
-          <li key={i} style={{ marginBottom: 6 }}>
-            <a
-              href={ch.link}
-              target="_blank"
-              rel="noreferrer"
-              style={{ color: "#2563eb", fontWeight: 500 }}
-            >
-              {ch.name}
-            </a>
-          </li>
+    <section id="live" className="livetv-card">
+      <h3>📺 Live TV</h3>
+      <div className="channel-grid">
+        {channels.map((pair, i) => (
+          <div key={i} className="channel-row">
+            {pair.map((ch, j) => (
+              <a
+                key={j}
+                href={ch.link}
+                target="_blank"
+                rel="noreferrer"
+                className="channel-link"
+              >
+                {ch.name}
+              </a>
+            ))}
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }
