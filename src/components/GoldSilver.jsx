@@ -22,17 +22,31 @@ export default function GoldSilver() {
 
   if (!rates) return <p>Loading Gold & Silver rates...</p>;
 
+  // Helper function: split rate into number + unit
+  const formatRate = (rate) => {
+    if (!rate) return "N/A";
+    const parts = rate.split(" ");
+    const number = parts[0]; // ₹154,080
+    const unit = parts.slice(1).join(" "); // per 10gm / per kg
+    return (
+      <>
+        <strong>{number}</strong> {unit}
+      </>
+    );
+  };
+
   return (
     <div className="goldsilver-card">
       <h3>💰 Gold & Silver Rates (Jaipur)</h3>
       <p>
         <span className="label">🏅 Gold (24K):</span>{" "}
-        <span className="value">{rates.gold?.["24K"] || "N/A"}</span>
+        <span className="value">{formatRate(rates.gold?.["24K"])}</span>
       </p>
       <p>
         <span className="label">🥈 Silver (1kg):</span>{" "}
-        <span className="value">{rates.silver?.["1kg"] || "N/A"}</span>
+        <span className="value">{formatRate(rates.silver?.["1kg"])}</span>
       </p>
+      <small className="source">Source: {rates.source}</small>
     </div>
   );
 }
