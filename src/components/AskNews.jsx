@@ -58,7 +58,7 @@ export default function AskNews() {
         }}
       >
         <input
-          placeholder="देश/ राज्य/ शहर/ प्रमुख व्यक्ति/ विषय लिखें..."
+          placeholder="देश/ राज्य/ शहर/ नाम लिखें..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
           style={{
@@ -101,7 +101,7 @@ export default function AskNews() {
       <div>
         {results === null && (
           <div style={{ color: "#6b7280" }}>
-            देश, राज्य, शहर या प्रमुख व्यक्ति का नाम लिखें और ताज़ा खबरें पाएं।
+            देश, राज्य, शहर या नाम लिखें और ASK दबाएं।
           </div>
         )}
 
