@@ -1,30 +1,38 @@
-// src/components/GoldSilver.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+const BACKEND =
+  import.meta.env.VITE_BACKEND_URL ||
+  "http://localhost:3000";
 
 export default function GoldSilver() {
+  const [rates, setRates] = useState(null);
+
+  useEffect(() => {
+    async function loadRates() {
+      try {
+        const res = await fetch(`${BACKEND}/goldsilver`);
+        const data = await res.json();
+        setRates(data);
+      } catch (err) {
+        console.error("GoldSilver error:", err);
+      }
+    }
+    loadRates();
+  }, []);
+
+  if (!rates) return <p>Loading Gold & Silver rates...</p>;
+
   return (
     <div className="goldsilver-card">
       <h3>💰 Gold & Silver Rates</h3>
-
-      {/* Gold Widget */}
-      <iframe
-        src="https://www.goldprice.org/widget/live-gold-price.html?currency=INR"
-        width="100%"
-        height="120"
-        frameBorder="0"
-        scrolling="no"
-        title="Gold Price"
-      ></iframe>
-
-      {/* Silver Widget */}
-      <iframe
-        src="https://www.goldprice.org/widget/live-silver-price.html?currency=INR"
-        width="100%"
-        height="120"
-        frameBorder="0"
-        scrolling="no"
-        title="Silver Price"
-      ></iframe>
+      <p>
+        <span className="label">🏅 Gold (24K):</span>{" "}
+        <span className="value">{rates.gold?.["24K"] || "N/A"}</span>
+      </p>
+      <p>
+        <span className="label">🥈 Silver (1kg):</span>{" "}
+        <span className="value">{rates.silver?.["1kg"] || "N/A"}</span>
+      </p>
     </div>
   );
 }
