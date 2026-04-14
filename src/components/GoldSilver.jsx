@@ -24,7 +24,7 @@ export default function GoldSilver() {
 
   return (
     <div className="goldsilver-card">
-      <h3>💰 Gold & Silver Rates</h3>
+      <h3>💰 Gold & Silver Rates (Jaipur)</h3>
       <p>
         <span className="label">🏅 Gold (24K):</span>{" "}
         <span className="value">{rates.gold?.["24K"] || "N/A"}</span>
