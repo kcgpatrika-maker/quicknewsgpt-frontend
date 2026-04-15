@@ -168,10 +168,10 @@ button:hover { background: #1d4ed8; }
 .kalam-news-item {
   background: #fff;
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 12px;
+  padding: 8px 12px;   /* पहले 12px था → अब compact */
+  margin-bottom: 10px; /* spacing भी थोड़ा कम */
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  border-left: 4px solid #800000; /* accent line */
+  border-left: 4px solid #800000;
 }
 
 .kalam-news-item h4 {
