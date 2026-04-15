@@ -140,7 +140,7 @@ const fetchNews = useCallback(async () => {
                 <AskNews />
               </section>
 
-<section className="card" style={{ marginTop: 4 }}>
+<section className="kalam-card">
   <h3>
     गौतम की कलम से{" "}
     <CustomNewsAdmin
