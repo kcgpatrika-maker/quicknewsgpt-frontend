@@ -13,7 +13,7 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
   return (
     <div>
       {items.map((r) => (
-        <div key={r.id} style={{ marginBottom: 10 }}>
+        <div key={r.id} className="kalam-news-item">
           {editId === r.id ? (
             <>
               <input
@@ -43,7 +43,7 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
             </>
           ) : (
             <>
-              <div style={{ fontWeight: "bold" }}>{r.title}</div>
+              <h4>{r.title}</h4>
               <span
                 style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
                 onClick={() => setOpenId(openId === r.id ? null : r.id)}
@@ -64,7 +64,7 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
                   <button onClick={() => onDelete(r.id)}>🗑️ Delete</button>
                 </>
               )}
-              {openId === r.id && <div style={{ marginTop: 5 }}>{r.summary}</div>}
+              {openId === r.id && <p>{r.summary}</p>}
             </>
           )}
         </div>
