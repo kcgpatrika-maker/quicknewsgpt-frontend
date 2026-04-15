@@ -144,6 +144,59 @@ button:hover { background: #1d4ed8; }
   color: #fff;
 }
 
+/* ✍️ गौतम की कलम से Section */
+.kalam-card {
+  background: linear-gradient(135deg, #fffdf5, #f9f6f2); /* parchment-style */
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* हल्का shadow */
+  font-family: 'Georgia', serif; /* editorial feel */
+  margin-top: 12px;
+}
+
+/* Heading */
+.kalam-card h3 {
+  color: #800000; /* royal maroon accent */
+  font-size: 22px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+/* News Items */
+.kalam-news-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-left: 4px solid #800000; /* accent line */
+}
+
+.kalam-news-item h4 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #800000; /* headline accent */
+}
+
+.kalam-news-item p {
+  margin: 0;
+  font-size: 15px;
+  color: #333;
+}
+
+/* Decorative line / feather icon */
+.kalam-news-item::after {
+  content: "✒️"; /* feather icon */
+  display: block;
+  text-align: right;
+  margin-top: 6px;
+  font-size: 14px;
+  color: #999;
+}
+
 /* Footer */
 .footer {
   margin-top: 30px;
