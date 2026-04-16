@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 
 const Sidebar = ({ allNews }) => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
   const [translatedHeads, setTranslatedHeads] = useState([]);
   const [openId, setOpenId] = useState(null);
   const [translatedSummary, setTranslatedSummary] = useState("");
 
-  // Translation function (headline/summary)
+  // Translation function
   const translateText = async (text) => {
     try {
       const res = await fetch(
@@ -21,20 +20,23 @@ const Sidebar = ({ allNews }) => {
 
   // Handle category button click
   const handleCategoryClick = async (category) => {
-    setSelectedCategory(category);
     setOpenId(null);
     setTranslatedSummary("");
     const items = allNews[category] || [];
     const translated = [];
     for (let it of items) {
       if (it?.title) {
-        translated.push({ id: it.id, title: await translateText(it.title), summary: it.summary });
+        translated.push({
+          id: it.id,
+          title: await translateText(it.title),
+          summary: it.summary,
+        });
       }
     }
     setTranslatedHeads(translated);
   };
 
-  // Handle "पूरा पढ़ें" click
+  // Handle "Read Full News" click
   const handleReadMore = async (item) => {
     if (openId === item.id) {
       setOpenId(null);
@@ -48,74 +50,40 @@ const Sidebar = ({ allNews }) => {
   return (
     <aside>
       <div className="card">
-        <div className="side-title">Top English Headlines</div>
+        <h2 className="side-title">Top English Headlines</h2>
 
         {/* Category Buttons */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
-          {["International","India","State","Sports","Business","Entertainment"].map((cat) => (
-            <button key={cat} onClick={() => handleCategoryClick(cat)}>
-              {cat}
+        <div className="category-buttons">
+          {[
+            { cat: "International", label: "🌍 International News" },
+            { cat: "India", label: "🇮🇳 National News" },
+            { cat: "State", label: "🏛️ State News" },
+            { cat: "Sports", label: "🏏 Sports News" },
+            { cat: "Business", label: "💼 Business News" },
+            { cat: "Entertainment", label: "🎬 Entertainment News" },
+          ].map((btn) => (
+            <button key={btn.cat} onClick={() => handleCategoryClick(btn.cat)}>
+              {btn.label}
             </button>
           ))}
         </div>
 
         {/* Translated Headlines */}
-        <ul style={{ marginTop: 12 }}>
+        <ul className="translated-list">
           {translatedHeads.map((item) => (
-            <li key={item.id} style={{ marginBottom: 8 }}>
+            <li key={item.id}>
               <strong>{item.title}</strong>
               <span
-                style={{ color: "blue", cursor: "pointer", marginLeft: 8 }}
+                className="read-more"
                 onClick={() => handleReadMore(item)}
               >
-                पूरा पढ़ें
+                Read Full News
               </span>
               {openId === item.id && (
-                <p style={{ marginTop: 6 }}>{translatedSummary}</p>
+                <p className="translated-summary">{translatedSummary}</p>
               )}
             </li>
           ))}
-        </ul>
-      </div>
-
-      {/* ==== ABOUT Section ==== */}
-      <div className="card about">
-        <div className="side-title" style={{ fontWeight: 700 }}>About</div>
-        <p style={{ marginTop: 8 }}>
-          QuickNewsGPT delivers instant AI-summaries of latest headlines in Hindi & English.
-        </p>
-      </div>
-
-      {/* ==== Trending Section ==== */}
-      <div className="card">
-        <div className="side-title" style={{ fontWeight: 700 }}>Trending</div>
-        <ul style={{ marginTop: 8 }}>
-          <li>
-            <a href="https://www.youtube.com/feed/trending" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
-              YouTube Trending
-            </a>
-          </li>
-          <li>
-            <a href="https://trends.google.com/trends/trendingsearches/daily?geo=IN" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
-              Google Trends India
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {/* ==== Legal Section ==== */}
-      <div className="card">
-        <div className="side-title" style={{ fontWeight: 700 }}>Legal</div>
-        <ul style={{ marginTop: 8 }}>
-          <li>
-            <a href="/privacy" style={{ color: "#2563eb" }}>Privacy Policy</a>
-          </li>
-          <li>
-            <a href="/terms" style={{ color: "#2563eb" }}>Terms of Service</a>
-          </li>
-          <li>
-            <a href="/contact" style={{ color: "#2563eb" }}>Contact</a>
-          </li>
         </ul>
       </div>
     </aside>
