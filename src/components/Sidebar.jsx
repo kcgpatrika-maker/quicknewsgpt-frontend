@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import PrivacyPolicy from "./PrivacyPolicy";
-import Terms from "./Terms";
-import Contact from "./Contact";
 
 const Sidebar = ({ allNews }) => {
   const [openCategory, setOpenCategory] = useState(null);
@@ -113,11 +110,23 @@ const Sidebar = ({ allNews }) => {
 
       <div className="card">
         <h2 className="side-title">Legal</h2>
-        <ul>
-          <li><a href="/privacy">Privacy Policy</a></li>
-          <li><a href="/terms">Terms of Service</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
+        <h3>Privacy Policy</h3>
+        <p>
+          This website uses Google AdSense advertising services. Google may use cookies to serve personalized ads.  
+          We do not collect personal data directly. For queries, contact:  
+          <a href="mailto:quicknewsgpt@gmail.com">quicknewsgpt@gmail.com</a>
+        </p>
+
+        <h3>Terms of Service</h3>
+        <p>
+          These are placeholder terms. A detailed Terms of Service page will be added soon.
+        </p>
+
+        <h3>Contact</h3>
+        <p>
+          For general queries, feedback, or support, please email us at:  
+          <a href="mailto:quicknewsgpt@gmail.com">quicknewsgpt@gmail.com</a>
+        </p>
       </div>
     </aside>
   );
