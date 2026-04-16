@@ -241,22 +241,16 @@ button:hover { background: #1d4ed8; }
   font-size: 14px;
   width: 90%;            /* थोड़ी चौड़ाई कम */
   margin: auto;
-  display: flex;         /* इमोजी + टेक्स्ट एक लाइन में */
+  display: flex;         /* emoji + text एक लाइन में */
   align-items: center;
   justify-content: center;
+  gap: 8px;              /* emoji और text के बीच spacing */
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
 .category-btn:hover {
   background: #bbf7d0;   /* hover पर थोड़ा गहरा Green */
-}
-
-.btn-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;              /* इमोजी और टेक्स्ट के बीच spacing */
 }
 
 .btn-emoji {
