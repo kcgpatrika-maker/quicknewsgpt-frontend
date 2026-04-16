@@ -233,20 +233,20 @@ button:hover { background: #1d4ed8; }
 }
 
 .category-btn {
-  background: #f3f4f6; /* हल्का grey background */
-  color: #111827;      /* dark readable text */
-  border: 1px solid #d1d5db;
+  background: #e0f2fe; /* हल्का Blue pastel */
+  color: #0c4a6e;      /* readable dark blue */
+  border: none;
   border-radius: 6px;
   padding: 10px;
   font-size: 14px;
-  width: 100%;         /* मोबाइल पर full width */
+  width: 100%;
   text-align: left;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .category-btn:hover {
-  background: #e5e7eb;
+  opacity: 0.85;
 }
 
 /* Translated headlines list */
