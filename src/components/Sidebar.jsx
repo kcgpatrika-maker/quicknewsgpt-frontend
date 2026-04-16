@@ -65,13 +65,12 @@ const Sidebar = ({ allNews }) => {
   { cat: "Business", emoji: "💼", text: "Business News" },
   { cat: "Entertainment", emoji: "🎬", text: "Entertainment News" },
 ].map((btn) => (
-  <div key={btn.cat} style={{ marginBottom: "10px" }}>
+  <div key={btn.cat} style={{ marginBottom: "8px" }}>
     <button
       className="category-btn"
       onClick={() => handleCategoryClick(btn.cat)}
     >
-      <span className="btn-emoji">{btn.emoji}</span>
-      <span className="btn-text">{btn.text}</span>
+      {btn.emoji} {btn.text}
     </button>
 
     {openCategory === btn.cat && (
