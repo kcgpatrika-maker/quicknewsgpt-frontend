@@ -58,42 +58,45 @@ const Sidebar = ({ allNews }) => {
 
         {/* Category Buttons */}
         {[
-          { cat: "International", label: "🌍 International News" },
-          { cat: "India", label: "🇮🇳 National News" },
-          { cat: "Rajasthan", label: "🏛️ Rajasthan News" },   // State category fix
-          { cat: "Sports", label: "🏏 Sports News" },
-          { cat: "Business", label: "💼 Business News" },
-          { cat: "Entertainment", label: "🎬 Entertainment News" },
-        ].map((btn) => (
-          <div key={btn.cat} style={{ marginBottom: "10px" }}>
-            <button
-              className="category-btn"
-              onClick={() => handleCategoryClick(btn.cat)}
-            >
-              {btn.label}
-            </button>
+  { cat: "International", emoji: "🌍", text: "International News" },
+  { cat: "India", emoji: "🇮🇳", text: "National News" },
+  { cat: "Rajasthan", emoji: "🏛️", text: "Rajasthan News" },
+  { cat: "Sports", emoji: "🏏", text: "Sports News" },
+  { cat: "Business", emoji: "💼", text: "Business News" },
+  { cat: "Entertainment", emoji: "🎬", text: "Entertainment News" },
+].map((btn) => (
+  <div key={btn.cat} style={{ marginBottom: "10px" }}>
+    <button
+      className="category-btn"
+      onClick={() => handleCategoryClick(btn.cat)}
+    >
+      <span className="btn-content">
+        <span className="btn-emoji">{btn.emoji}</span>
+        <span className="btn-text">{btn.text}</span>
+      </span>
+    </button>
 
-            {openCategory === btn.cat && (
-              <ul className="translated-list">
-                {translatedHeads.map((item) => (
-                  <li key={item.id}>
-                    <strong>{item.title}</strong>
-                    <span
-                      className="read-more"
-                      onClick={() => handleReadMore(item)}
-                    >
-                      Read Full News
-                    </span>
-                    {openId === item.id && (
-                      <p className="translated-summary">{translatedSummary}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
+    {openCategory === btn.cat && (
+      <ul className="translated-list">
+        {translatedHeads.map((item) => (
+          <li key={item.id}>
+            <strong>{item.title}</strong>
+            <span
+              className="read-more"
+              onClick={() => handleReadMore(item)}
+            >
+              Read Full News
+            </span>
+            {openId === item.id && (
+              <p className="translated-summary">{translatedSummary}</p>
             )}
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
+    )}
+  </div>
+))}
+</div>
 
       {/* ==== ABOUT Section ==== */}
       <div className="card about">
