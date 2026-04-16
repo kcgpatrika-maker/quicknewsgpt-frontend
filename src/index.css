@@ -242,8 +242,8 @@ button:hover { background: #1d4ed8; }
   width: 90%;            /* थोड़ी चौड़ाई कम */
   margin: auto;
   display: flex;         /* emoji + text एक लाइन में */
-  align-items: center;
-  justify-content: center;
+  align-items: center;   /* vertical center */
+  justify-content: center; /* horizontal center */
   gap: 8px;              /* emoji और text के बीच spacing */
   cursor: pointer;
   transition: background 0.2s ease;
