@@ -61,7 +61,6 @@ const Sidebar = ({ allNews }) => {
           { cat: "International", label: "🌍 International News" },
           { cat: "India", label: "🇮🇳 National News" },
           { cat: "Rajasthan", label: "🏛️ Rajasthan News" },   // State category fix
-          { cat: "States", label: "🏛️ States News" },          // Alternative key
           { cat: "Sports", label: "🏏 Sports News" },
           { cat: "Business", label: "💼 Business News" },
           { cat: "Entertainment", label: "🎬 Entertainment News" },
