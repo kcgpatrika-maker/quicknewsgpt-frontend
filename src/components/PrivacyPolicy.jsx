@@ -33,7 +33,7 @@ export default function PrivacyPolicy() {
       <h2>5. Contact</h2>
       <p>
         For any privacy-related queries, you may contact us at:  
-        <strong>quicknewsgpt@gmail.com</strong>
+        <a href="mailto:quicknewsgpt@gmail.com">quicknewsgpt@gmail.com</a>
       </p>
     </div>
   );
