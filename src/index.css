@@ -239,8 +239,10 @@ button:hover { background: #1d4ed8; }
   border-radius: 20px;   /* हल्का गोल */
   padding: 8px 12px;
   font-size: 14px;
-  width: 80%;            /* चौड़ाई थोड़ी कम */
-  text-align: left;      /* emoji + text left aligned */
+  width: 75%;            /* चौड़ाई और कम */
+  margin: 0 auto;        /* बटन को sidebar में सेंटर करें */
+  display: block;        /* margin auto काम करने के लिए */
+  text-align: left;      /* emoji + टेक्स्ट left aligned */
   cursor: pointer;
   transition: background 0.2s ease;
 }
