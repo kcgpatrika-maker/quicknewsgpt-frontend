@@ -1,10 +1,12 @@
-// src/components/Sidebar.jsx
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-const Sidebar = ({ topItems = [] }) => {
-  const [englishHeads, setEnglishHeads] = useState([]);
+const Sidebar = ({ allNews }) => {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [translatedHeads, setTranslatedHeads] = useState([]);
+  const [openId, setOpenId] = useState(null);
+  const [translatedSummary, setTranslatedSummary] = useState("");
 
-  // Simple inline translator using free browser API
+  // Translation function (headline/summary)
   const translateText = async (text) => {
     try {
       const res = await fetch(
@@ -17,39 +19,60 @@ const Sidebar = ({ topItems = [] }) => {
     }
   };
 
-  // Translate the incoming headlines
-  useEffect(() => {
-    const run = async () => {
-      const translated = [];
-      for (let it of topItems) {
-        if (it?.title) {
-          translated.push(await translateText(it.title));
-        }
+  // Handle category button click
+  const handleCategoryClick = async (category) => {
+    setSelectedCategory(category);
+    setOpenId(null);
+    setTranslatedSummary("");
+    const items = allNews[category] || [];
+    const translated = [];
+    for (let it of items) {
+      if (it?.title) {
+        translated.push({ id: it.id, title: await translateText(it.title), summary: it.summary });
       }
-      setEnglishHeads(translated);
-    };
-    run();
-  }, [topItems]);
+    }
+    setTranslatedHeads(translated);
+  };
+
+  // Handle "पूरा पढ़ें" click
+  const handleReadMore = async (item) => {
+    if (openId === item.id) {
+      setOpenId(null);
+      setTranslatedSummary("");
+    } else {
+      setOpenId(item.id);
+      setTranslatedSummary(await translateText(item.summary));
+    }
+  };
 
   return (
-    <aside style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      
-      {/* ==== Top English Headlines Section ==== */}
+    <aside>
       <div className="card">
-        <div className="side-title" style={{ fontWeight: 700 }}>
-          Top English Headlines
+        <div className="side-title">Top English Headlines</div>
+
+        {/* Category Buttons */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+          {["International","India","State","Sports","Business","Entertainment"].map((cat) => (
+            <button key={cat} onClick={() => handleCategoryClick(cat)}>
+              {cat}
+            </button>
+          ))}
         </div>
-        <ul style={{ marginTop: 8 }}>
-          {englishHeads.map((text, idx) => (
-            <li
-              key={idx}
-              style={{
-                padding: "4px 0",
-                borderBottom: "1px solid #e5e7eb",
-                fontSize: 14,
-              }}
-            >
-              {text}
+
+        {/* Translated Headlines */}
+        <ul style={{ marginTop: 12 }}>
+          {translatedHeads.map((item) => (
+            <li key={item.id} style={{ marginBottom: 8 }}>
+              <strong>{item.title}</strong>
+              <span
+                style={{ color: "blue", cursor: "pointer", marginLeft: 8 }}
+                onClick={() => handleReadMore(item)}
+              >
+                पूरा पढ़ें
+              </span>
+              {openId === item.id && (
+                <p style={{ marginTop: 6 }}>{translatedSummary}</p>
+              )}
             </li>
           ))}
         </ul>
