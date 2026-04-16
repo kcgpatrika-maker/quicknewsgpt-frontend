@@ -233,20 +233,22 @@ button:hover { background: #1d4ed8; }
 }
 
 .category-btn {
-  background: #e0f2fe; /* हल्का Blue pastel */
-  color: #0c4a6e;      /* readable dark blue */
+  background: #dcfce7;   /* हल्का Green pastel */
+  color: #111827;        /* Black text */
   border: none;
-  border-radius: 6px;
-  padding: 10px;
+  border-radius: 25px;   /* गोल pill-style */
+  padding: 10px 16px;
   font-size: 14px;
-  width: 100%;
-  text-align: left;
+  width: 90%;            /* थोड़ी चौड़ाई कम */
+  margin: auto;
+  display: block;
+  text-align: center;    /* टेक्स्ट और इमोजी सेंटर */
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .category-btn:hover {
-  opacity: 0.85;
+  background: #bbf7d0;   /* hover पर थोड़ा गहरा Green */
 }
 
 /* Translated headlines list */
