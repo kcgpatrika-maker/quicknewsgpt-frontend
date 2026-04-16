@@ -238,7 +238,8 @@ const fetchNews = useCallback(async () => {
 
             {/* Sidebar */}
             <aside className="sidebar">
-              <Sidebar topItems={allNews["India"]?.slice(0, 3) || []} />
+              {/* अब पूरा allNews पास करें */}
+              <Sidebar allNews={allNews} />
             </aside>
           </div>
         </>
