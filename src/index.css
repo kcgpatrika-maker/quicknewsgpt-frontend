@@ -261,13 +261,14 @@ button:hover { background: #1d4ed8; }
 
 .btn-emoji {
   font-size: 16px;
+  line-height: 1;
 }
 
 .btn-text {
   font-size: 14px;
   font-weight: 500;
+  line-height: 1;
 }
-
 
 /* Translated headlines list */
 .translated-list {
