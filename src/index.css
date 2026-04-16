@@ -232,19 +232,21 @@ button:hover { background: #1d4ed8; }
   gap: 8px;
 }
 
-.category-buttons button {
-  background: #2563eb; /* Blue accent */
-  color: #fff;
-  border: none;
+.category-btn {
+  background: #f3f4f6; /* हल्का grey background */
+  color: #111827;      /* dark readable text */
+  border: 1px solid #d1d5db;
   border-radius: 6px;
   padding: 10px;
   font-size: 14px;
+  width: 100%;         /* मोबाइल पर full width */
+  text-align: left;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
-.category-buttons button:hover {
-  background: #1e40af;
+.category-btn:hover {
+  background: #e5e7eb;
 }
 
 /* Translated headlines list */
