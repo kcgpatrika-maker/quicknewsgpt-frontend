@@ -20,7 +20,6 @@ const Sidebar = ({ allNews }) => {
 
   const handleCategoryClick = async (category) => {
     if (openCategory === category) {
-      // दोबारा दबाने पर headlines बंद
       setOpenCategory(null);
       setTranslatedHeads([]);
       return;
@@ -61,7 +60,8 @@ const Sidebar = ({ allNews }) => {
         {[
           { cat: "International", label: "🌍 International News" },
           { cat: "India", label: "🇮🇳 National News" },
-          { cat: "State", label: "🏛️ State News" },
+          { cat: "Rajasthan", label: "🏛️ Rajasthan News" },   // State category fix
+          { cat: "States", label: "🏛️ States News" },          // Alternative key
           { cat: "Sports", label: "🏏 Sports News" },
           { cat: "Business", label: "💼 Business News" },
           { cat: "Entertainment", label: "🎬 Entertainment News" },
@@ -74,7 +74,6 @@ const Sidebar = ({ allNews }) => {
               {btn.label}
             </button>
 
-            {/* Headlines under the same button */}
             {openCategory === btn.cat && (
               <ul className="translated-list">
                 {translatedHeads.map((item) => (
@@ -97,15 +96,29 @@ const Sidebar = ({ allNews }) => {
         ))}
       </div>
 
-      {/* Other Sidebar Sections */}
-      <div className="card">
-        <h2 className="side-title">About</h2>
-        <p>QuickNewsGPT — AI powered news summaries and live updates.</p>
+      {/* ==== ABOUT Section ==== */}
+      <div className="card about">
+        <div className="side-title" style={{ fontWeight: 700 }}>About</div>
+        <p style={{ marginTop: 8 }}>
+          QuickNewsGPT delivers instant AI-summaries of latest headlines in Hindi & English.
+        </p>
       </div>
 
+      {/* ==== Trending Section ==== */}
       <div className="card">
-        <h2 className="side-title">Trending</h2>
-        <p>Latest hot topics and breaking stories.</p>
+        <div className="side-title" style={{ fontWeight: 700 }}>Trending</div>
+        <ul style={{ marginTop: 8 }}>
+          <li>
+            <a href="https://www.youtube.com/feed/trending" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
+              YouTube Trending
+            </a>
+          </li>
+          <li>
+            <a href="https://trends.google.com/trends/trendingsearches/daily?geo=IN" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
+              Google Trends India
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div className="card">
