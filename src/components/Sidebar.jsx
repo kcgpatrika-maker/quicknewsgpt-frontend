@@ -70,10 +70,8 @@ const Sidebar = ({ allNews }) => {
       className="category-btn"
       onClick={() => handleCategoryClick(btn.cat)}
     >
-      <span className="btn-content">
-        <span className="btn-emoji">{btn.emoji}</span>
-        <span className="btn-text">{btn.text}</span>
-      </span>
+      <span className="btn-emoji">{btn.emoji}</span>
+      <span className="btn-text">{btn.text}</span>
     </button>
 
     {openCategory === btn.cat && (
