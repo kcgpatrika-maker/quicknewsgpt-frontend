@@ -56,8 +56,8 @@ const Sidebar = ({ allNews }) => {
       <div className="card">
         <h2 className="side-title">Top English Headlines</h2>
 
-        {/* Category Buttons */}
-        {[
+  {/* Category Buttons */}
+  {[
   { cat: "International", emoji: "🌍", text: "International News" },
   { cat: "India", emoji: "🇮🇳", text: "National News" },
   { cat: "Rajasthan", emoji: "🏛️", text: "Rajasthan News" },
