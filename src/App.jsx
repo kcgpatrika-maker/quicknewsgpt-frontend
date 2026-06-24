@@ -119,9 +119,19 @@ const fetchNews = useCallback(async () => {
                   </div>
                 </div>
 
-                {loading ? (
-                  <div>Loading...</div>
-                ) : (
+              {loading ? (
+               <div
+                style={{
+                  textAlign: "center",
+                  padding: "20px",
+                  fontSize: "18px",
+                  color: "#444",
+                  fontWeight: "600"
+                }}
+               >
+                📰 देश-दुनिया की ताज़ा खबरें लोड हो रही हैं...
+              </div>
+              ) : (
                   Object.keys(allNews).map(cat => (
                     <div key={cat} style={{ marginTop: 12 }}>
                       {/* Category headings अब सिर्फ़ colored text */}
