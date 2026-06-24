@@ -119,7 +119,7 @@ const fetchNews = useCallback(async () => {
                   </div>
                 </div>
 
-              {loading ? (
+              {loading || Object.keys(allNews).length === 0 ? (
                <div
                 style={{
                   textAlign: "center",
