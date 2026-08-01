@@ -107,6 +107,86 @@ const fetchNews = useCallback(async () => {
           {/* MAIN */}
           <div className="container">
             <main className="main-column">
+
+              <section className="kalam-card">
+  <h3>
+    गौतम की कलम से{" "}
+    <CustomNewsAdmin
+      onAdd={(headline, summary) => {
+        const db = window.db;
+        db.collection("news").add({
+          title: headline,
+          summary: summary,
+          pubDate: new Date().toISOString().split("T")[0]
+        }).then(() => {
+          // ✅ बिना reload के state अपडेट
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
+        });
+      }}
+      onEdit={(id, headline, summary) => {
+        const db = window.db;
+        db.collection("news").doc(id).update({
+          title: headline,
+          summary: summary
+        }).then(() => {
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
+        });
+      }}
+      onDelete={(id) => {
+        const db = window.db;
+        db.collection("news").doc(id).delete().then(() => {
+          db.collection("news").get().then(snapshot => {
+            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCustomNews(items);
+          });
+        });
+      }}
+      setAuthenticated={setIsAdmin}
+    />
+  </h3>
+<p
+  style={{
+    margin: "0 0 14px 0",
+    color: "#555",
+    fontSize: "15px",
+    fontStyle: "italic"
+  }}
+>
+  यहाँ प्रकाशित समाचार Quick NewsGPT द्वारा तैयार मौलिक समाचार एवं संपादकीय लेख हैं।
+</p>
+  <CustomNewsList
+    items={customNews}
+    authenticated={isAdmin}
+    onEdit={(id, headline, summary) => {
+      const db = window.db;
+      db.collection("news").doc(id).update({
+        title: headline,
+        summary: summary
+      }).then(() => {
+        db.collection("news").get().then(snapshot => {
+          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCustomNews(items);
+        });
+      });
+    }}
+    onDelete={(id) => {
+      const db = window.db;
+      db.collection("news").doc(id).delete().then(() => {
+        db.collection("news").get().then(snapshot => {
+          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setCustomNews(items);
+        });
+      });
+    }}
+  />
+</section>
+
               {/* Latest Headlines */}
               <section className="card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -149,77 +229,7 @@ const fetchNews = useCallback(async () => {
                 <h3>🌐 अन्य खबरों के लिए सर्च करें</h3>
                 <AskNews />
               </section>
-
-<section className="kalam-card">
-  <h3>
-    गौतम की कलम से{" "}
-    <CustomNewsAdmin
-      onAdd={(headline, summary) => {
-        const db = window.db;
-        db.collection("news").add({
-          title: headline,
-          summary: summary,
-          pubDate: new Date().toISOString().split("T")[0]
-        }).then(() => {
-          // ✅ बिना reload के state अपडेट
-          db.collection("news").get().then(snapshot => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setCustomNews(items);
-          });
-        });
-      }}
-      onEdit={(id, headline, summary) => {
-        const db = window.db;
-        db.collection("news").doc(id).update({
-          title: headline,
-          summary: summary
-        }).then(() => {
-          db.collection("news").get().then(snapshot => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setCustomNews(items);
-          });
-        });
-      }}
-      onDelete={(id) => {
-        const db = window.db;
-        db.collection("news").doc(id).delete().then(() => {
-          db.collection("news").get().then(snapshot => {
-            const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setCustomNews(items);
-          });
-        });
-      }}
-      setAuthenticated={setIsAdmin}
-    />
-  </h3>
-
-  <CustomNewsList
-    items={customNews}
-    authenticated={isAdmin}
-    onEdit={(id, headline, summary) => {
-      const db = window.db;
-      db.collection("news").doc(id).update({
-        title: headline,
-        summary: summary
-      }).then(() => {
-        db.collection("news").get().then(snapshot => {
-          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCustomNews(items);
-        });
-      });
-    }}
-    onDelete={(id) => {
-      const db = window.db;
-      db.collection("news").doc(id).delete().then(() => {
-        db.collection("news").get().then(snapshot => {
-          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          setCustomNews(items);
-        });
-      });
-    }}
-  />
-</section>
-              
+             
 {/* Gold-Silver Rates */}
 <section className="card goldsilver-card" style={{ marginTop: 4 }}>
   <GoldSilver />
