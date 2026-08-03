@@ -190,7 +190,7 @@ const fetchNews = useCallback(async () => {
               {/* Latest Headlines */}
               <section className="card">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <h2 style={{ margin: 0 }}>Latest Headlines</h2>
+                  <h2 style={{ margin: 0 }}>ताजा समाचार</h2>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     {/* Refresh हटाकर Updated time दिखाएँ */}
                     <div style={{ fontSize: 13, color: "#6b7280" }}>
