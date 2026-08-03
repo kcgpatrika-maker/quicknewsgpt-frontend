@@ -24,6 +24,20 @@ export default function NewsList({ items = [], hideBadge = false }) {
             {r.title}
           </div>
 
+          {/* Publish Date */}
+          {r.pubDate && (
+            <div
+              style={{
+                fontSize: "12px",
+                color: "#6b7280",
+                marginTop: "4px",
+                marginBottom: "4px",
+              }}
+            >
+              🕒 {new Date(r.pubDate).toLocaleDateString("en-IN")}
+            </div>
+          )}
+
           {/* Read full story link */}
           {r.link && (
             <a
@@ -33,7 +47,7 @@ export default function NewsList({ items = [], hideBadge = false }) {
               className="read-more"
               style={{ fontSize: "13px", color: "#2563eb" }}
             >
-              Read full story
+              पूरा समाचार पढ़ें →
             </a>
           )}
         </div>
