@@ -280,7 +280,7 @@ const fetchNews = useCallback(async () => {
     </a>
   </div>
 </div>
-
+</main>
             {/* Sidebar */}
             <aside className="sidebar">
               {/* अब पूरा allNews पास करें */}
