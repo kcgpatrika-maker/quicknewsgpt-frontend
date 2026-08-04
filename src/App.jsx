@@ -10,6 +10,9 @@ import LiveTV from "./components/LiveTV";
 import WikipediaSearch from "./components/WikipediaSearch";
 import CustomNewsAdmin from "./components/CustomNewsAdmin";
 import CustomNewsList from "./components/CustomNewsList";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import Terms from "./components/Terms";
 
 const BACKEND = import.meta.env.VITE_BACKEND_URL || "https://quick-newsgpt-backend.onrender.com";
 
@@ -70,6 +73,12 @@ const fetchNews = useCallback(async () => {
     <div>
       {window.location.pathname === "/privacy" ? (
         <PrivacyPolicy />
+      ) : window.location.pathname === "/about" ? (
+        <About />
+      ) : window.location.pathname === "/contact" ? (
+        <Contact />
+      ) : window.location.pathname === "/terms" ? (
+        <Terms />
       ) : (
         <>
           {/* HEADER */}
@@ -245,42 +254,52 @@ const fetchNews = useCallback(async () => {
         <h3>📖 सब कुछ बताएगा विकिपीडिया</h3>
         <WikipediaSearch />
       </section>
-
               {/* Footer */}
 <div
   className="footer"
   style={{
     marginTop: 12,
     color: "#6b7280",
-    lineHeight: "1.6",
+    lineHeight: "1.7",
+    borderTop: "1px solid #e5e7eb",
+    paddingTop: "15px",
+    textAlign: "center",
   }}
 >
-  <div style={{ marginBottom: 8 }}>
-    <strong>Quick NewsGPT</strong> में प्रकाशित समाचार विश्वसनीय समाचार
-    स्रोतों एवं Quick NewsGPT की मौलिक संपादकीय सामग्री पर आधारित हैं।
+  <div style={{ marginBottom: 10 }}>
+    <strong>Quick NewsGPT</strong> publishes news collected from trusted public
+    news sources along with original editorial articles in
+    <strong> "गौतम की कलम"</strong>.
   </div>
 
-  <div style={{ marginBottom: 10 }}>
-    हमारा उद्देश्य पाठकों तक ताज़ा, सरल और उपयोगी समाचार पहुँचाना है।
+  <div style={{ marginBottom: 12 }}>
+    Our mission is to deliver fast, simple and useful news for every reader.
+  </div>
+
+  <div style={{ marginBottom: 12 }}>
+    <a href="/about" style={{ color: "#2563eb", margin: "0 10px" }}>
+      About
+    </a>
+
+    <a href="/contact" style={{ color: "#2563eb", margin: "0 10px" }}>
+      Contact
+    </a>
+
+    <a href="/terms" style={{ color: "#2563eb", margin: "0 10px" }}>
+      Terms
+    </a>
+
+    <a href="/privacy" style={{ color: "#2563eb", margin: "0 10px" }}>
+      Privacy Policy
+    </a>
   </div>
 
   <div>
     © 2026 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
   </div>
-
-  <div style={{ marginTop: 8 }}>
-    <a
-      href="/privacy"
-      style={{
-        color: "#2563eb",
-        textDecoration: "underline",
-      }}
-    >
-      Privacy Policy
-    </a>
-  </div>
 </div>
 </main>
+
             {/* Sidebar */}
             <aside className="sidebar">
               {/* अब पूरा allNews पास करें */}
