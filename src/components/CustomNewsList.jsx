@@ -44,6 +44,18 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
           ) : (
             <>
               <h4>{r.title}</h4>
+              
+              {r.pubDate && (
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "#6b7280",
+                    margin: "4px 0 8px 0",
+                  }}
+                >
+                  🕒 {new Date(r.pubDate).toLocaleDateString("en-IN")}
+                </div>
+              )}
               <span
                 style={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
                 onClick={() => setOpenId(openId === r.id ? null : r.id)}
