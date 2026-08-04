@@ -53,7 +53,11 @@ export default function CustomNewsList({ items = [], authenticated, onEdit, onDe
                     margin: "4px 0 8px 0",
                   }}
                 >
-                  🕒 {new Date(r.pubDate).toLocaleDateString("en-IN")}
+                  🕒 {new Date(r.pubDate).toLocaleDateString("en-IN", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </div>
               )}
               <span
