@@ -24,11 +24,14 @@ const Sidebar = ({ allNews }) => {
       setTranslatedHeads([]);
       return;
     }
+
     setOpenCategory(category);
     setOpenId(null);
     setTranslatedSummary("");
+
     const items = allNews[category] || [];
     const translated = [];
+
     for (let it of items) {
       if (it?.title) {
         translated.push({
@@ -38,6 +41,7 @@ const Sidebar = ({ allNews }) => {
         });
       }
     }
+
     setTranslatedHeads(translated);
   };
 
@@ -53,93 +57,163 @@ const Sidebar = ({ allNews }) => {
 
   return (
     <aside>
+
       <div className="card">
         <h2 className="side-title">Top English Headlines</h2>
 
-  {/* Category Buttons */}
-{[
-  { cat: "International", emoji: "🌍", text: "International News" },
-  { cat: "India", emoji: "🇮🇳", text: "National News" },
-  { cat: "Rajasthan", emoji: "🏛️", text: "Rajasthan News" },
-  { cat: "Sports", emoji: "🏏", text: "Sports News" },
-  { cat: "Business", emoji: "💼", text: "Business News" },
-  { cat: "Entertainment", emoji: "🎬", text: "Entertainment News" },
-].map((btn) => (
-  <div key={btn.cat} style={{ marginBottom: "8px" }}>
-    <button
-      className="category-btn"
-      onClick={() => handleCategoryClick(btn.cat)}
-    >
-      {btn.emoji} {btn.text}
-    </button>
-
-    {openCategory === btn.cat && (
-      <ul className="translated-list">
-        {translatedHeads.map((item) => (
-          <li key={item.id}>
-            <strong>{item.title}</strong>
-            <span
-              className="read-more"
-              onClick={() => handleReadMore(item)}
+        {[
+          { cat: "International", emoji: "🌍", text: "International News" },
+          { cat: "India", emoji: "🇮🇳", text: "National News" },
+          { cat: "Rajasthan", emoji: "🏛️", text: "Rajasthan News" },
+          { cat: "Sports", emoji: "🏏", text: "Sports News" },
+          { cat: "Business", emoji: "💼", text: "Business News" },
+          { cat: "Entertainment", emoji: "🎬", text: "Entertainment News" },
+        ].map((btn) => (
+          <div key={btn.cat} style={{ marginBottom: "8px" }}>
+            <button
+              className="category-btn"
+              onClick={() => handleCategoryClick(btn.cat)}
             >
-              Read Full News
-            </span>
-            {openId === item.id && (
-              <p className="translated-summary">{translatedSummary}</p>
-            )}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-))}
-</div>
+              {btn.emoji} {btn.text}
+            </button>
 
-      {/* ==== ABOUT Section ==== */}
+            {openCategory === btn.cat && (
+              <ul className="translated-list">
+                {translatedHeads.map((item) => (
+                  <li key={item.id}>
+                    <strong>{item.title}</strong>
+
+                    <span
+                      className="read-more"
+                      onClick={() => handleReadMore(item)}
+                    >
+                      Read Full News
+                    </span>
+
+                    {openId === item.id && (
+                      <p className="translated-summary">
+                        {translatedSummary}
+                      </p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ===== ABOUT ===== */}
+
       <div className="card about">
-        <div className="side-title" style={{ fontWeight: 700 }}>About</div>
-        <p style={{ marginTop: 8 }}>
-          QuickNewsGPT delivers instant AI-summaries of latest headlines in Hindi & English.
+        <div className="side-title" style={{ fontWeight: 700 }}>
+          About Quick NewsGPT
+        </div>
+
+        <p style={{ marginTop: 10 }}>
+          Quick NewsGPT is an independent news platform that provides readers
+          with the latest national, international, business, sports and
+          entertainment news collected from trusted public news sources.
+        </p>
+
+        <p>
+          The website also publishes original articles under
+          <strong> "गौतम की कलम से"</strong>, offering useful information,
+          opinions and editorial content prepared especially for Quick NewsGPT.
+        </p>
+
+        <p>
+          Our goal is to present reliable information in a simple,
+          reader-friendly and easy-to-understand format.
         </p>
       </div>
 
-      {/* ==== Trending Section ==== */}
+      {/* ===== Trending ===== */}
+
       <div className="card">
-        <div className="side-title" style={{ fontWeight: 700 }}>Trending</div>
+        <div className="side-title" style={{ fontWeight: 700 }}>
+          Trending
+        </div>
+
         <ul style={{ marginTop: 8 }}>
           <li>
-            <a href="https://www.youtube.com/feed/trending" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
+            <a
+              href="https://www.youtube.com/feed/trending"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "#2563eb" }}
+            >
               YouTube Trending
             </a>
           </li>
+
           <li>
-            <a href="https://trends.google.com/trends/trendingsearches/daily?geo=IN" target="_blank" rel="noreferrer" style={{ color: "#2563eb" }}>
+            <a
+              href="https://trends.google.com/trends/trendingsearches/daily?geo=IN"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "#2563eb" }}
+            >
               Google Trends India
             </a>
           </li>
+
         </ul>
       </div>
+            {/* ===== Legal ===== */}
 
       <div className="card">
-        <h2 className="side-title">Legal</h2>
+        <div className="side-title" style={{ fontWeight: 700 }}>
+          Legal Information
+        </div>
+
         <h3>Privacy Policy</h3>
+
         <p>
-          This website uses Google AdSense advertising services. Google may use cookies to serve personalized ads.  
-          We do not collect personal data directly. For queries, contact:  
-          <a href="mailto:quicknewsgpt@gmail.com">quicknewsgpt@gmail.com</a>
+          Quick NewsGPT uses third-party services including Google AdSense
+          and Google Analytics. These services may use cookies to improve
+          user experience and display relevant advertisements.
+        </p>
+
+        <p>
+          We do not collect personally identifiable information directly
+          from our visitors.
         </p>
 
         <h3>Terms of Service</h3>
+
         <p>
-          These are placeholder terms. A detailed Terms of Service page will be added soon.
+          By using Quick NewsGPT, you agree to use this website only for
+          lawful purposes.
         </p>
 
-        <h3>Contact</h3>
         <p>
-          For general queries, feedback, or support, please email us at:  
-          <a href="mailto:quicknewsgpt@gmail.com">quicknewsgpt@gmail.com</a>
+          News collected from external public sources belongs to their
+          respective publishers.
         </p>
+
+        <p>
+          Original articles published under
+          <strong> "गौतम की कलम से"</strong> are the editorial content of
+          Quick NewsGPT.
+        </p>
+
+        <h3>Contact Us</h3>
+
+        <p>
+          We welcome corrections, feedback and suggestions from our readers.
+        </p>
+
+        <p>
+          Email:
+          {" "}
+          <a href="mailto:quicknewsgpt@gmail.com">
+            quicknewsgpt@gmail.com
+          </a>
+        </p>
+
       </div>
+
     </aside>
   );
 };
