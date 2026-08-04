@@ -256,13 +256,17 @@ const fetchNews = useCallback(async () => {
                 <div style={{ marginBottom: 10 }}>
                   हमारा उद्देश्य पाठकों तक ताज़ा, सरल और उपयोगी समाचार पहुँचाना है।
                 </div>
+                
+               </div>
                 © 2026 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
                 </div>
-               
-                <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
+
+            <div style={{ marginTop: 8 }}>
+              <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
                   Privacy Policy
                 </a>
               </div>
+            </div>
             </main>
 
             {/* Sidebar */}
