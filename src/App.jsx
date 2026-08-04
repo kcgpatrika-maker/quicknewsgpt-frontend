@@ -247,27 +247,39 @@ const fetchNews = useCallback(async () => {
       </section>
 
               {/* Footer */}
-              <div className="footer" style={{ marginTop: 12, color: "#6b7280", lineHeight: "1.6" }}>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Quick NewsGPT</strong> में प्रकाशित समाचार विश्वसनीय समाचार स्रोतों एवं
-                  Quick NewsGPT की मौलिक संपादकीय सामग्री पर आधारित हैं।
-                </div>
+<div
+  className="footer"
+  style={{
+    marginTop: 12,
+    color: "#6b7280",
+    lineHeight: "1.6",
+  }}
+>
+  <div style={{ marginBottom: 8 }}>
+    <strong>Quick NewsGPT</strong> में प्रकाशित समाचार विश्वसनीय समाचार
+    स्रोतों एवं Quick NewsGPT की मौलिक संपादकीय सामग्री पर आधारित हैं।
+  </div>
 
-                <div style={{ marginBottom: 10 }}>
-                  हमारा उद्देश्य पाठकों तक ताज़ा, सरल और उपयोगी समाचार पहुँचाना है।
-                </div>
-                
-               </div>
-                © 2026 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
-                </div>
+  <div style={{ marginBottom: 10 }}>
+    हमारा उद्देश्य पाठकों तक ताज़ा, सरल और उपयोगी समाचार पहुँचाना है।
+  </div>
 
-            <div style={{ marginTop: 8 }}>
-              <a href="/privacy" style={{ color: "#2563eb", textDecoration: "underline" }}>
-                  Privacy Policy
-                </a>
-              </div>
-            </div>
-            </main>
+  <div>
+    © 2026 Quick NewsGPT — Built by Kailash Gautam · Made in India 🇮🇳
+  </div>
+
+  <div style={{ marginTop: 8 }}>
+    <a
+      href="/privacy"
+      style={{
+        color: "#2563eb",
+        textDecoration: "underline",
+      }}
+    >
+      Privacy Policy
+    </a>
+  </div>
+</div>
 
             {/* Sidebar */}
             <aside className="sidebar">
