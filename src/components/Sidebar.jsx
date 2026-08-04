@@ -161,58 +161,34 @@ const Sidebar = ({ allNews }) => {
         </ul>
       </div>
             {/* ===== Legal ===== */}
-
       <div className="card">
-        <div className="side-title" style={{ fontWeight: 700 }}>
-          Legal Information
-        </div>
+  <h2 className="side-title">Legal</h2>
 
-        <h3>Privacy Policy</h3>
+  <ul style={{ lineHeight: "2", paddingLeft: "18px" }}>
+    <li>
+      <a href="/about">About Us</a>
+    </li>
 
-        <p>
-          Quick NewsGPT uses third-party services including Google AdSense
-          and Google Analytics. These services may use cookies to improve
-          user experience and display relevant advertisements.
-        </p>
+    <li>
+      <a href="/contact">Contact</a>
+    </li>
 
-        <p>
-          We do not collect personally identifiable information directly
-          from our visitors.
-        </p>
+    <li>
+      <a href="/terms">Terms of Service</a>
+    </li>
 
-        <h3>Terms of Service</h3>
+    <li>
+      <a href="/privacy">Privacy Policy</a>
+    </li>
+  </ul>
 
-        <p>
-          By using Quick NewsGPT, you agree to use this website only for
-          lawful purposes.
-        </p>
-
-        <p>
-          News collected from external public sources belongs to their
-          respective publishers.
-        </p>
-
-        <p>
-          Original articles published under
-          <strong> "गौतम की कलम से"</strong> are the editorial content of
-          Quick NewsGPT.
-        </p>
-
-        <h3>Contact Us</h3>
-
-        <p>
-          We welcome corrections, feedback and suggestions from our readers.
-        </p>
-
-        <p>
-          Email:
-          {" "}
-          <a href="mailto:quicknewsgpt@gmail.com">
-            quicknewsgpt@gmail.com
-          </a>
-        </p>
-
-      </div>
+  <p style={{ marginTop: "10px", fontSize: "13px", color: "#666" }}>
+    Email:
+    <a href="mailto:quicknewsgpt@gmail.com">
+      {" "}quicknewsgpt@gmail.com
+    </a>
+  </p>
+</div>
 
     </aside>
   );
