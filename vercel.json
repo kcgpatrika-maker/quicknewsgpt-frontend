@@ -1,6 +1,13 @@
 {
   "rewrites": [
     { "source": "/privacy", "destination": "/" },
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/about", "destination": "/" },
+    { "source": "/contact", "destination": "/" },
+    { "source": "/terms", "destination": "/" },
+
+    {
+      "source": "/((?!ads\\.txt|robots\\.txt|sitemap\\.xml|google4d9e02b453892c36\\.html|manifest\\.json|icon-192\\.png|icon-512\\.png|favicon\\.ico|sw\\.js).*)",
+      "destination": "/"
+    }
   ]
 }
